@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deforestasi dalam Konsesi</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --red: #8b2a1a;
+  --red-light: #c04030;
+  --cream: #f5f0e8;
+  --dark: #1a1a1a;
+  --tan: #d4c4a0;
+  --muted: #5a5040;
+}
+
+body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:var(--dark); display:flex; height:100vh; overflow:hidden; }
+
+/* SIDEBAR */
+#sidebar {
+  width:280px; flex-shrink:0;
+  background:var(--dark); color:var(--cream);
+  display:flex; flex-direction:column;
+  padding:28px 20px 24px;
+  overflow-y:auto;
+  z-index:10;
+}
+
+#sidebar h1 {
+  font-family:'Playfair Display',serif;
+  font-size:1.25rem; font-weight:900; line-height:1.2;
+  color:var(--cream); margin-bottom:6px;
+}
+#sidebar .s-sub {
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.6rem; color:var(--tan); letter-spacing:.08em;
+  text-transform:uppercase; margin-bottom:20px;
+}
+
+.cat-btn {
+  width:100%; text-align:left; padding:11px 14px;
+  margin-bottom:8px; border-radius:6px;
+  border:1.5px solid rgba(255,255,255,.1);
+  background:transparent; color:rgba(245,240,232,.6);
+  font-family:'IBM Plex Sans',sans-serif; font-size:.82rem; font-weight:600;
+  cursor:pointer; transition:.2s;
+  display:flex; align-items:center; gap:10px;
+}
+.cat-btn:hover { border-color:var(--red-light); color:var(--cream); }
+.cat-btn.active { background:var(--red); border-color:var(--red); color:#fff; }
+
+.s-divider { height:1px; background:rgba(255,255,255,.08); margin:16px 0; }
+
+.stat-block {
+  background:rgba(139,42,26,.15); border-left:3px solid var(--red);
+  border-radius:4px; padding:12px 14px; margin-bottom:10px;
+}
+.stat-block .s-label { font-family:'IBM Plex Mono',monospace; font-size:.55rem; color:var(--tan); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+.stat-block .s-val { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--cream); line-height:1; }
+.stat-block .s-unit { font-size:.6rem; font-family:'IBM Plex Mono',monospace; color:var(--tan); }
+
+.bullet-list { list-style:none; padding:0; margin-top:6px; }
+.bullet-list li {
+  font-size:.72rem; line-height:1.55; color:rgba(245,240,232,.65);
+  padding-left:12px; position:relative; margin-bottom:5px;
+  font-family:'IBM Plex Mono',monospace;
+}
+.bullet-list li::before { content:'—'; position:absolute; left:0; color:var(--red-light); }
+
+/* MAP */
+#map-wrap { flex:1; position:relative; overflow:hidden; }
+#map { width:100%; height:100%; }
+
+#map-title {
+  position:absolute; top:20px; left:20px; z-index:500;
+  pointer-events:none;
+}
+#map-title h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1rem,1.8vw,1.45rem); font-weight:900;
+  color:var(--dark); line-height:1.25;
+}
+
+#others-badge {
+  position:absolute; bottom:28px; right:24px; z-index:500;
+  background:var(--red); border-radius:50%;
+  width:120px; height:120px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  color:#fff; text-align:center; pointer-events:none;
+  box-shadow:0 4px 24px rgba(139,42,26,.4);
+}
+#others-badge .ob-label { font-family:'IBM Plex Mono',monospace; font-size:.55rem; letter-spacing:.05em; line-height:1.4; opacity:.85; }
+#others-badge .ob-val   { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; line-height:1; }
+#others-badge .ob-unit  { font-family:'IBM Plex Mono',monospace; font-size:.55rem; opacity:.85; }
+
+/* LEAFLET */
+.leaflet-container { background:#e8e4da !important; }
+
+.dot-marker {
+  border-radius:50%;
+  background:var(--red); color:#fff;
+  font-family:'IBM Plex Mono',monospace; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 2px 8px rgba(139,42,26,.5);
+  cursor:pointer; transition:.15s;
+}
+.dot-marker:hover { filter:brightness(1.2); }
+
+.cluster-icon {
+  background:var(--red); color:#fff; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px;
+  border:3px solid rgba(255,255,255,.9);
+  box-shadow:0 3px 12px rgba(139,42,26,.55);
+}
+/* hide default markercluster styles */
+.marker-cluster { background:transparent !important; }
+.marker-cluster div { background:transparent !important; }
+
+.leaflet-tooltip.label-tip {
+  background:transparent; border:none; box-shadow:none;
+  padding:0; white-space:nowrap; pointer-events:none;
+}
+.label-box { font-family:'IBM Plex Sans',sans-serif; font-size:.72rem; line-height:1.3; }
+.label-box .lb-name { color:var(--dark); font-weight:600; }
+.label-box .lb-val  { color:var(--red); font-family:'IBM Plex Mono',monospace; font-size:.85rem; font-weight:700; }
+.leaflet-tooltip::before { display:none !important; }
+
+.leaflet-popup-content-wrapper {
+  border-radius:8px; padding:0; overflow:hidden;
+  border-top:3px solid var(--red);
+  font-family:'IBM Plex Sans',sans-serif;
+  box-shadow:0 8px 28px rgba(26,26,26,.18);
+}
+.popup-inner { padding:12px 16px; }
+.popup-rank  { font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:var(--muted); }
+.popup-name  { font-size:.9rem; font-weight:700; margin:3px 0 6px; color:var(--dark); }
+.popup-val   { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--red); line-height:1; }
+.popup-unit  { font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:var(--muted); margin-top:2px; }
+.popup-type  { display:inline-block; margin-top:8px; font-family:'IBM Plex Mono',monospace; font-size:.6rem; background:rgba(139,42,26,.1); color:var(--red); border-radius:4px; padding:2px 7px; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h1>Deforestasi<br>dalam Konsesi</h1>
+  <p class="s-sub">// Sepuluh teratas per kategori · 2025</p>
+
+  <button class="cat-btn active" onclick="loadData('kebun-kayu')" id="btn-kebun-kayu">🌲 Konsesi Kebun Kayu</button>
+  <button class="cat-btn" onclick="loadData('logging')" id="btn-logging">🪵 Konsesi Logging</button>
+  <button class="cat-btn" onclick="loadData('sawit')" id="btn-sawit">🌴 Konsesi Sawit</button>
+  <button class="cat-btn" onclick="loadData('tambang')" id="btn-tambang">⛏️ Konsesi Tambang</button>
+
+  <div class="s-divider"></div>
+
+  <div class="stat-block">
+    <div class="s-label">Total deforestasi (10 teratas)</div>
+    <div class="s-val" id="stat-total">21.799</div>
+    <div class="s-unit">hektare</div>
+  </div>
+
+  <ul class="bullet-list" id="stat-bullets">
+    <li>Deforestasi dalam 212 konsesi kebun kayu</li>
+    <li>34% deforestasi terjadi pada 10 perusahaan teratas</li>
+  </ul>
+</div>
+
+<div id="map-wrap">
+  <div id="map-title">
+    <h2 id="map-heading">Sepuluh teratas deforestasi<br>di konsesi kebun kayu</h2>
+  </div>
+  <div id="map"></div>
+  <div id="others-badge">
+    <div class="ob-label" id="ob-label">202 izin<br>Lainnya</div>
+    <div class="ob-val" id="ob-val">21.799</div>
+    <div class="ob-unit">hektare</div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+const map = L.map('map', { zoomControl:true, attributionControl:false }).setView([-2, 118], 5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { subdomains:'abcd', maxZoom:19 }).addTo(map);
+
+let clusterGroup = null;
+function clearLayers() {
+  if (clusterGroup) map.removeLayer(clusterGroup);
+  clusterGroup = null;
+}
+
+const DATASETS = {
+  'kebun-kayu': {
+    heading: 'Sepuluh teratas deforestasi<br>di konsesi kebun kayu',
+    othersLabel: '202 izin<br>Lainnya', othersVal: '21.799', statTotal: '21.799',
+    bullets: ['Deforestasi dalam 212 konsesi kebun kayu','34% deforestasi terjadi pada 10 perusahaan teratas'],
+    points: [
+      { lat:2.16,  lng:117.48, rank:1,  name:'Tanjung Redeb Hutani',               value:1409, dir:'right'  },
+      { lat:0.2,  lng:111.0, rank:2,  name:'Finnantara Intiga',                  value:1341, dir:'left'   },
+      { lat:1.3,  lng:116.2, rank:3,  name:'Mahakarya Perdana Gemilang Unit II', value:1324, dir:'right'  },
+      { lat:0.3,  lng:115.5, rank:4,  name:'Diva Perdana Pesona',                value:1296, dir:'right'  },
+      { lat:1.4,  lng:101.5, rank:5,  name:'Bumi Hijau Prima',                   value:1294, dir:'left'   },
+      { lat:0.3,  lng:100.5, rank:6,  name:'Grace Putri Perdana',                value:1171, dir:'left'   },
+      { lat:1.9,  lng:117.3, rank:7,  name:'Hutan Berau Lestari',                value:1097, dir:'right'  },
+      { lat:0.8,  lng:116.0, rank:8,  name:'Sendawar Adhi Karya',                value:1019, dir:'right'  },
+      { lat:-0.6, lng:115.2, rank:9,  name:'Swadaya Perkasa',                    value:662,  dir:'right'  },
+      { lat:-2.0, lng:103.5, rank:10, name:'Sekato Pratama Makmur',              value:652,  dir:'bottom' },
+    ]
+  },
+  'logging': {
+    heading: 'Sepuluh teratas deforestasi<br>di konsesi logging',
+    othersLabel: '227 izin<br>Lainnya', othersVal: '53.661', statTotal: '53.661',
+    bullets: ['Deforestasi dalam 237 konsesi logging','28% deforestasi dalam konsesi logging terjadi pada 10 perusahaan teratas'],
+    points: [
+      { lat:3.8,  lng:117.5, rank:1,  name:'Kiani Lestari',                        value:3739, dir:'right'  },
+      { lat:-0.5, lng:115.0, rank:2,  name:'Dasa Intiga',                          value:3195, dir:'left'  },
+      { lat:-2.5, lng:136.8, rank:3,  name:'Diamond Raya Timber',                  value:2741, dir:'right' },
+      { lat:-7.5, lng:131.5, rank:4,  name:'Anugerah Pratama Inspirasi',           value:2211, dir:'bottom'},
+      { lat:1.2,  lng:118.2, rank:5,  name:'Itci Kartika Utama (Itciku)',          value:1902, dir:'right' },
+      { lat:2.5,  lng:118.5, rank:6,  name:'Inhutani I Unit Labanan',              value:1688, dir:'right' },
+      { lat:-5.0, lng:139.5, rank:7,  name:'Jati Dharma Indah Plywood Industries', value:1415, dir:'bottom'},
+      { lat:1.8,  lng:116.0, rank:8,  name:'PT Inhutani I Unit Sambarata',         value:1330, dir:'left'  },
+      { lat:-1.5, lng:133.5, rank:9,  name:'Dwima Jaya Utama',                     value:1267, dir:'top'   },
+      { lat:2.5,  lng:99.5,  rank:10, name:'Barumun Raya Padang Langkat',          value:1260, dir:'left'  },
+    ]
+  },
+  'sawit': {
+    heading: 'Sepuluh teratas deforestasi<br>di konsesi sawit',
+    othersLabel: '709 izin<br>Lainnya', othersVal: '24.300', statTotal: '24.300',
+    bullets: ['Deforestasi seluas 37.910 ha dalam 719 konsesi sawit sepanjang 2025','36% (13.610 ha) terjadi pada 10 konsesi teratas','Pusat ekspansi berada di Kalimantan dan Tanah Papua'],
+    points: [
+      { lat:-1.0, lng:135.0, rank:1,  name:'Inti Kebun Lestari',      value:2624, dir:'top'    },
+      { lat:0.0,  lng:113.5, rank:2,  name:'Banyan Tumbuh Lestari',   value:2094, dir:'right'  },
+      { lat:-3.5, lng:136.5, rank:3,  name:'Inti Kebun Sejahtera',    value:2053, dir:'right'  },
+      { lat:-7.5, lng:140.3, rank:4,  name:'Merauke Sawit Jaya',      value:1808, dir:'left'   },
+      { lat:-5.5, lng:139.5, rank:5,  name:'Papua Lestari Abadi',     value:1300, dir:'right'  },
+      { lat:-2.5, lng:111.8, rank:7,  name:'Agro Kalimantan Lestari', value:784,  dir:'left'   },
+      { lat:1.8,  lng:102.0, rank:8,  name:'Anugrah Surya Mandiri',   value:713,  dir:'top'    },
+      { lat:0.2,  lng:100.5, rank:9,  name:'Khatulistiwa Agro Abadi', value:682,  dir:'left'   },
+      { lat:-1.5, lng:102.5, rank:10, name:'Citra Sugi Aditya',       value:676,  dir:'bottom' },
+    ]
+  },
+  'tambang': {
+    heading: 'Sepuluh teratas deforestasi<br>di konsesi tambang',
+    othersLabel: '1.131 izin<br>Lainnya', othersVal: '32.233', statTotal: '32.233',
+    bullets: ['Deforestasi seluas 41.162 ha dalam 1.140 konsesi tambang sepanjang 2025','22% (8.929 ha) terjadi dalam 10 perusahaan teratas','Ekspansi tambang emas meningkat selain nikel di Indonesia'],
+    points: [
+      { lat:2.5,  lng:117.8, rank:1,  name:'Berau Coal (Batubara)',             value:1473, dir:'right'  },
+      { lat:-2.0, lng:121.5, rank:2,  name:'Sulawesi Cahaya Mineral (Nikel)',   value:1085, dir:'right'  },
+      { lat:0.5,  lng:114.5, rank:3,  name:'Maruwai Coal (Batubara)',           value:920,  dir:'top'    },
+      { lat:1.2,  lng:128.0, rank:4,  name:'Weda Bay Nickel (Nikel)',           value:902,  dir:'right'  },
+      { lat:-3.2, lng:120.5, rank:5,  name:'Vale Indonesia TBK (Nikel)',        value:842,  dir:'left'   },
+      { lat:1.8,  lng:99.0,  rank:6,  name:'Agincourt Resources (Emas)',        value:840,  dir:'left'   },
+      { lat:1.5,  lng:116.0, rank:7,  name:'Lahai Coal (Batubara)',             value:770,  dir:'left'   },
+      { lat:3.5,  lng:117.2, rank:8,  name:'Blok Waringin Agung (Emas)',       value:764,  dir:'right'  },
+      { lat:-1.2, lng:115.5, rank:9,  name:'Suprabari Mapanindo Mineral',      value:673,  dir:'left'   },
+      { lat:-4.2, lng:122.8, rank:10, name:'Bintang Delapan Mineral (Nikel)',  value:659,  dir:'bottom' },
+    ]
+  }
+};
+
+function loadData(type) {
+  clearLayers();
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-'+type).classList.add('active');
+
+  const d = DATASETS[type];
+  document.getElementById('map-heading').innerHTML  = d.heading;
+  document.getElementById('stat-total').textContent = d.statTotal;
+  document.getElementById('ob-label').innerHTML     = d.othersLabel;
+  document.getElementById('ob-val').textContent     = d.othersVal;
+  document.getElementById('stat-bullets').innerHTML = d.bullets.map(b=>`<li>${b}</li>`).join('');
+
+  const maxVal = Math.max(...d.points.map(p => p.value));
+
+  clusterGroup = L.markerClusterGroup({
+    maxClusterRadius: 70,
+    showCoverageOnHover: false,
+    spiderfyOnMaxZoom: true,
+    iconCreateFunction: function(cluster) {
+      const n = cluster.getChildCount();
+      const s = 46;
+      return L.divIcon({
+        className: '',
+        html: `<div class="cluster-icon" style="width:${s}px;height:${s}px">${n}</div>`,
+        iconSize: [s, s], iconAnchor: [s/2, s/2]
+      });
+    }
+  });
+
+  d.points.forEach(p => {
+    const size = Math.round(20 + (p.value / maxVal) * 28);
+    const fs   = Math.max(9, Math.round(size * 0.38));
+
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="dot-marker" style="width:${size}px;height:${size}px;font-size:${fs}px">${p.rank}</div>`,
+      iconSize: [size, size],
+      iconAnchor: [size/2, size/2]
+    });
+
+    const marker = L.marker([p.lat, p.lng], { icon });
+
+    const gap = size/2 + 10;
+    const offsets = { right:[gap,0], left:[-gap,0], top:[0,-gap], bottom:[0,gap] };
+    const off = offsets[p.dir] || [gap, 0];
+
+    marker.bindTooltip(`
+      <div class="label-box">
+        <div class="lb-name">${p.name}</div>
+        <div class="lb-val">${p.value.toLocaleString('id-ID')}</div>
+      </div>
+    `, { permanent:true, direction:p.dir, offset:off, className:'label-tip' });
+
+    marker.bindPopup(`
+      <div class="popup-inner">
+        <div class="popup-rank">Peringkat #${p.rank}</div>
+        <div class="popup-name">${p.name}</div>
+        <div class="popup-val">${p.value.toLocaleString('id-ID')}</div>
+        <div class="popup-unit">hektare deforestasi</div>
+        <div class="popup-type">${type}</div>
+      </div>
+    `);
+
+    clusterGroup.addLayer(marker);
+  });
+
+  map.addLayer(clusterGroup);
+}
+
+loadData('kebun-kayu');
+</script>
+</body>
+</html>

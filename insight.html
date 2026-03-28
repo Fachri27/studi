@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status Deforestasi Indonesia 2025 — SIMONTINI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Sans:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:       #8b2a1a;
+  --red-light: #c04030;
+  --red-pale:  #f2ece8;
+  --cream:     #f5f0e8;
+  --dark:      #1a1a1a;
+  --ink-mid:   #3a3428;
+  --tan:       #d4c4a0;
+  --muted:     #7a6e60;
+  --border:    #e2d8cc;
+  --white:     #ffffff;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--dark);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PROGRESS BAR ── */
+#progress {
+  position: fixed; top: 0; left: 0; z-index: 200;
+  height: 2px; width: 0%;
+  background: linear-gradient(90deg, var(--red), #e07050);
+  transition: width .06s linear;
+  pointer-events: none;
+}
+
+/* ── STICKY NAV ── */
+#sitenav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5vw;
+  height: 52px;
+  background: rgba(245,240,232,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-100%);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+}
+#sitenav.show { transform: translateY(0); }
+.nav-brand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; font-weight: 600; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--red);
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-brand svg { width: 13px; height: 13px; fill: var(--red); }
+.nav-links {
+  display: flex; gap: 0; list-style: none;
+}
+.nav-links a {
+  font-size: .7rem; font-weight: 600; letter-spacing: .04em;
+  text-decoration: none; color: var(--muted);
+  padding: 0 14px; line-height: 52px;
+  transition: color .15s;
+  border-bottom: 2px solid transparent;
+}
+.nav-links a:hover { color: var(--red); }
+.nav-links a.active { color: var(--red); border-bottom-color: var(--red); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  background: var(--dark);
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 8vw 80px;
+  position: relative; overflow: hidden;
+}
+.hero-bg-text {
+  position: absolute; top: 50%; left: 8vw;
+  transform: translateY(-50%);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(8rem, 22vw, 22rem);
+  font-weight: 900; line-height: 1;
+  color: rgba(255,255,255,.03);
+  pointer-events: none; user-select: none;
+  letter-spacing: -.04em;
+}
+.hero-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; font-weight: 600; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--red-light);
+  margin-bottom: 22px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-tag::before {
+  content: '';
+  display: inline-block; width: 28px; height: 1.5px;
+  background: var(--red-light);
+}
+#hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 6vw, 5.5rem);
+  font-weight: 900; line-height: 1.06;
+  letter-spacing: -.03em;
+  color: var(--cream);
+  max-width: 780px;
+  margin-bottom: 28px;
+}
+#hero h1 em { color: var(--red-light); font-style: normal; }
+.hero-meta {
+  display: flex; gap: 32px; align-items: center;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.hero-stat .hs-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 700; line-height: 1;
+  color: var(--cream);
+}
+.hero-stat .hs-unit {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; letter-spacing: .1em;
+  color: rgba(245,240,232,.45);
+  text-transform: uppercase;
+}
+.hero-divider {
+  width: 1px; height: 48px;
+  background: rgba(245,240,232,.12);
+}
+.hero-desc {
+  max-width: 420px;
+  font-size: .82rem; line-height: 1.75;
+  color: rgba(245,240,232,.45);
+}
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.scroll-hint span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .55rem; letter-spacing: .15em;
+  text-transform: uppercase; color: rgba(245,240,232,.3);
+}
+.scroll-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red); opacity: .6;
+  animation: sdrop 1.5s ease-in-out infinite;
+}
+@keyframes sdrop {
+  0%,100% { transform: translateY(0); opacity: .6; }
+  50% { transform: translateY(8px); opacity: .2; }
+}
+
+/* ── LAYOUT ── */
+.page-section {
+  max-width: 820px; margin: 0 auto;
+  padding: 96px 5vw;
+}
+.page-section.wide {
+  max-width: 1160px;
+}
+.page-section.dark-bg {
+  max-width: 100%; background: var(--dark); padding: 80px 5vw;
+}
+.page-section.dark-bg .section-body { max-width: 820px; margin: 0 auto; }
+
+/* section anchor */
+.s-anchor { display: block; height: 52px; margin-top: -52px; visibility: hidden; }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .6rem; font-weight: 600; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--red);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 24px; height: 1.5px;
+  background: var(--red);
+  display: inline-block;
+}
+.section-label.light { color: rgba(245,240,232,.45); }
+.section-label.light::before { background: rgba(245,240,232,.3); }
+
+/* ── HEADING ── */
+.s-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 900; line-height: 1.12;
+  letter-spacing: -.025em; color: var(--dark);
+  margin-bottom: 28px;
+}
+.s-heading.light { color: var(--cream); }
+.s-heading em { color: var(--red); font-style: italic; }
+
+/* ── BODY TEXT ── */
+.body-text {
+  font-size: .95rem; line-height: 1.85;
+  color: var(--ink-mid);
+  margin-bottom: 20px;
+}
+.body-text.light { color: rgba(245,240,232,.6); }
+.body-text + .body-text { margin-top: 0; }
+
+/* ── LEAD TEXT ── */
+.lead {
+  font-size: 1.15rem; line-height: 1.7;
+  color: var(--dark); font-weight: 300;
+  border-left: 3px solid var(--red);
+  padding-left: 20px;
+  margin: 32px 0;
+}
+.lead.light { color: var(--cream); }
+
+/* ── STAT GRID ── */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden; margin: 40px 0;
+}
+.stat-cell {
+  background: var(--white); padding: 24px 22px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.stat-cell.red { background: var(--red); }
+.sc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .55rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.stat-cell.red .sc-label { color: rgba(255,255,255,.55); }
+.sc-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem; font-weight: 700; line-height: 1;
+  color: var(--dark);
+}
+.stat-cell.red .sc-val { color: #fff; }
+.sc-unit {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; color: var(--muted);
+}
+.stat-cell.red .sc-unit { color: rgba(255,255,255,.5); }
+
+/* ── DIVIDER ── */
+.divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 48px 0;
+}
+.divider.light { border-color: rgba(255,255,255,.08); }
+
+/* ── PULL QUOTE ── */
+.pull-quote {
+  margin: 48px 0;
+  padding: 32px 36px;
+  background: var(--dark);
+  border-radius: 8px;
+  position: relative;
+}
+.pull-quote::before {
+  content: '\201C';
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem; line-height: .8;
+  color: var(--red); opacity: .4;
+  position: absolute; top: 20px; left: 28px;
+}
+.pull-quote p {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; font-style: italic;
+  line-height: 1.65; color: var(--cream);
+  padding-left: 32px;
+}
+.pull-quote cite {
+  display: block; margin-top: 14px; padding-left: 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .6rem; letter-spacing: .1em;
+  color: rgba(245,240,232,.4);
+  font-style: normal;
+}
+
+/* ── CHAPTER HEADER ── */
+.chapter-header {
+  display: flex; align-items: flex-start; gap: 20px;
+  margin-bottom: 28px;
+}
+.chapter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; letter-spacing: .15em; font-weight: 600;
+  color: var(--red); border: 1.5px solid var(--red);
+  padding: 5px 9px; border-radius: 4px;
+  white-space: nowrap; flex-shrink: 0; margin-top: 5px;
+}
+.chapter-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 2.8vw, 2rem);
+  font-weight: 700; line-height: 1.2;
+  letter-spacing: -.02em;
+  color: var(--dark);
+}
+
+/* ── CALLOUT BOX ── */
+.callout {
+  background: var(--red-pale);
+  border-left: 4px solid var(--red);
+  border-radius: 0 6px 6px 0;
+  padding: 18px 20px;
+  margin: 28px 0;
+  font-size: .85rem; line-height: 1.7; color: var(--ink-mid);
+}
+.callout strong { color: var(--red); }
+
+/* ── BULLET LIST ── */
+.insight-list { list-style: none; padding: 0; margin: 20px 0 28px; }
+.insight-list li {
+  padding: 10px 0 10px 24px; position: relative;
+  font-size: .9rem; line-height: 1.65; color: var(--ink-mid);
+  border-bottom: 1px solid var(--border);
+}
+.insight-list li:last-child { border-bottom: none; }
+.insight-list li::before {
+  content: '—'; position: absolute; left: 0;
+  color: var(--red); font-weight: 700;
+}
+
+/* ── DATA TABLE ── */
+.data-table {
+  width: 100%; border-collapse: collapse;
+  font-size: .78rem; margin: 28px 0;
+}
+.data-table th {
+  background: var(--dark); color: var(--cream);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: 10px 14px; text-align: left; font-weight: 600;
+}
+.data-table td {
+  padding: 9px 14px; border-bottom: 1px solid var(--border);
+  color: var(--ink-mid);
+}
+.data-table tr:hover td { background: rgba(139,42,26,.04); }
+.data-table td.num {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--red); font-weight: 600; text-align: right;
+}
+.data-table td.rank {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted); font-size: .65rem;
+}
+
+/* ── VIZ EMBED ── */
+.viz-block {
+  margin: 48px 0;
+}
+.viz-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.viz-label::before {
+  content: ''; width: 16px; height: 1.5px;
+  background: var(--muted); display: inline-block;
+}
+.viz-caption {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .62rem; color: var(--muted); margin-top: 10px;
+  line-height: 1.6;
+}
+
+.viz-frame {
+  width: 100%; overflow: hidden;
+  background: var(--white);
+}
+.viz-frame iframe {
+  width: 100%; display: block;
+  border: none;
+}
+
+/* full-bleed embed — breaks out of max-width container */
+.viz-block--full {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 56px;
+  margin-bottom: 0;
+}
+.viz-block--full .viz-frame {
+  border-radius: 0;
+  box-shadow: none;
+}
+.viz-block--full .viz-label,
+.viz-block--full .viz-caption {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 5vw;
+}
+
+/* embed bar (slim top strip) */
+.embed-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px;
+  background: var(--dark);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.embed-bar-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .6rem; letter-spacing: .12em;
+  color: rgba(245,240,232,.45); text-transform: uppercase;
+}
+.viz-expand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; color: rgba(245,240,232,.35);
+  background: none; border: none; cursor: pointer;
+  letter-spacing: .08em; text-transform: uppercase;
+  transition: color .15s;
+  text-decoration: none;
+  display: flex; align-items: center; gap: 5px;
+}
+.viz-expand:hover { color: rgba(245,240,232,.75); }
+.viz-expand svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* ── METHODOLOGY STEPS ── */
+.method-steps {
+  display: flex; flex-direction: column; gap: 0;
+  margin: 32px 0;
+}
+.method-step {
+  display: flex; gap: 20px; align-items: flex-start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+.method-step:last-child { border-bottom: none; }
+.ms-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; letter-spacing: .1em;
+  color: var(--red); background: var(--red-pale);
+  padding: 5px 8px; border-radius: 4px;
+  flex-shrink: 0; font-weight: 600; margin-top: 2px;
+}
+.ms-body h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: .9rem; font-weight: 700; color: var(--dark);
+  margin-bottom: 6px;
+}
+.ms-body p {
+  font-size: .82rem; line-height: 1.7; color: var(--muted);
+}
+
+/* ── PROVINCE TABLE WRAPPER ── */
+.two-col-tables {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  margin: 32px 0;
+}
+.tc-block h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px;
+}
+
+/* ── RECOMMENDATION ── */
+.rec-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; margin: 36px 0;
+}
+.rec-card {
+  background: var(--white); border-radius: 8px;
+  border: 1px solid var(--border); padding: 22px 20px;
+}
+.rec-card .rc-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .55rem; letter-spacing: .15em;
+  color: var(--red); margin-bottom: 10px; display: block;
+}
+.rec-card h4 {
+  font-size: .9rem; font-weight: 700; color: var(--dark);
+  margin-bottom: 8px; line-height: 1.3;
+}
+.rec-card p {
+  font-size: .78rem; line-height: 1.7; color: var(--muted);
+}
+
+/* ── AUTHOR BLOCK ── */
+.author-block {
+  border-top: 1px solid var(--border);
+  padding-top: 40px; margin-top: 60px;
+  display: flex; gap: 40px; flex-wrap: wrap;
+}
+.ab-group { flex: 1; min-width: 160px; }
+.ab-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.ab-names {
+  font-size: .78rem; line-height: 1.75; color: var(--ink-mid);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--dark);
+  padding: 40px 8vw 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-brand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; letter-spacing: .2em;
+  text-transform: uppercase; color: rgba(245,240,232,.35);
+  display: flex; align-items: center; gap: 7px;
+}
+.footer-brand svg { width: 14px; height: 14px; fill: rgba(245,240,232,.35); }
+.footer-cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem; color: rgba(245,240,232,.2);
+  line-height: 1.7; max-width: 560px;
+}
+
+/* ── RESPONSIVE ── */
+
+/* Tablet 900px ke bawah */
+@media (max-width: 900px) {
+  .page-section { padding: 72px 6vw; }
+  .page-section.dark-bg { padding: 64px 6vw; }
+  #hero { padding: 0 6vw 64px; }
+  .rec-grid { grid-template-columns: 1fr 1fr; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links a { padding: 0 10px; font-size: .65rem; }
+
+  /* iframe embed lebih pendek di tablet */
+  .viz-block--full .viz-frame iframe { height: 80vh !important; }
+}
+
+/* Mobile 640px ke bawah */
+@media (max-width: 640px) {
+  /* Nav */
+  .nav-links { display: none; }
+  #sitenav { padding: 0 5vw; }
+
+  /* Hero */
+  #hero { padding: 0 5vw 56px; min-height: 100svh; }
+  #hero h1 { font-size: clamp(2rem, 9vw, 3rem); margin-bottom: 20px; }
+  .hero-meta { flex-direction: column; gap: 14px; align-items: flex-start; }
+  .hero-divider { display: none; }
+  .hero-stat .hs-val { font-size: 1.6rem; }
+  .hero-desc { max-width: 100%; font-size: .8rem; }
+  .scroll-hint { display: none; }
+
+  /* Sections */
+  .page-section { padding: 56px 5vw; }
+  .page-section.dark-bg { padding: 56px 5vw; }
+
+  /* Headings */
+  .s-heading { font-size: clamp(1.5rem, 6vw, 2rem); margin-bottom: 20px; }
+
+  /* Stats */
+  .stat-grid { grid-template-columns: 1fr 1fr; gap: 1px; }
+  .sc-val { font-size: 1.35rem; }
+
+  /* Tables */
+  .two-col-tables { grid-template-columns: 1fr; gap: 16px; }
+  .data-table { font-size: .72rem; }
+  .data-table th, .data-table td { padding: 8px 10px; }
+
+  /* Pull quote */
+  .pull-quote { padding: 24px 20px 20px; }
+  .pull-quote::before { font-size: 3.5rem; top: 12px; left: 16px; }
+  .pull-quote p { font-size: 1rem; padding-left: 20px; }
+  .pull-quote cite { padding-left: 20px; }
+
+  /* Rec grid */
+  .rec-grid { grid-template-columns: 1fr; }
+
+  /* Author block */
+  .author-block { gap: 24px; }
+  .ab-group { min-width: 140px; }
+
+  /* Chapter header */
+  .chapter-header { gap: 12px; }
+
+  /* Method steps */
+  .method-step { gap: 12px; }
+
+  /* Footer */
+  footer { flex-direction: column; align-items: flex-start; gap: 12px; padding: 32px 5vw 28px; }
+  .footer-cite { font-size: .55rem; max-width: 100%; }
+
+  /* Embed iframes */
+  .viz-block--full .viz-frame iframe { height: 70vh !important; }
+  .embed-bar { padding: 9px 14px; }
+  .embed-bar-title { font-size: .55rem; letter-spacing: .08em; }
+
+  /* Lead text */
+  .lead { font-size: 1rem; }
+
+  /* Callout */
+  .callout { font-size: .8rem; padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- STICKY NAV -->
+<nav id="sitenav">
+  <div class="nav-brand">
+    <svg viewBox="0 0 24 24"><path d="M12 1L2 6.5v6C2 17.96 6.42 23.27 12 24.5c5.58-1.23 10-6.54 10-12V6.5Z"/></svg>
+    SIMONTINI
+  </div>
+  <ul class="nav-links">
+    <li><a href="#pendahuluan">Pendahuluan</a></li>
+    <li><a href="#metodologi">Metodologi</a></li>
+    <li><a href="#deforestasi">Deforestasi 2025</a></li>
+    <li><a href="#konsesi">Konsesi</a></li>
+    <li><a href="#diskusi">Diskusi</a></li>
+    <li><a href="#rekomendasi">Rekomendasi</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-text">2025</div>
+  <div class="hero-tag">Status Deforestasi Indonesia &middot; 2025</div>
+  <h1>Deforestasi Indonesia<br>melonjak pada <em>2025</em></h1>
+  <div class="hero-meta">
+    <div class="hero-stat">
+      <span class="hs-val">261.575</span>
+      <span class="hs-unit">Hektare deforestasi</span>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat">
+      <span class="hs-val">+4.191</span>
+      <span class="hs-unit">Peningkatan dari 2024</span>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-desc">
+      Deforestasi terjadi di seluruh pulau besar Indonesia, dengan lonjakan terbesar di Kalimantan dan Sumatera sepanjang 2025.
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Gulir ke bawah</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- PENDAHULUAN -->
+<span class="s-anchor" id="pendahuluan"></span>
+<section class="page-section">
+  <div class="section-label">01 / Pendahuluan</div>
+  <h2 class="s-heading">Mengapa data deforestasi tahunan penting?</h2>
+
+  <p class="lead">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pemerintah Indonesia pada dasarnya berupaya menekan deforestasi melalui berbagai kebijakan — namun data tahunan yang transparan masih menjadi tantangan tersendiri.
+  </p>
+
+  <p class="body-text">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+  </p>
+  <p class="body-text">
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+  </p>
+  <p class="body-text">
+    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-cell red">
+      <span class="sc-label">Total deforestasi 2025</span>
+      <span class="sc-val">261.575</span>
+      <span class="sc-unit">hektare</span>
+    </div>
+    <div class="stat-cell">
+      <span class="sc-label">Peningkatan dari 2024</span>
+      <span class="sc-val">+4.191</span>
+      <span class="sc-unit">hektare</span>
+    </div>
+    <div class="stat-cell">
+      <span class="sc-label">Provinsi terdampak</span>
+      <span class="sc-val">33</span>
+      <span class="sc-unit">dari 34 provinsi</span>
+    </div>
+    <div class="stat-cell">
+      <span class="sc-label">Kabupaten terdampak</span>
+      <span class="sc-val">428</span>
+      <span class="sc-unit">atau 83% dari total</span>
+    </div>
+  </div>
+
+  <p class="body-text">
+    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+  </p>
+</section>
+
+<!-- METODOLOGI -->
+<span class="s-anchor" id="metodologi"></span>
+<section class="page-section dark-bg">
+<div class="section-body">
+  <div class="section-label light">02 / Metodologi</div>
+  <h2 class="s-heading light">Tiga tahapan deteksi dan verifikasi</h2>
+
+  <p class="body-text light">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Deforestasi yang dimaksud dalam kajian ini adalah hilangnya tutupan hutan alam — tidak mencakup kehilangan pada kebun kayu maupun hutan tanaman.
+  </p>
+
+  <div class="method-steps">
+    <div class="method-step">
+      <div class="ms-num">01</div>
+      <div class="ms-body">
+        <h4>Deteksi dugaan deforestasi</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Alert deforestasi bulanan dikembangkan melalui University of Maryland, ditampалkan dengan tutupan hutan MapBiomas Indonesia untuk menyaring true alert dan false alert. Scope area setiap bulan diperluas radius 1,5 kilometer, lalu diklasifikasi dengan metode change detection.</p>
+      </div>
+    </div>
+    <div class="method-step">
+      <div class="ms-num">02</div>
+      <div class="ms-body">
+        <h4>Inspeksi visual</h4>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem. Poligon dugaan deforestasi dicek satu per satu pada citra satelit NICFI/Planet resolusi 3 meter. Seluruh dugaan deforestasi pada skala luas lebih dari 1 hektare diinspeksi secara visual oleh tim peneliti.</p>
+      </div>
+    </div>
+    <div class="method-step">
+      <div class="ms-num">03</div>
+      <div class="ms-body">
+        <h4>Pemantauan lapangan</h4>
+        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur. Tim peneliti mengunjungi area-area deforestasi terpilih di 17 provinsi sepanjang 2025, mewakili berbagai kategori geografis, tipologi kawasan hutan, dan jenis konsesi. Total area terverifikasi lapangan mencapai 22.350 hektare.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMBED: ALUR.HTML -->
+  <div class="viz-block viz-block--full">
+    <div class="viz-frame">
+      <div class="embed-bar">
+        <span class="embed-bar-title">Tahapan &amp; Pemrosesan Data SIMONTINI</span>
+        <a href="alur.html" target="_blank" class="viz-expand">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+          Buka penuh
+        </a>
+      </div>
+      <iframe src="alur.html" title="Alur Pemrosesan Data" loading="lazy" style="height:100vh;"></iframe>
+    </div>
+    <div class="viz-caption" style="padding-top:12px;padding-bottom:4px;">
+      Diagram interaktif alur kerja SIMONTINI dari pemodelan deep learning hingga verifikasi lapangan. Klik kotak oranye untuk melihat detail setiap tahapan.
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- DEFORESTASI 2025 -->
+<span class="s-anchor" id="deforestasi"></span>
+<section class="page-section">
+  <div class="section-label">03 / Deforestasi 2025</div>
+  <h2 class="s-heading">Peta dan distribusi deforestasi per pulau</h2>
+
+  <p class="lead">
+    Deforestasi pada 2025 teridentifikasi seluas 261.575 hektare, meningkat 4.191 hektare dari tahun sebelumnya. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+  </p>
+
+  <p class="body-text">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Deforestasi terjadi di seluruh provinsi Indonesia kecuali DKI Jakarta. Peningkatan terbesar terjadi di Kalimantan Timur yang naik dari peringkat ketiga menjadi peringkat pertama, menggantikan Kalimantan Barat.
+  </p>
+
+  <!-- EMBED: INDEX.HTML -->
+  <div class="viz-block viz-block--full">
+    <div class="viz-frame">
+      <div class="embed-bar">
+        <span class="embed-bar-title">Deforestasi melonjak pada 2025</span>
+        <a href="index.html" target="_blank" class="viz-expand">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+          Buka penuh
+        </a>
+      </div>
+      <iframe src="index.html" title="Peta Deforestasi Indonesia" loading="lazy" style="height:100vh;"></iframe>
+    </div>
+    <div class="viz-caption" style="padding-top:12px;padding-bottom:4px;">
+      Peta interaktif deforestasi per pulau besar Indonesia 2019–2025. Gulir untuk melihat perubahan deforestasi tiap tahun.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h3 class="chapter-title" style="margin-bottom:20px;">Sepuluh teratas provinsi deforestasi, 2025</h3>
+
+  <div class="two-col-tables">
+    <div class="tc-block">
+      <h4>2024 (Referensi)</h4>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Provinsi</th><th>Ha</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">01</td><td>Kalimantan Timur</td><td class="num">44.483</td></tr>
+          <tr><td class="rank">02</td><td>Kalimantan Barat</td><td class="num">39.598</td></tr>
+          <tr><td class="rank">03</td><td>Kalimantan Tengah</td><td class="num">33.389</td></tr>
+          <tr><td class="rank">04</td><td>Riau</td><td class="num">20.812</td></tr>
+          <tr><td class="rank">05</td><td>Sumatera Selatan</td><td class="num">20.184</td></tr>
+          <tr><td class="rank">06</td><td>Jambi</td><td class="num">14.839</td></tr>
+          <tr><td class="rank">07</td><td>Aceh</td><td class="num">8.962</td></tr>
+          <tr><td class="rank">08</td><td>Kalimantan Utara</td><td class="num">8.767</td></tr>
+          <tr><td class="rank">09</td><td>Bangka Belitung</td><td class="num">7.956</td></tr>
+          <tr><td class="rank">10</td><td>Sumatera Utara</td><td class="num">7.303</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tc-block">
+      <h4>2025 (Estimasi)</h4>
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Provinsi</th><th>Ha</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">01</td><td>Kalimantan Timur</td><td class="num">48.921</td></tr>
+          <tr><td class="rank">02</td><td>Kalimantan Barat</td><td class="num">41.203</td></tr>
+          <tr><td class="rank">03</td><td>Riau</td><td class="num">24.580</td></tr>
+          <tr><td class="rank">04</td><td>Kalimantan Tengah</td><td class="num">31.440</td></tr>
+          <tr><td class="rank">05</td><td>Sumatera Selatan</td><td class="num">21.390</td></tr>
+          <tr><td class="rank">06</td><td>Jambi</td><td class="num">16.210</td></tr>
+          <tr><td class="rank">07</td><td>Aceh</td><td class="num">9.870</td></tr>
+          <tr><td class="rank">08</td><td>Papua Selatan</td><td class="num">9.130</td></tr>
+          <tr><td class="rank">09</td><td>Kalimantan Utara</td><td class="num">8.990</td></tr>
+          <tr><td class="rank">10</td><td>Sumatera Utara</td><td class="num">7.840</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="body-text">
+    Ut labore et dolore magna aliqua, Kalimantan kembali menjadi pulau dengan deforestasi tahunan terluas pada 2025. Pulau ini mengalami deforestasi tahunan terluas secara beruntun selama dua belas tahun terakhir. Bahkan, berbeda dengan pulau lainnya yang relatif stagnan, deforestasi Kalimantan justru terus meningkat setiap tahun sejak 2021.
+  </p>
+
+  <div class="pull-quote">
+    <p>Deforestasi di Kalimantan meningkat drastis setiap tahun sejak 2021, didorong oleh ekspansi konsesi kebun kayu, sawit, dan pertambangan yang beroperasi secara legal di bawah izin yang diterbitkan pemerintah.</p>
+    <cite>— Analisis SIMONTINI 2025</cite>
+  </div>
+</section>
+
+<!-- KONSESI -->
+<span class="s-anchor" id="konsesi"></span>
+<section class="page-section dark-bg">
+<div class="section-body">
+  <div class="section-label light">04 / Deforestasi dalam Konsesi</div>
+  <h2 class="s-heading light">Siapa yang paling banyak membabat hutan?</h2>
+
+  <p class="body-text light">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sebagian besar deforestasi pada 2025 terjadi di dalam konsesi yang memiliki izin resmi dari pemerintah — mencakup kebun kayu, logging, sawit, dan pertambangan. Ditelisik lebih dalam, hanya segelintir perusahaan yang bertanggung jawab atas porsi terbesar kerusakan hutan ini.
+  </p>
+
+  <!-- EMBED: KONSESI.HTML -->
+  <div class="viz-block viz-block--full">
+    <div class="viz-frame">
+      <div class="embed-bar">
+        <span class="embed-bar-title">Deforestasi dalam Konsesi — Sepuluh Teratas per Kategori</span>
+        <a href="konsesi.html" target="_blank" class="viz-expand">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+          Buka penuh
+        </a>
+      </div>
+      <iframe src="konsesi.html" title="Deforestasi dalam Konsesi" loading="lazy" style="height:100vh;"></iframe>
+    </div>
+    <div class="viz-caption" style="padding-top:12px;padding-bottom:4px;color:rgba(245,240,232,.35)">
+      Peta interaktif 10 konsesi teratas deforestasi per kategori. Pilih kategori di sidebar untuk beralih antar kebun kayu, logging, sawit, dan tambang.
+    </div>
+  </div>
+
+  <hr class="divider light">
+
+  <div class="callout" style="background:rgba(139,42,26,.18);border-color:var(--red-light);">
+    <p style="color:var(--cream);">
+      <strong style="color:#e07050;">Catatan:</strong> Hanya 3% deforestasi 2025 yang terjadi di kawasan konservasi, sementara 49% di hutan produksi dan 43% di luar kawasan hutan. Artinya, <strong style="color:#e07050;">97% deforestasi yang terjadi berpotensi legal</strong> karena dilakukan di daerah berizin.
+    </p>
+  </div>
+</div>
+</section>
+
+<!-- DISKUSI -->
+<span class="s-anchor" id="diskusi"></span>
+<section class="page-section">
+  <div class="section-label">05 / Diskusi</div>
+  <h2 class="s-heading">Empat temuan utama tahun 2025</h2>
+
+  <!-- 1 -->
+  <div style="margin-top: 40px;">
+    <div class="chapter-header">
+      <span class="chapter-num">01</span>
+      <h3 class="chapter-title">Deforestasi legal sebagai ancaman terbesar</h3>
+    </div>
+    <p class="body-text">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sistem dan detail hukum Indonesia pada dasarnya tidak melarang deforestasi karena sepanjang pemerintah menerbitkan izin maka pemilik izin dapat melakukan deforestasi secara sah.
+    </p>
+    <p class="body-text">
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+    <ul class="insight-list">
+      <li>Moratorium izin baru di hutan primer dan gambut adalah kebijakan, bukan peraturan tetap</li>
+      <li>Omnibus Law membuka ruang proyek pemerintah untuk membabat hutan alam secara leluasa</li>
+      <li>Pemerintah tidak pernah merilis RKT perusahaan kehutanan atau RKAB perusahaan pertambangan secara publik</li>
+      <li>Hanya 3% deforestasi terjadi di kawasan konservasi — sisanya berpotensi legal</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 2 -->
+  <div>
+    <div class="chapter-header">
+      <span class="chapter-num">02</span>
+      <h3 class="chapter-title">Kalimantan kembali jadi epicentrum deforestasi</h3>
+    </div>
+    <p class="body-text">
+      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Kalimantan kembali menjadi pulau pemilik deforestasi tahunan terluas pada 2025 — dua belas tahun berturut-turut. Penunjukan IKN di Penajam Paser Utara tampaknya menjadi salah satu musabab meningkatnya deforestasi ini.
+    </p>
+    <p class="body-text">
+      Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Deforestasi akibat pengembangan kebun kayu, tambang, dan sawit menjadi musabab utama, mencakup 59% deforestasi di seluruh Pulau Kalimantan.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 3 -->
+  <div>
+    <div class="chapter-header">
+      <span class="chapter-num">03</span>
+      <h3 class="chapter-title">Kebun kayu biomassa: ancaman baru yang melonjak</h3>
+    </div>
+    <p class="body-text">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pada 2025, kebun kayu — khususnya kebun kayu biomassa/energi — menjadi penyebab deforestasi terbesar di Indonesia. Ekspansi ini didorong oleh permintaan pasar Jepang dan Korea Selatan, serta kebijakan kelistrikan nasional yang membuka ruang penggunaan biomassa berbasis kayu.
+    </p>
+    <div class="callout">
+      <strong>Faktor pendorong ekspansi kebun kayu biomassa:</strong>
+      <ul style="margin-top:8px;padding-left:16px;font-size:.82rem;line-height:1.75;color:var(--ink-mid);">
+        <li>Tingginya permintaan pasar Jepang dan Korea Selatan akan bahan bakar biomassa kayu</li>
+        <li>Kebijakan kelistrikan nasional yang mengizinkan biomassa kayu hingga 5–10% pada 2030</li>
+        <li>Meningkatnya konsesi kebun kayu biomassa yang diterbitkan Kementerian Kehutanan</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 4 -->
+  <div>
+    <div class="chapter-header">
+      <span class="chapter-num">04</span>
+      <h3 class="chapter-title">Nikel merangsek ke hutan Papua dan Raja Ampat</h3>
+    </div>
+    <p class="body-text">
+      At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti. Raja Ampat yang dikenal sebagai surga wisata bahari — bahkan dinobatkan UNESCO sebagai kawasan geopark — kini terancam serius oleh tambang nikel di empat pulau kecilnya.
+    </p>
+    <p class="body-text">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Analisis citra satelit mengindikasikan hingga 2025 telah terjadi deforestasi akibat penambangan nikel seluas lebih dari 200 hektare di kepulauan Raja Ampat. Ancaman ini diperkirakan akan terus meluas seiring terbitnya izin-izin tambang nikel baru di Tanah Papua.
+    </p>
+  </div>
+</section>
+
+<!-- REKOMENDASI -->
+<span class="s-anchor" id="rekomendasi"></span>
+<section class="page-section" style="background:var(--dark);max-width:100%;padding:80px 5vw;">
+<div style="max-width:820px;margin:0 auto;">
+  <div class="section-label light">06 / Rekomendasi</div>
+  <h2 class="s-heading light">Apa yang harus dilakukan?</h2>
+
+  <p class="body-text light">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Saat ini, perlindungan hukum terhadap hutan alam di Indonesia hanya terdapat pada hutan-hutan alam yang berada di kawasan konservasi. Dari total 94,9 juta hektare hutan alam tersisa, 42 juta hektare tidak memiliki perlindungan hukum atau kebijakan sama sekali.
+  </p>
+
+  <div class="rec-grid">
+    <div class="rec-card">
+      <span class="rc-num">REC — 01</span>
+      <h4>Peraturan Presiden perlindungan hutan alam</h4>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Presiden perlu menerbitkan peraturan presiden yang memberikan perlindungan hukum terhadap seluruh hutan alam tersisa di Indonesia.</p>
+    </div>
+    <div class="rec-card">
+      <span class="rc-num">REC — 02</span>
+      <h4>Transparansi dokumen izin konsesi</h4>
+      <p>Sed do eiusmod tempor incididunt ut labore et dolore. Pemerintah wajib merilis RKT perusahaan kehutanan, RKAB pertambangan, dan peta detail pelepasan kawasan hutan secara publik.</p>
+    </div>
+    <div class="rec-card">
+      <span class="rc-num">REC — 03</span>
+      <h4>Moratorium izin konversi baru</h4>
+      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco. Penghentian sementara penerbitan izin konversi baru — terutama kebun kayu biomassa dan tambang nikel — di kawasan hutan alam tersisa.</p>
+    </div>
+    <div class="rec-card">
+      <span class="rc-num">REC — 04</span>
+      <h4>Penegakan hukum kawasan konservasi</h4>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit. Perlu penguatan signifikan terhadap unit pengelola kawasan konservasi dan penegakan 4 UU yang melarang deforestasi di dalamnya.</p>
+    </div>
+  </div>
+
+  <p class="body-text light">
+    Terobosan hukum yang bisa dilakukan dalam waktu cepat adalah dalam bentuk peraturan presiden, yang kekuatannya relatif setara dengan peraturan pemerintah. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
+  </p>
+
+  <hr class="divider light">
+
+  <div class="author-block" style="border-color:rgba(255,255,255,.08);">
+    <div class="ab-group">
+      <div class="ab-label" style="color:rgba(245,240,232,.3);">Penulis</div>
+      <div class="ab-names" style="color:rgba(245,240,232,.55);">Timer Manurung<br>Dedy Sukmara<br>Andhika Younastya</div>
+    </div>
+    <div class="ab-group">
+      <div class="ab-label" style="color:rgba(245,240,232,.3);">Pengolah Data</div>
+      <div class="ab-names" style="color:rgba(245,240,232,.55);">Andhika Younastya<br>Anggun Detrina Napitupulu<br>Bagus Sugiarto<br>Wahyu Ananta Nugraha</div>
+    </div>
+    <div class="ab-group">
+      <div class="ab-label" style="color:rgba(245,240,232,.3);">Verifikasi Lapangan</div>
+      <div class="ab-names" style="color:rgba(245,240,232,.55);">Bagus Subgiarto<br>Fajar Simanjuntak<br>Gilang Ekselsa<br>Riszki Is Hardianto</div>
+    </div>
+    <div class="ab-group">
+      <div class="ab-label" style="color:rgba(245,240,232,.3);">Saran Pengutipan</div>
+      <div class="ab-names" style="color:rgba(245,240,232,.55);">Auriga Nusantara. 2025.<br><em>Status Deforestasi Indonesia 2025.</em><br>simontini.id</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg viewBox="0 0 24 24"><path d="M12 1L2 6.5v6C2 17.96 6.42 23.27 12 24.5c5.58-1.23 10-6.54 10-12V6.5Z"/></svg>
+    SIMONTINI &mdash; Status Deforestasi Indonesia 2025
+  </div>
+  <div class="footer-cite">
+    Auriga Nusantara. 2025. <em>Status Deforestasi Indonesia 2025</em>. Data deforestasi menggunakan STADI (Status Deforestasi Indonesia) yang tersedia pada simontini.id. Data 2001–2022 menggunakan University of Maryland Lossyear dengan overlay tutupan hutan Kementerian Kehutanan.
+  </div>
+</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (max > 0 ? scrollY / max * 100 : 0) + '%';
+});
+
+// Nav show/hide + active links
+const nav = document.getElementById('sitenav');
+const sections = document.querySelectorAll('.s-anchor');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -60% 0px' });
+
+sections.forEach(s => io.observe(s));
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('show', scrollY > 80);
+});
+</script>
+
+</body>
+</html>

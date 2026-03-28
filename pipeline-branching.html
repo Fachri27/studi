@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipeline Branching Example</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    body {
+      background: #FAFAF8;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1A1A18;
+      margin: 0;
+      padding: 0;
+    }
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr 60px 1fr;
+      grid-template-rows: auto 60px auto 60px auto 60px auto 60px auto;
+      gap: 0;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 16px;
+      position: relative;
+    }
+    .step {
+      background: #C0522A;
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 22px 18px;
+      min-height: 60px;
+      box-shadow: 0 2px 10px rgba(192,82,42,.12);
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      z-index: 2;
+    }
+    .step.big {
+      background: #A13B1A;
+      font-size: 1.3rem;
+      font-weight: 800;
+      grid-column: 3 / 4;
+      grid-row: 9;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Arrow SVG styling */
+    .arrow, .arrow-branch {
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .arrow svg, .arrow-branch svg {
+      position: absolute;
+      width: 100%; height: 100%;
+      left: 0; top: 0;
+      display: block;
+    }
+    .pipeline-grid > .arrow, .pipeline-grid > .arrow-branch {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+    }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .pipeline-grid {
+        grid-template-columns: 1fr 40px 1fr 40px 1fr;
+        grid-template-rows: repeat(9, auto);
+      }
+    }
+    @media (max-width: 600px) {
+      .pipeline-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(13, auto);
+        gap: 18px;
+      }
+      .arrow, .arrow-branch { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="pipeline-grid">
+    <!-- True/False Alert branching example -->
+    <div class="step" style="grid-column: 3 / 4; grid-row: 1;">Agregasi True Alert</div>
+    <div class="step" style="grid-column: 2 / 3; grid-row: 3;">True Alert</div>
+    <div class="step" style="grid-column: 4 / 5; grid-row: 3; background:#7E3418;">False Alert</div>
+    <!-- Arrow branch from True/False Alert to Agregasi True Alert -->
+    <div class="arrow-branch">
+      <svg viewBox="0 0 600 320">
+        <!-- True Alert ke Agregasi True Alert -->
+        <polyline points="150,180 150,100 300,100" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polygon points="300,96 300,104 308,100" fill="#C0522A"/>
+        <!-- False Alert ke Agregasi True Alert -->
+        <polyline points="450,180 450,100 300,100" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polygon points="300,96 300,104 308,100" fill="#C0522A"/>
+      </svg>
+    </div>
+    <!-- Overlay branching example -->
+    <div class="step" style="grid-column: 1 / 2; grid-row: 5;">Overlay</div>
+    <div class="step" style="grid-column: 2 / 3; grid-row: 7;">Inspeksi visual</div>
+    <div class="step" style="grid-column: 3 / 4; grid-row: 7;">Penapisan temporal</div>
+    <div class="step" style="grid-column: 4 / 5; grid-row: 7;">Pengecekan lapangan</div>
+    <div class="step big">Data Deforestasi</div>
+    <!-- Arrow branch from Overlay to 3 steps -->
+    <div class="arrow-branch">
+      <svg viewBox="0 0 600 320">
+        <!-- Overlay ke Inspeksi visual -->
+        <polyline points="60,340 60,400 180,400" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polygon points="180,396 180,404 188,400" fill="#C0522A"/>
+        <!-- Overlay ke Penapisan temporal -->
+        <polyline points="60,340 60,420 300,420" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polygon points="300,416 300,424 308,420" fill="#C0522A"/>
+        <!-- Overlay ke Pengecekan lapangan -->
+        <polyline points="60,340 60,440 420,440" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polygon points="420,436 420,444 428,440" fill="#C0522A"/>
+        <!-- 3 steps ke Data Deforestasi (merge) -->
+        <polyline points="188,400 188,500 300,500" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polyline points="308,420 308,500 300,500" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polyline points="428,440 428,500 300,500" stroke="#C0522A" stroke-width="4" fill="none"/>
+        <polygon points="300,496 300,504 292,500" fill="#C0522A"/>
+      </svg>
+    </div>
+  </div>
+  <script>
+    // GSAP animasi box
+    gsap.utils.toArray('.step').forEach((el, i) => {
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        delay: 0.2 + i * 0.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    });
+    // GSAP animasi panah cabang
+    gsap.utils.toArray('.arrow-branch svg polyline').forEach((path, i) => {
+      const length = path.getTotalLength ? path.getTotalLength() : 100;
+      gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+      gsap.to(path, {
+        strokeDashoffset: 0,
+        duration: 0.9,
+        delay: 0.5 + i * 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: path,
+          start: 'top 95%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+    });
+  </script>
+</body>
+</html>
