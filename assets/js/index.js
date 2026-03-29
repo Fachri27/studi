@@ -98,7 +98,27 @@ async function hydrateInjectedScripts(container) {
   }
 }
 
+function transformIncludeToIframe() {
+  const mapping = {
+    'partials/chart-deforestasi.html': 'chart-deforestasi.html',
+    'partials/alur-embed.html': 'alur.html',
+    'partials/peta-embed.html': 'peta.html',
+    'partials/tematik-embed.html': 'tematik.html',
+    'partials/konsesi-embed.html': 'konsesi.html'
+  };
+
+  document.querySelectorAll('[data-include-html]').forEach(host => {
+    const src = host.getAttribute('data-include-html');
+    const iframeSrc = mapping[src];
+    if (!iframeSrc) return;
+
+    host.removeAttribute('data-include-html');
+    host.innerHTML = `\n      <div class="viz-frame">\n        <iframe src="${iframeSrc}" title="${iframeSrc.replace('.html', '')}" loading="lazy" style="display:block;width:100%;border:0;height:100vh;"></iframe>\n      </div>\n`;
+  });
+}
+
 async function loadHtmlPartials() {
+  transformIncludeToIframe();
   const hosts = Array.from(document.querySelectorAll('[data-include-html]'));
   if (!hosts.length) return;
 
