@@ -9,15 +9,9 @@
   will-change: opacity, transform;
 }
 /* ─── RESET & BASE ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.simontini-alur,
-.simontini-alur *,
-.simontini-alur *::before,
-.simontini-alur *::after { box-sizing: border-box; }
-
-.simontini-alur * { margin: 0; padding: 0; }
-
-.simontini-alur {
+:root {
   --rust:       #C0522A;
   --rust-dark:  #8C3A1C;
   --rust-light: rgba(192,82,42,.15);
@@ -35,7 +29,8 @@
   --shadow-pill-hover: 0 6px 24px rgba(192,82,42,.28);
 }
 
-.simontini-alur {
+html { scroll-behavior: smooth; }
+body {
   background: #0d0d0d;
   font-family: var(--font);
   color: var(--ink);
@@ -336,45 +331,6 @@
     justify-content: center;
     text-align: center;
     padding: 9px 14px;
-  }
-}
-
-@media (max-width: 560px) {
-  .site-header {
-    padding: 34px 16px 24px;
-  }
-
-  .pipeline {
-    padding: 0 16px 84px;
-  }
-
-  #pin-wrapper {
-    padding-top: 66px;
-  }
-
-  .p-unit {
-    width: 100%;
-  }
-
-  .pill {
-    min-height: 68px;
-    padding: 10px 10px 12px;
-  }
-
-  .pill-title {
-    font-size: 10px;
-    line-height: 1.35;
-  }
-
-  .pill-sub {
-    font-size: 10px;
-    line-height: 1.45;
-  }
-
-  .scroll-prompt {
-    font-size: 10px;
-    padding: 8px 10px;
-    gap: 7px;
   }
 }
 </style>
@@ -737,22 +693,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-(() => {
-const root = document.currentScript.closest('.simontini-alur');
-if (!root || root.dataset.alurInitialized === '1') return;
-root.dataset.alurInitialized = '1';
-
-const qs = (selector) => root.querySelector(selector);
-const qsa = (selector) => Array.from(root.querySelectorAll(selector));
-
 gsap.registerPlugin(ScrollTrigger);
 
 // Progress bar
 window.addEventListener('scroll', () => {
   const max = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = qs('#progress');
-  if (!progress) return;
-  progress.style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
+  document.getElementById('progress').style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
 });
 
 // Header entrance
@@ -770,7 +716,7 @@ const r1 = ['#lbl1','#pw-r1b1','#arr-r1a1','#pw-r1b2','#arr-r1a2','#pw-r1b3','#a
 const r2 = ['#lbl2','#pw-r2b1','#arr-r2a1','#pw-r2b2','#arr-r2a2','#pw-r2b3','#arr-r2a3','#pw-r2b4'];
 const r3 = ['#lbl3','#pw-r3b4','#arr-r3a3','#pw-r3b3','#arr-r3a2','#pw-r3b2','#arr-r3a1','#pw-r3b1'];
 const r4 = ['#lbl4','#pw-r4b1','#arr-r4a1','#pw-r4b2','#arr-r4a2','#pw-r4b3'];
-const scrollPrompt = qs('#scroll-prompt');
+const scrollPrompt = document.getElementById('scroll-prompt');
 
 gsap.set([...r1, ...r2, ...r3, ...r4], { opacity: 0, y: 22 });
 
@@ -818,7 +764,7 @@ r4.forEach((target, index) => {
 
 // Pin pipeline dan scrub dengan scroll
 ScrollTrigger.create({
-  trigger: qs('#pin-wrapper'),
+  trigger: '#pin-wrapper',
   start: 'top top',
   end: () => '+=' + (tl.duration() * 960),
   pin: true,
@@ -847,10 +793,10 @@ ScrollTrigger.create({
    CLICK TO TOGGLE DETAIL
    Klik pill yang punya data-detail → toggle panel bawahnya
 ────────────────────────────────────────────────────────── */
-qsa('.pill.has-detail').forEach(pill => {
+document.querySelectorAll('.pill.has-detail').forEach(pill => {
   pill.addEventListener('click', () => {
     const panelId = pill.dataset.detail;
-    const panel = qs(`#${panelId}`);
+    const panel = document.getElementById(panelId);
     if (!panel) return;
     const isOpen = panel.classList.contains('open');
     // tutup semua panel lain di row yang sama dulu (opsional: bisa remove ini untuk multi-open)
@@ -863,7 +809,7 @@ qsa('.pill.has-detail').forEach(pill => {
 });
 
 /* ── hover micro-lift on pills ── */
-qsa('.pill:not(.big)').forEach(p => {
+document.querySelectorAll('.pill:not(.big)').forEach(p => {
   p.addEventListener('mouseenter', () => {
     if (!p.classList.contains('has-detail')) return;
     p.style.boxShadow = 'var(--shadow-pill-hover)';
@@ -872,6 +818,5 @@ qsa('.pill:not(.big)').forEach(p => {
     p.style.boxShadow = '';
   });
 });
-})();
 </script>
 </div>
