@@ -135,10 +135,14 @@ body {
   flex: 1;
   min-width: 0;
   background: #ece8df;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 #map {
   width: 100%;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 #title-block {
@@ -239,30 +243,31 @@ body {
 }
 
 #table-wrap {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 18px;
-  z-index: 610;
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  overflow-y: auto;
+  max-height: 50vh;
+  background: var(--dark);
+  padding: 12px 18px;
 }
 .table-card {
-  background: rgba(248,244,238,.95);
-  border: 1px solid #9e9183;
-  box-shadow: 0 8px 24px rgba(26,26,26,.12);
+  background: var(--dark);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 8px 28px rgba(0,0,0,.45);
   overflow: hidden;
-  border-radius: 0;
+  border-radius: 4px;
+  color: var(--cream);
 }
 .table-title {
   font-family: 'Poppins', sans-serif;
-  font-size: .6rem;
-  letter-spacing: .08em;
+  font-size: .58rem;
+  letter-spacing: .09em;
   text-transform: uppercase;
-  color: #fff;
-  background: var(--red-light);
-  padding: 7px 10px;
+  color: var(--cream);
+  background: var(--red);
+  padding: 7px 12px;
 }
 .table-card table {
   width: 100%;
@@ -270,56 +275,51 @@ body {
   font-size: .72rem;
   table-layout: fixed;
 }
+.table-card thead tr { border-bottom: 2px solid var(--red-light); }
 .table-card th, .table-card td {
-  border-bottom: 1px solid #d7ccc0;
-  padding: 5px 8px;
-  vertical-align: top;
-}
-.table-card th,
-.table-card td {
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  padding: 7px 10px;
+  vertical-align: middle;
   overflow-wrap: anywhere;
 }
-.table-card th:nth-child(1),
-.table-card td:nth-child(1) {
-  width: 10%;
-}
-.table-card th:nth-child(2),
-.table-card td:nth-child(2) {
-  width: 44%;
-}
-.table-card th:nth-child(3),
-.table-card td:nth-child(3),
-.table-card th:nth-child(4),
-.table-card td:nth-child(4) {
-  width: 23%;
-}
+/* 5 kolom: rank25, rank24, provinsi, 2025ha, 2024ha */
+.table-card th:nth-child(1), .table-card td:nth-child(1) { width: 7%; }
+.table-card th:nth-child(2), .table-card td:nth-child(2) { width: 9%; }
+.table-card th:nth-child(4), .table-card td:nth-child(4),
+.table-card th:nth-child(5), .table-card td:nth-child(5) { width: 18%; }
 .table-card th {
   font-family: 'Poppins', sans-serif;
-  font-size: .58rem;
+  font-size: .56rem;
   text-transform: uppercase;
-  letter-spacing: .05em;
-  text-align: left;
-  color: #fff;
-  background: var(--red-light);
+  letter-spacing: .06em;
+  text-align: right;
+  color: var(--tan);
+  background: transparent;
+  font-weight: 600;
 }
-.table-card tr:nth-child(even) td { background: #f1e7e1; }
-.table-card td:last-child,
-.table-card th:last-child { text-align: right; }
+.table-card th:nth-child(3) { text-align: left; }
+.table-card td { text-align: right; color: var(--cream); }
+.table-card td:nth-child(3) { text-align: left; font-weight: 600; color: var(--cream); }
+.table-card tr:nth-child(even) td { background: rgba(255,255,255,.03); }
 .table-card tbody tr {
   cursor: pointer;
   transition: background .15s ease;
 }
 .table-card tbody tr:hover td {
-  background: rgba(192,64,48,.14) !important;
+  background: rgba(192,64,48,.18) !important;
 }
 .table-card tbody tr.active-row td {
-  background: rgba(192,64,48,.2) !important;
+  background: rgba(192,64,48,.26) !important;
 }
 .table-card tbody tr.total-row td {
   font-weight: 700;
-  background: rgba(192,64,48,.18) !important;
+  color: var(--red-light);
   border-top: 2px solid var(--red-light);
+  background: transparent !important;
 }
+.td-up   { color: #6bcf7f; }
+.td-down { color: #e8704a; }
+.td-same { color: var(--tan); }
 
 /* Leaflet custom */
 .leaflet-container { background: #efebe3 !important; }
@@ -497,9 +497,8 @@ body {
 /* Responsive */
 @media (max-width: 1280px) {
   #table-wrap {
-    left: 14px;
-    right: 14px;
     gap: 10px;
+    padding: 10px 14px;
   }
   #notes-box {
     width: min(390px, 40vw);
@@ -548,12 +547,9 @@ body {
     width: auto;
   }
   #table-wrap {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
     grid-template-columns: 1fr;
-    max-height: none;
-    overflow: visible;
+    max-height: 45vh;
+    padding: 10px 12px;
     gap: 10px;
   }
   .table-card {
@@ -626,8 +622,8 @@ body {
 
     <button class="mode-btn active" data-mode="provinsi">Deforestasi berbasis provinsi</button>
     <button class="mode-btn" data-mode="kabupaten">Deforestasi berbasis kabupaten</button>
-    <button class="mode-btn" data-mode="konservasi">Deforestasi di area kawasan konservasi</button>
-    <button class="mode-btn" data-mode="megafauna">Habitat megafauna ikonik</button>
+    <button class="mode-btn" data-mode="konservasi">Deforestasi di kawasan konservasi</button>
+    <button class="mode-btn" data-mode="megafauna">Deforestasi di Habitat megafauna ikonik</button>
 
     <div class="divider"></div>
 
@@ -714,36 +710,53 @@ const MODES = {
     ],
     tables: [
       {
-        title: 'Top Provinsi 2025 (1–10)',
-        headers: ['#', 'Provinsi', '2025 (ha)', '2024 (ha)'],
+        title: 'Provinsi 2025 (1–19)',
+        headers: ['2025', '2024', 'Provinsi', '2025 (ha)', '2024 (ha)'],
         rows: [
-          ['1', 'Kalimantan Tengah', '56.900', '33.389'],
-          ['2', 'Kalimantan Timur', '47.135', '44.483'],
-          ['3', 'Aceh', '38.157', '8.962'],
-          ['4', 'Kalimantan Barat', '31.876', '39.598'],
-          ['5', 'Papua Tengah', '26.978', '6.360'],
-          ['6', 'Sumatera Barat', '26.940', '2.606'],
-          ['7', 'Sumatera Utara', '20.512', '7.303'],
-          ['8', 'Kalimantan Utara', '19.716', '8.767'],
-          ['9', 'Riau', '17.812', '20.812'],
-          ['10', 'Papua Pegunungan', '16.468', '2.688']
+          ['1',  '↗3',  'Kalimantan Tengah',    '56.900', '33.389'],
+          ['2',  '↘1',  'Kalimantan Timur',     '47.135', '44.483'],
+          ['3',  '↗7',  'Aceh',                 '38.157',  '8.962'],
+          ['4',  '↘2',  'Kalimantan Barat',     '31.876', '39.598'],
+          ['5',  '↗12', 'Papua Tengah',         '26.978',  '6.360'],
+          ['6',  '↗20', 'Sumatera Barat',       '26.940',  '2.606'],
+          ['7',  '↗10', 'Sumatera Utara',       '20.512',  '7.303'],
+          ['8',  '— 8', 'Kalimantan Utara',     '19.716',  '8.767'],
+          ['9',  '↘4',  'Riau',                 '17.812', '20.812'],
+          ['10', '↗18', 'Papua Pegunungan',     '16.468',  '2.688'],
+          ['11', '↗11', 'Sulawesi Tengah',      '15.839',  '7.019'],
+          ['12', '↘6',  'Jambi',                '15.334', '14.839'],
+          ['13', '↗15', 'Bengkulu',             '13.095',  '4.300'],
+          ['14', '↘5',  'Sumatera Selatan',      '9.771', '20.184'],
+          ['15', '↗17', 'Papua Barat Daya',      '9.459',  '2.966'],
+          ['16', '↗21', 'Papua Barat',           '9.108',  '2.303'],
+          ['17', '↘14', 'Sulawesi Tenggara',     '9.104',  '4.413'],
+          ['18', '↗24', 'Papua',                 '8.421',  '1.768'],
+          ['19', '↘13', 'Papua Selatan',         '7.248',  '5.010']
         ]
       },
       {
-        title: 'Provinsi Lainnya (11–20)',
-        headers: ['#', 'Provinsi', '2025 (ha)', '2024 (ha)'],
+        title: 'Provinsi 2025 (20–37)',
+        headers: ['2025', '2024', 'Provinsi', '2025 (ha)', '2024 (ha)'],
         rows: [
-          ['11', 'Sulawesi Tengah', '15.839', '7.019'],
-          ['12', 'Jambi', '15.334', '14.839'],
-          ['13', 'Bengkulu', '13.095', '4.300'],
-          ['14', 'Sumatera Selatan', '9.771', '20.184'],
-          ['15', 'Papua Barat Daya', '9.459', '2.966'],
-          ['16', 'Papua Barat', '9.108', '2.303'],
-          ['17', 'Sulawesi Tenggara', '9.104', '4.413'],
-          ['18', 'Papua', '8.421', '1.768'],
-          ['19', 'Papua Selatan', '7.248', '5.010'],
-          ['20', 'Sulawesi Selatan', '5.526', '1.928'],
-          ['Total', 'Seluruh provinsi', '433.751', '261.575']
+          ['20', '↗23', 'Sulawesi Selatan',           '5.526',   '1.928'],
+          ['21', '↗26', 'Sulawesi Barat',             '4.867',   '1.170'],
+          ['22', '↘19', 'Maluku Utara',               '4.454',   '2.648'],
+          ['23', '↗22', 'Gorontalo',                  '3.849',   '2.180'],
+          ['24', '↗27', 'Maluku',                     '3.072',     '889'],
+          ['25', '↘16', 'Kalimantan Selatan',         '2.656',   '3.659'],
+          ['26', '↗29', 'Nusa Tenggara Timur',        '2.335',     '497'],
+          ['27', '↘25', 'Nusa Tenggara Barat',        '1.813',   '1.276'],
+          ['28', '↗32', 'Lampung',                    '1.111',     '145'],
+          ['29', '↗30', 'Kepulauan Riau',               '965',     '387'],
+          ['30', '↗35', 'Banten',                       '784',      '55'],
+          ['31', '↗33', 'Jawa Barat',                   '690',      '87'],
+          ['32', '↘31', 'Jawa Timur',                   '657',     '209'],
+          ['33', '↘28', 'Sulawesi Utara',               '495',     '650'],
+          ['34', '↘9',  'Kepulauan Bangka Belitung',    '454',   '7.956'],
+          ['35', '↗34', 'Jawa Tengah',                   '89',      '59'],
+          ['36', '— 36','Bali',                          '61',       '7'],
+          ['37', '— 37','Daerah Istimewa Yogyakarta',     '0',     '0.3'],
+          ['Total', '', 'Seluruh provinsi',          '433.751', '261.575']
         ]
       }
     ]
@@ -900,12 +913,12 @@ function focusMarkerByLabel(label, rowEl = null) {
 function buildPopupHtml(entry) {
   const isSpecies = entry.kind === 'species';
   const item = entry.item;
-  const unitMap = { provinsi: 'hektare deforestasi', kabupaten: 'hektare deforestasi', konservasi: 'hektare', megafauna: 'hektare habitat terdampak' };
+  const unitMap = { provinsi: 'hektare', kabupaten: 'hektare', konservasi: 'hektare', megafauna: 'hektare habitat terdampak' };
   const tagMap  = { provinsi: 'provinsi', kabupaten: 'kabupaten', konservasi: 'kawasan konservasi', megafauna: 'megafauna' };
   const unit = unitMap[entry.mode] || 'hektare';
   const tag  = tagMap[entry.mode]  || entry.mode;
   const rank = !isSpecies ? `<div class="popup-rank"></div>` : `<div class="popup-rank">Megafauna ikonik</div>`;
-  return `<div class="popup-inner">${rank}<div class="popup-name">${item.name}</div><div class="popup-val">${item.value}</div><div class="popup-unit">${unit}</div><div class="popup-type">${tag}</div></div>`;
+  return `<div class="popup-inner">${rank}<div class="popup-name">${item.name}</div><div class="popup-val">${item.value}</div><div class="popup-unit">${unit}</div></div>`;
 }
 
 function showCallout(entry) {
@@ -1042,26 +1055,36 @@ function renderTableCard(tbl) {
   const table = document.createElement('table');
   const thead = document.createElement('thead');
   const hr = document.createElement('tr');
-  tbl.headers.forEach(h => {
+  tbl.headers.forEach((h, i) => {
     const th = document.createElement('th');
     th.textContent = h;
     hr.appendChild(th);
   });
   thead.appendChild(hr);
 
+  const is5col = tbl.headers.length >= 5;
+
   const tbody = document.createElement('tbody');
   tbl.rows.forEach(row => {
     const tr = document.createElement('tr');
     const isTotalRow = String(row[0]).toLowerCase() === 'total';
     if (isTotalRow) tr.classList.add('total-row');
-    row.forEach((cell) => {
+    row.forEach((cell, ci) => {
       const td = document.createElement('td');
+      // col 2 (index 1) = rank change arrow — color by direction
+      if (is5col && ci === 1 && !isTotalRow) {
+        const s = String(cell);
+        if (s.startsWith('↗')) { td.className = 'td-up';   }
+        else if (s.startsWith('↘')) { td.className = 'td-down'; }
+        else                      { td.className = 'td-same'; }
+      }
       td.textContent = cell;
       tr.appendChild(td);
     });
 
     if (!isTotalRow) {
-      const maybeLabel = row[1] || row[0] || '';
+      // province name: index 2 for 5-col, index 1 for 4-col
+      const maybeLabel = is5col ? (row[2] || '') : (row[1] || row[0] || '');
       tr.addEventListener('click', () => focusMarkerByLabel(maybeLabel, tr));
     }
 
@@ -1148,6 +1171,8 @@ function renderMode(modeKey) {
     tableWrap.style.display = 'none';
     wrapEl.classList.remove('notes-top');
   }
+  // beri tahu Leaflet bahwa ukuran kontainer peta berubah
+  requestAnimationFrame(() => map.invalidateSize());
 
   // per-mode layout tuning
   if (modeKey === 'kabupaten') {

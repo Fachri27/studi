@@ -45,9 +45,9 @@
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-bg-text">2025</div>
-  <div class="hero-tag">Status Deforestasi Indonesia &middot; 2025</div>
-  <h1>Deforestasi Indonesia<br>melonjak pada <em>2025</em></h1>
+  <!-- <div class="hero-bg-text">2025</div> -->
+  <!-- <div class="hero-tag">Status Deforestasi Indonesia &middot; 2025</div> -->
+  <h1>Status Deforestasi Indonesia 2025</h1>
   <div class="hero-meta">
     <div class="hero-stat">
       <span class="hs-val">433.751</span>
@@ -130,34 +130,34 @@ regulasi yang melindungi seluruh hutan alam tersisa
   <div class="method-steps">
     <div class="method-step">
       <div class="ms-num">01</div>
-      <div class="ms-body">
+      <div class="body-text">
         <p>Pertama, dilakukan pemodelan deforestasi. Pengetahuan yang terkumpul selama ini, seperti pemantauan lapangan, data-data deforestasi 2023 dan 2024, dimodelkan dengan deep learning U-Net. Model ini kemudian dilatih (trained) pada citra satelit Sentinel resolusi 10 meter.</p>
       </div>
     </div>
     <div class="method-step">
       <div class="ms-num">02</div>
-      <div class="ms-body">
+      <div class="body-text">
         <!-- <h4>Inspeksi visual</h4> -->
         <p>Kedua, menentukan area cakupan (scoping area). Isyarat deforestasi (deforestation alert, atau biasa disebut GLAD alert) bulanan yang diproduksi Universitas Maryland dikumpulkan. Demi efektivitas, yang dikumpul hanya isyarat yang dengan tingkat kepercayaan tinggi (high confidence). Isyarat-isyarat ini kemudian “diikat” atau diagregasi pada satu kotak (bounding box) bersisi 10.240 meter. Bounding boxes inilah yang menjadi area cakupan.</p>
       </div>
     </div>
     <div class="method-step">
       <div class="ms-num">03</div>
-      <div class="ms-body">
+      <div class="body-text">
         <!-- <h4>Pemantauan lapangan</h4> -->
         <p>Ketiga, model deforestasi yang telah dibangun kemudian dijalankan pada citra satelit Sentinel 2 resolusi 10 meter di area-area cakupan.</p>
       </div>
     </div>
     <div class="method-step">
       <div class="ms-num">04</div>
-      <div class="ms-body">
+      <div class="body-text">
         <!-- <h4>Pemantauan lapangan</h4> -->
         <p>Keempat, area-area yang terdeteksi deforestasi (deforestasi indikatif) ditampalkan (overlay) dengan peta tutupan hutan. Terdapat 4 referensi tutupan hutan yang dipakai, yakni: (i) MapBiomas Indonesia, (ii) Peta Penutupan Lahan yang diproduksi Kementerian Kehutanan, (iii) Tropical-moist forest (TMF) yang diproduksi European Commission’s Joint Research Centre, dan (iv) Forest Persistence yang diproduksi Google.</p>
       </div>
     </div>
     <div class="method-step">
       <div class="ms-num">05</div>
-      <div class="ms-body">
+      <div class="body-text">
         <!-- <h4>Pemantauan lapangan</h4> -->
         <p>
           Kelima, proses verifikasi. Deforestasi indikatif yang terdapat di luar irisan keempat tutupan hutan referensi (forest-agreement area) diinspeksi secara visual. Berhubung banyaknya poligon, sementara waktu terbatas, mengakibatkan poligon di bawah 1 hektare tidak dapat diinspeksi sehingga dihilangkan dari area deforestasi. Sementara, untuk deforestasi indikatif di dalam irisan tutupan hutan referensi (forest-agreement area), inspeksi visual maupun penapisan historikal (temporal filter) dilakukan pada area-area di atas 10 hektare, dalam konsesi, dan dalam kawasan konservasi. Area yang dideteksi sebagai false atau bukan deforestasi dihilangkan dari data, sedangkan area yang tidak diinspeksi (di bawah 10 hektare) dimasukkan sebagai ke dalam area deforestasi.
@@ -177,11 +177,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
 </div>
 </section>
 
-<section class="page-section px-[5vw] py-16">
-  <div class="ms-body">
-        <!-- <h4>Pemantauan lapangan</h4> -->
-        <p>
-          Uji akurasi. Uji akurasi dilakukan untuk mengetahui tingkat akurasi data deforestasi 2025 ini, dengan menginspeksi secara visual poligon deforestasi pada citra Planet Scope resolusi spasial 3,7 meter. Poligon yang diinspeksi dipilih secara acak (random) dengan metode stratified random sampling. Poligon deforestasi dikelompokkan berdasarkan luasan, yakni <0,5 ha, 0,5-1 ha, 1-5 ha, 5-10 ha, 10-50 ha, dan >50 ha. Jumlah sampel ditentukan berdasarkan rumus Slovin dengan tingkat kesalahan 5%.
+<section class="page-section px-[5vw] pt-16 pb-6"> Uji akurasi dilakukan untuk mengetahui tingkat akurasi data deforestasi 2025 ini, dengan menginspeksi secara visual poligon deforestasi pada citra Planet Scope resolusi spasial 3,7 meter. Poligon yang diinspeksi dipilih secara acak (random) dengan metode stratified random sampling. Poligon deforestasi dikelompokkan berdasarkan luasan, yakni <0,5 ha, 0,5-1 ha, 1-5 ha, 5-10 ha, 10-50 ha, dan >50 ha. Jumlah sampel ditentukan berdasarkan rumus Slovin dengan tingkat kesalahan 5%.
         </p>
         <p>
           Sebagaimana tabel berikut, hasil pengujian akurasi data deforestasi 2025 ini sebesar 89%.
@@ -191,12 +187,12 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
   <div class="viz-block viz-block--full mt-5 mb-2">
     <div class="viz-frame viz-frame--padded">
-      <div class="mx-auto w-full max-w-5xl overflow-x-auto overflow-y-hidden rounded-none bg-white shadow-[0_4px_28px_rgba(26,26,26,.08)] md:overflow-x-visible">
+      <div class="mx-auto w-full max-w-6xl overflow-x-auto overflow-y-hidden rounded-none bg-white shadow-[0_4px_28px_rgba(26,26,26,.08)] md:overflow-x-visible">
         <div class="border-b border-[#ddd5c8] px-4 py-4 sm:px-6">
           <div class="text-[12px] font-semibold tracking-[-0.01em] text-[#1a1a1a] sm:text-[13px]">Hasil uji akurasi terhadap data deforestasi 2025</div>
         </div>
 
-        <table class="w-full min-w-[760px] table-fixed border-collapse text-[10px] text-[#1a1a1a] sm:text-[11px] md:min-w-full md:text-[12px]">
+        <table class="w-full min-w-[900px] table-fixed border-collapse text-[10px] text-[#1a1a1a] sm:text-[11px] md:min-w-full md:text-[12px]">
           <thead>
             <tr>
               <th colspan="3" class="border-r border-white/15 bg-[#8b2a1a] px-2 py-3 text-left font-semibold uppercase tracking-[0.08em] text-white sm:px-4">Area deforestasi</th>
@@ -323,11 +319,11 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
 <!-- DEFORESTASI 2025 -->
 <span class="s-anchor" id="deforestasi"></span>
-<section class="page-section px-[5vw] py-16">
+<section class="page-section px-[5vw] py-8">
   <div class="section-label">03 / Deforestasi 2025</div>
   <h2 class="s-heading">Peta dan distribusi deforestasi per pulau</h2>
 
-  <p class="lead">
+  <p class="body-text">
     Dengan metode seperti di atas, deforestasi di Indonesia pada 2025 seluas 434.258 hektare. Deforestasi ini meningkat sebesar 66% dari tahun sebelumnya yang luasnya 261.574 hektare. Deforestasi terluas kembali terjadi di Kalimantan, disusul Sumatera. Tanah Papua, yang pada 2024 berada di peringkat keempat, pada tahun 2025 menempati peringkat ketiga menggantikan Sulawesi.
   </p>
 
@@ -420,8 +416,9 @@ regulasi yang melindungi seluruh hutan alam tersisa
           Geser tabel ke samping untuk melihat semua kolom.
         </div>
       </div>
+      
     </div>
-    <div class="viz-caption embed-caption">
+    <div class="viz-caption embed-caption" style="white-space: nowrap;">
       Tabel perbandingan deforestasi 2023–2025 dan perluasan 2025 dibanding 2024 per pulau besar di Indonesia.
     </div><br>
   </div>
@@ -550,7 +547,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
   <div class="mt-10">
     <div class="chapter-header">
-      <span class="chapter-num">01</span>
+      <span class="ms-num">01</span>
       <h3 class="chapter-title">Kebijakan pemerintah turut memicu deforestasi</h3>
     </div>
     <p class="body-text">
@@ -577,7 +574,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
   <div>
     <div class="chapter-header">
-      <span class="chapter-num">02</span>
+      <span class="ms-num">02</span>
       <h3 class="chapter-title">Episentrum deforestasi mengarah ke Tanah Papua</h3>
     </div>
     <p class="body-text">
@@ -595,7 +592,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
   <div>
     <div class="chapter-header">
-      <span class="chapter-num">03</span>
+      <span class="ms-num">03</span>
       <h3 class="chapter-title">Ekspansi komoditas industrial menjadi pemicu deforestasi</h3>
     </div>
     <p class="body-text">
@@ -628,7 +625,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
   <div>
     <div class="chapter-header">
-      <span class="chapter-num">04</span>
+      <span class="ms-num">04</span>
       <h3 class="chapter-title">Legal deforestasi sebagai biang masalah</h3>
     </div>
     <p class="body-text">
@@ -646,7 +643,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
   <div>
     <div class="chapter-header">
-      <span class="chapter-num">05</span>
+      <span class="ms-num">05</span>
       <h3 class="chapter-title">Deforestasi tinggi di area konservasi</h3>
     </div>
     <p class="body-text">
@@ -672,42 +669,48 @@ regulasi yang melindungi seluruh hutan alam tersisa
     Perlindungan hutan alam tersisa perlu diperkuat melalui kombinasi regulasi, tata ruang, kelembagaan, dan tanggung jawab para pemegang izin. Rekomendasi berikut menempatkan perlindungan hutan sebagai agenda kebijakan yang harus dijalankan secara serentak.
   </p>
 
-  <div class="rec-grid">
-    <div class="rec-card">
-      <span class="rc-num">REC — 01</span>
-      <h4>Regulasi yang melindungi seluruh hutan alam tersisa</h4>
-      <p>Penerbitan regulasi yang memastikan perlindungan seluruh hutan alam tersisa di Indonesia. Perlindungan hukum terhadap hutan alam ini idealnya dalam bentuk undang-undang. Namun, menghadirkan sebuah undang-undang bukan perkara mudah, dan kerap butuh bertahun-tahun. Peraturan di bawahnya, yakni peraturan pemerintah, pun tak jarang memerlukan waktu lama, terutama oleh kerumitan dan kompleksitas persetujuan lintas kementerian, sebuah prasyarat yang diperlukan dalam penyusunan peraturan pemerintah. Karenanya, peraturan presiden akan merupakan terobosan taktis, namun cukup menjawab persoalan karena peraturan presiden relatif setara dengan peraturan pemerintah. Maka, saatnya Presiden Prabowo menerbitkan peraturan presiden mengenai perlindungan seluruh hutan alam tersisa di Indonesia.</p>
+  <div class="method-steps">
+    <div class="method-step">
+      <div class="ms-num">01</div>
+      <div class="">
+        <h4 class="chapter-title">Regulasi yang melindungi seluruh hutan alam tersisa</h4><br>
+        <p>Penerbitan regulasi yang memastikan perlindungan seluruh hutan alam tersisa di Indonesia. Perlindungan hukum terhadap hutan alam ini idealnya dalam bentuk undang-undang. Namun, menghadirkan sebuah undang-undang bukan perkara mudah, dan kerap butuh bertahun-tahun. Peraturan di bawahnya, yakni peraturan pemerintah, pun tak jarang memerlukan waktu lama, terutama oleh kerumitan dan kompleksitas persetujuan lintas kementerian, sebuah prasyarat yang diperlukan dalam penyusunan peraturan pemerintah. Karenanya, peraturan presiden akan merupakan terobosan taktis, namun cukup menjawab persoalan karena peraturan presiden relatif setara dengan peraturan pemerintah. Maka, saatnya Presiden Prabowo menerbitkan peraturan presiden mengenai perlindungan seluruh hutan alam tersisa di Indonesia.</p>
+      </div>
     </div>
-    <div class="rec-card">
-      <span class="rc-num">REC — 02</span>
-      <h4>Pengadaan dan pemberlakuan instrumen pengendalian revisi tata ruang</h4>
-      <p>
-        Pada pertengahan 2023 publik dikejutkan dengan usulan revisi tata ruang Provinsi Kalimantan Timur yang ditengarai akan melepaskan 612.355 hektare kawasan hutan (menjadi area penggunaan lain), menurunkan fungsi kawasan hutan (sehingga memungkinkan ditambang) seluas 101.788 hektare. Padahal, setidaknya 389.596 hektare (55%) area ini bertutupan hutan alam. Sementara, beberapa bulan sebelumnya Pemerintah Provinsi Kalimantan Utara mengusulkan revisi tata ruang yang akan mengalihkan fungsi kawasan hutan seluas 762.000 hektare. Di Aceh, manuver pemerintah daerah ditengarai akan berdampak pada hilangnya status perlindungan Kawasan Ekosistem Leuser yang telah ditetapkan sebagai cagar biosfer sekaligus sebagai penyangga Taman Nasional Gunung Leuser. Sekelumit kecil contoh empirik ini menunjukkan kemendesakan perlunya instrumen pengendalian revisi tata ruang wilayah yang menjamin prosesnya berlangsung secara transparan dan memastikan pelibatan pihak terdampak sehingga hasil revisinya semata-mata demi kepentingan publik.
-      </p>
+    <div class="method-step">
+      <div class="ms-num">02</div>
+      <div class="">
+        <h4 class="chapter-title">Pengadaan dan pemberlakuan instrumen pengendalian revisi tata ruang</h4><br>
+        <p>Pada pertengahan 2023 publik dikejutkan dengan usulan revisi tata ruang Provinsi Kalimantan Timur yang ditengarai akan melepaskan 612.355 hektare kawasan hutan (menjadi area penggunaan lain), menurunkan fungsi kawasan hutan (sehingga memungkinkan ditambang) seluas 101.788 hektare. Padahal, setidaknya 389.596 hektare (55%) area ini bertutupan hutan alam. Sementara, beberapa bulan sebelumnya Pemerintah Provinsi Kalimantan Utara mengusulkan revisi tata ruang yang akan mengalihkan fungsi kawasan hutan seluas 762.000 hektare. Di Aceh, manuver pemerintah daerah ditengarai akan berdampak pada hilangnya status perlindungan Kawasan Ekosistem Leuser yang telah ditetapkan sebagai cagar biosfer sekaligus sebagai penyangga Taman Nasional Gunung Leuser. Sekelumit kecil contoh empirik ini menunjukkan kemendesakan perlunya instrumen pengendalian revisi tata ruang wilayah yang menjamin prosesnya berlangsung secara transparan dan memastikan pelibatan pihak terdampak sehingga hasil revisinya semata-mata demi kepentingan publik.</p>
+      </div>
     </div>
-    <div class="rec-card">
-      <span class="rc-num">REC — 03</span>
-      <h4>Percepatan perluasan area preservasi, terutama di luar kawasan hutan</h4>
-      <p>Sebagaimana disampaikan di atas, kawasan konservasi eksisting jauh dari memadai untuk mencakup seluruh area konservasi. Bahkan, setidaknya … hektare habitat spesies ikonik dan area penting biodiversitas tersebut berada dalam area penggunaan lain (APL). Di tengah rendahnya kinerja pelestarian dalam kawasan konservasi oleh Kementerian Kehutanan, perlu model-model baru pengelolaan area konservasi. Undang-Undang Konservasi 32/2024 telah membuka ruang untuk ini, yakni sebagai area preservasi. Namun, kekosongan peraturan pelaksananya mengakibatkan belum adanya perwujudan area preservasi hingga saat ini. Oleh karena itu, pengadaan aturan pelaksana ini perlu disegerakan. Namun begitu, perlu digarisbawahi bahwa area preservasi ini semestinya sekaligus sebagai model-model baru, semisal pengelolaannya, termasuk penerima manfaat ekonominya, oleh dan untuk pemerintah daerah atau komunitas lokal dengan kordinasi atau supervisi oleh Kementerian Kehutanan.</p>
+    <div class="method-step">
+      <div class="ms-num">03</div>
+      <div class="">
+        <h4 class="chapter-title">Percepatan perluasan area preservasi, terutama di luar kawasan hutan</h4><br>
+        <p>Sebagaimana disampaikan di atas, kawasan konservasi eksisting jauh dari memadai untuk mencakup seluruh area konservasi. Bahkan, setidaknya … hektare habitat spesies ikonik dan area penting biodiversitas tersebut berada dalam area penggunaan lain (APL). Di tengah rendahnya kinerja pelestarian dalam kawasan konservasi oleh Kementerian Kehutanan, perlu model-model baru pengelolaan area konservasi. Undang-Undang Konservasi 32/2024 telah membuka ruang untuk ini, yakni sebagai area preservasi. Namun, kekosongan peraturan pelaksananya mengakibatkan belum adanya perwujudan area preservasi hingga saat ini. Oleh karena itu, pengadaan aturan pelaksana ini perlu disegerakan. Namun begitu, perlu digarisbawahi bahwa area preservasi ini semestinya sekaligus sebagai model-model baru, semisal pengelolaannya, termasuk penerima manfaat ekonominya, oleh dan untuk pemerintah daerah atau komunitas lokal dengan kordinasi atau supervisi oleh Kementerian Kehutanan.</p>
+      </div>
     </div>
-    <div class="rec-card">
-      <span class="rc-num">REC — 04</span>
-      <h4>Redistribusi kelembagaan dan aparatur pengelola hutan sehingga seluruh tutupan hutan alam memiliki aparatur penjaganya</h4>
-      <p>
-        Presiden Prabowo disebut telah memerintahkan penggandaan jumlah polisi hutan. Satu langkah yang semestinya patut diapresiasi. Akan tetapi, sebagaimana pernah dipaparkan Auriga Nusantara ke Komisi 4 DPR RI, keberadaan aparatur penjaga hutan selama ini cenderung terkonsentrasi di Pulau Jawa. Demikian juga penganggaran, porsi anggaran negara per hektare kawasan hutan jauh lebih tinggi di Jawa. Karena itu, selain penambahan aparatur –atau redistribusi kewenangan dan fungsi pengelolaan ke pemerintah daerah– diperlukan juga redistribusi aparatur sehingga seluruh tutupan hutan alam memiliki aparatur penjaga berikut anggarannya.
-      </p>
+    <div class="method-step">
+      <div class="ms-num">04</div>
+      <div class="">
+        <h4 class="chapter-title">Redistribusi kelembagaan dan aparatur pengelola hutan sehingga seluruh tutupan hutan alam memiliki aparatur penjaganya</h4><br>
+        <p>Presiden Prabowo disebut telah memerintahkan penggandaan jumlah polisi hutan. Satu langkah yang semestinya patut diapresiasi. Akan tetapi, sebagaimana pernah dipaparkan Auriga Nusantara ke Komisi 4 DPR RI, keberadaan aparatur penjaga hutan selama ini cenderung terkonsentrasi di Pulau Jawa. Demikian juga penganggaran, porsi anggaran negara per hektare kawasan hutan jauh lebih tinggi di Jawa. Karena itu, selain penambahan aparatur –atau redistribusi kewenangan dan fungsi pengelolaan ke pemerintah daerah– diperlukan juga redistribusi aparatur sehingga seluruh tutupan hutan alam memiliki aparatur penjaga berikut anggarannya.</p>
+      </div>
     </div>
-    <div class="rec-card">
-      <span class="rc-num">REC — 05</span>
-      <h4>Korporasi yang mengelola area bertutupan hutan alam berkomitmen lingkungan, sosial, dan tata kelola yang baik (ESG Commitment)</h4>
-      <p>
-        Hampir separuh deforestasi 2025 terjadi di dalam konsesi, sementara terdapat lebih dari 9 juta hektare tutupan hutan alam di dalam konsesi konversi (tambang, sawit, kebun kayu). Korporasi-korporasi yang mengelola areal bertutupan hutan alam ini semestinya menyatakan komitmen lingkungan, sosial, dan tata kelola yang baik, termasuk untuk tidak melakukan atau terlibat dengan deforestasi.
-      </p>
+    <div class="method-step">
+      <div class="ms-num">05</div>
+      <div class="">
+        <h4 class="chapter-title">Korporasi yang mengelola area bertutupan hutan alam berkomitmen lingkungan, sosial, dan tata kelola yang baik (ESG Commitment)</h4><br>
+        <p>Hampir separuh deforestasi 2025 terjadi di dalam konsesi, sementara terdapat lebih dari 9 juta hektare tutupan hutan alam di dalam konsesi konversi (tambang, sawit, kebun kayu). Korporasi-korporasi yang mengelola areal bertutupan hutan alam ini semestinya menyatakan komitmen lingkungan, sosial, dan tata kelola yang baik, termasuk untuk tidak melakukan atau terlibat dengan deforestasi.</p>
+      </div>
     </div>
-    <div class="rec-card">
-      <span class="rc-num">REC — 06</span>
-      <h4>Penyediaan insentif bagi pemerintah daerah, komunitas lokal, dan korporasi yang melakukan perlindungan hutan alam</h4>
-      <p>Perlindungan hutan semestinya dipandang sebagai investasi, selain karena fungsi dan jasa lingkungannya yang dinikmati publik, juga karena kegiatan ekonomi sekalipun akan terganggu bila lingkungan rusak atau tidak berfungsi semestinya. Karena itu, insentif semestinya disediakan negara kepada pihak-pihak yang melindungi hutan, baik komunitas lokal, pemerintah daerah (provinsi, kabupaten, dan desa), maupun korporasi. Selain insentif, manfaat ekonomi, seperti jasa karbon, atas keberadaan hutan semestinya diperoleh juga oleh pihak-pihak yang melindungi hutan. Insentif dan manfaat ekonomi ini selain sebagai stimulus (perlindungan hutan alam), juga sebagai penyedia biaya untuk perlindungan hutan dalam jangka panjang oleh pihak-pihak tersebut.</p>
+    <div class="method-step">
+      <div class="ms-num">06</div>
+      <div class="">
+        <h4 class="chapter-title">Penyediaan insentif bagi pemerintah daerah, komunitas lokal, dan korporasi yang melakukan perlindungan hutan alam</h4><br>
+        <p>Perlindungan hutan semestinya dipandang sebagai investasi, selain karena fungsi dan jasa lingkungannya yang dinikmati publik, juga karena kegiatan ekonomi sekalipun akan terganggu bila lingkungan rusak atau tidak berfungsi semestinya. Karena itu, insentif semestinya disediakan negara kepada pihak-pihak yang melindungi hutan, baik komunitas lokal, pemerintah daerah (provinsi, kabupaten, dan desa), maupun korporasi. Selain insentif, manfaat ekonomi, seperti jasa karbon, atas keberadaan hutan semestinya diperoleh juga oleh pihak-pihak yang melindungi hutan. Insentif dan manfaat ekonomi ini selain sebagai stimulus (perlindungan hutan alam), juga sebagai penyedia biaya untuk perlindungan hutan dalam jangka panjang oleh pihak-pihak tersebut.</p>
+      </div>
     </div>
   </div>
 

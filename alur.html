@@ -323,6 +323,52 @@ body {
 }
 .p-arrow.rev svg { transform: scaleX(-1); }
 
+/* arr-r2a3: align arrow with True Alert (top pill), not branch-unit center */
+#arr-r2a3 {
+  align-self: flex-start;
+  margin-top: 11px; /* half of pill height ~36px ÷ 2 - half arrow 7px */
+}
+
+/* Agregasi True Alert: bigger than regular pill */
+#pw-r2b4 .pill {
+  font-size: 15px;
+  font-weight: 800;
+  padding: 20px 16px;
+}
+
+/* ─── L-CONNECTOR: Agregasi → Bounding Box ───────────────────────────────────
+   Jalur: turun dari sisi kanan Agregasi, lalu belok kiri ke Bounding Box.
+   ::after  = border-right (vertikal) + border-bottom (horizontal) = bentuk L
+   ::before = kepala panah ke kiri di ujung lengan horizontal
+   Ubah --sudut untuk sudut tikungan (default 4px)
+──────────────────────────────────────────────────────────────────────── */
+:root { --sudut: 4px; }
+#row2 { overflow: visible; }
+#pw-r2b4 { position: relative; }
+#pw-r2b4::after {
+  content: '';
+  position: absolute;
+  right: 0;                          /* anchored to right edge of Agregasi */
+  top: 100%;
+  margin-top: 6px;
+  width: calc(100% + 36px);          /* Agregasi width + arrow = Bounding Box right edge */
+  height: 80px;                      /* row gap + padding to reach Row 3 */
+  border-right: 1.5px solid var(--rust);   /* vertical arm */
+  border-bottom: 1.5px solid var(--rust);  /* horizontal arm */
+  border-bottom-right-radius: var(--sudut);
+}
+#pw-r2b4::before {
+  content: '';
+  position: absolute;
+  right: calc(100% + 36px);          /* left end of horizontal arm */
+  top: calc(100% + 6px + 80px);
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 7px solid var(--rust); /* ← left-pointing arrowhead */
+}
+
 /* ─── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 840px) {
   .p-row { grid-template-columns: 1fr; }
@@ -506,9 +552,12 @@ body {
           </div>
         </div>
         <div class="p-arrow" id="arr-r2a2">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+          <svg viewBox="0 0 44 28" fill="none" aria-label="percabangan true false">
+            <line x1="0" y1="14" x2="16" y2="14" stroke="var(--rust)" stroke-width="1.5"/>
+            <line x1="16" y1="14" x2="30" y2="8" stroke="var(--rust)" stroke-width="1.5"/>
+            <line x1="16" y1="14" x2="30" y2="20" stroke="var(--rust)" stroke-width="1.5"/>
+            <polyline points="26,4 32,8 26,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+            <polyline points="26,16 32,20 26,24" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
