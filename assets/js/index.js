@@ -99,21 +99,74 @@ async function hydrateInjectedScripts(container) {
 }
 
 function transformIncludeToIframe() {
-  const mapping = {
-    'partials/chart-deforestasi.html': 'chart-deforestasi.html',
-    'partials/alur-embed.html': 'alur.html',
-    'partials/peta-embed.html': 'peta.html',
-    'partials/tematik-embed.html': 'tematik.html',
-    'partials/konsesi-embed.html': 'konsesi.html'
+  const configs = {
+    'partials/chart-deforestasi.html': {
+      src: 'chart-deforestasi.html',
+      height: '460px',
+      darkBar: false,
+      barTitle: null,
+      caption: 'Grafik interaktif tren deforestasi Indonesia 2001–2024. Arahkan kursor ke batang untuk melihat informasi detail.'
+    },
+    'partials/alur-embed.html': {
+      src: 'alur.html',
+      height: '100vh',
+      darkBar: true,
+      barTitle: 'Tahapan &amp; Pemrosesan Data SIMONTINI',
+      caption: 'Diagram interaktif alur kerja SIMONTINI dari pemodelan deep learning hingga verifikasi lapangan. Klik kotak oranye untuk melihat detail setiap tahapan.'
+    },
+    'partials/peta-embed.html': {
+      src: 'peta.html',
+      height: '100vh',
+      darkBar: true,
+      barTitle: 'Deforestasi melonjak pada 2025',
+      caption: 'Peta interaktif deforestasi per pulau besar Indonesia 2019–2025. Gulir untuk melihat perubahan deforestasi tiap tahun.'
+    },
+    'partials/tematik-embed.html': {
+      src: 'tematik.html',
+      height: '100vh',
+      darkBar: true,
+      barTitle: 'Peta Tematik Deforestasi 2025',
+      caption: 'Peta tematik interaktif deforestasi 2025 berbasis provinsi, kabupaten, area konservasi, dan habitat megafauna.'
+    },
+    'partials/konsesi-embed.html': {
+      src: 'konsesi.html',
+      height: '100vh',
+      darkBar: true,
+      barTitle: 'Deforestasi dalam Konsesi \u2014 Sepuluh Teratas per Kategori',
+      caption: 'Peta interaktif 10 konsesi teratas deforestasi per kategori. Pilih kategori di sidebar untuk beralih antar kebun kayu, logging, sawit, dan tambang.'
+    }
   };
 
+  const expandIcon = `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>`;
+
   document.querySelectorAll('[data-include-html]').forEach(host => {
-    const src = host.getAttribute('data-include-html');
-    const iframeSrc = mapping[src];
-    if (!iframeSrc) return;
+    const key = host.getAttribute('data-include-html');
+    const cfg = configs[key];
+    if (!cfg) return;
 
     host.removeAttribute('data-include-html');
-    host.innerHTML = `\n      <div class="viz-frame">\n        <iframe src="${iframeSrc}" title="${iframeSrc.replace('.html', '')}" loading="lazy" style="display:block;width:100%;border:0;height:100vh;"></iframe>\n      </div>\n`;
+
+    const bar = cfg.barTitle ? `
+      <div class="embed-bar"${cfg.darkBar ? ' style="background:#161616;border-bottom-color:rgba(255,255,255,.08);"' : ''}>
+        <span class="embed-bar-title"${cfg.darkBar ? ' style="color:rgba(255,255,255,.45);"' : ''}>${cfg.barTitle}</span>
+        <a href="${cfg.src}" target="_blank" class="viz-expand"${cfg.darkBar ? ' style="color:#C0522A;"' : ''}>
+          ${expandIcon} Buka penuh
+        </a>
+      </div>` : '';
+
+    const captionStyle = cfg.darkBar
+      ? 'padding:10px 16px 14px;font-size:.72rem;line-height:1.7;color:rgba(255,255,255,.45);text-align:left;'
+      : '';
+
+    host.innerHTML = `
+      <div${cfg.darkBar ? ' style="background:#0d0d0d;"' : ''}>
+        ${bar}
+        <div class="viz-frame">
+          <iframe src="${cfg.src}" title="${cfg.src.replace('.html','')}" loading="lazy" style="display:block;width:100%;border:0;height:${cfg.height};"></iframe>
+        </div>
+      </div>
+      <div class="viz-caption embed-caption"${captionStyle ? ` style="${captionStyle}"` : ''}>${cfg.caption}</div>
+    `;
   });
 }
 
