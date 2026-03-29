@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --minify",
+    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --watch"
+  },
   "dependencies": {
     "gsap": "^3.14.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
   }
 }
