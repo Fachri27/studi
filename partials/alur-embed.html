@@ -9,9 +9,12 @@
   will-change: opacity, transform;
 }
 /* ─── RESET & BASE ─────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.simontini-alur,
+.simontini-alur *,
+.simontini-alur *::before,
+.simontini-alur *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
+.simontini-alur {
   --rust:       #C0522A;
   --rust-dark:  #8C3A1C;
   --rust-light: rgba(192,82,42,.15);
@@ -29,8 +32,8 @@
   --shadow-pill-hover: 0 6px 24px rgba(192,82,42,.28);
 }
 
-html { scroll-behavior: smooth; }
-body {
+.simontini-alur { scroll-behavior: smooth; }
+.simontini-alur {
   background: #0d0d0d;
   font-family: var(--font);
   color: var(--ink);
@@ -39,7 +42,7 @@ body {
 }
 
 /* ─── PROGRESS BAR ──────────────────────────────────── */
-#progress {
+.simontini-alur #alur-progress {
   position: fixed; top: 0; left: 0; z-index: 1000;
   height: 2px; width: 0;
   background: linear-gradient(90deg, var(--rust), #E8795A);
@@ -334,7 +337,7 @@ body {
   }
 }
 </style>
-<div id="progress"></div>
+<div id="alur-progress"></div>
 
 <!-- ── HEADER ── -->
 <header class="site-header">
@@ -698,7 +701,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Progress bar
 window.addEventListener('scroll', () => {
   const max = document.documentElement.scrollHeight - window.innerHeight;
-  document.getElementById('progress').style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
+  document.getElementById('alur-progress').style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
 });
 
 // Header entrance

@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build": "npm run build:tailwind",
     "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --minify",
     "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --watch"
   },
