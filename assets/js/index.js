@@ -118,6 +118,7 @@ function transformIncludeToIframe() {
 }
 
 const preferIframeEmbed = false; // false: keep partial inject (bilik html biasa), true: iframe fallback
+const partialVersion = '20260329';
 
 async function loadHtmlPartials() {
   if (preferIframeEmbed) {
@@ -214,9 +215,10 @@ async function loadHtmlPartials() {
   await Promise.all(hosts.map(async (host) => {
     const src = host.getAttribute('data-include-html');
     if (!src) return;
+    const versionedSrc = `${src}?v=${partialVersion}`;
 
     try {
-      const res = await fetch(src, { cache: 'no-cache' });
+      const res = await fetch(versionedSrc, { cache: 'no-cache' });
       if (!res.ok) throw new Error(`Failed to load ${src}`);
       host.innerHTML = await res.text();
       await hydrateInjectedScripts(host);
