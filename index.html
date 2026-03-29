@@ -110,13 +110,8 @@ regulasi yang melindungi seluruh hutan alam tersisa
     Dengan rentetan demikian, Indonesia mengalami penurunan deforestasi lima tahun berturut sejak 2017. Namun, sejak 2022 deforestasi Indonesia kembali meningkat tahun demi tahun, sebagaimana grafik berikut. Bahkan, sebagaimana akan dijelaskan di bawah, deforestasi di Indonesia melonjak pada 2025.
   </p>
 
-  <!-- Embed chart-deforestasi via iframe -->
-  <div class="viz-block viz-block--slightly-wide">
-    <div class="viz-frame viz-frame--padded">
-      <iframe src="chart-deforestasi.html" title="Grafik Deforestasi Indonesia" loading="lazy" style="display:block;width:100%;border:0;height:460px;"></iframe>
-    </div>
-    <div class="viz-caption embed-caption">Grafik interaktif tren deforestasi Indonesia 2001–2024. Arahkan kursor ke batang untuk melihat informasi detail.</div>
-  </div>
+  <!-- Include-ready block (Laravel target: @include('partials.chart-deforestasi')) -->
+  <div class="viz-block viz-block--slightly-wide" data-include-html="partials/chart-deforestasi.html"></div>
 
   <!-- <div class="stat-grid">
     <div class="stat-cell red">
@@ -198,13 +193,8 @@ regulasi yang melindungi seluruh hutan alam tersisa
     </div>
   </div>
 
-  <!-- Embed alur via iframe -->
-  <div class="viz-block viz-block--full">
-    <div class="viz-frame">
-      <iframe src="alur.html" title="Alur Pemrosesan Data" loading="lazy" style="width:100%;display:block;border:0;height:100vh;"></iframe>
-    </div>
-    <div class="viz-caption embed-caption">Tahapan & pemrosesan data SIMONTINI: deep learning, normalisasi, verifikasi, dan validasi.</div>
-  </div>
+  <!-- Include-ready block (Laravel target: @include('partials.alur-embed')) -->
+  <div class="viz-block viz-block--full" data-include-html="partials/alur-embed.html"></div>
 </div>
 </section>
 
@@ -464,21 +454,11 @@ regulasi yang melindungi seluruh hutan alam tersisa
     Tiga provinsi yang mengalami bencana longsor-banjir dahsyat di Sumatera Bagian Utara pada penghujung 2025 mengalami lonjakan deforestasi luar biasa: Aceh (426%), Sumatera Utara (281%), dan Sumatera Barat (1.034%).
   </p>
 
-  <!-- Embed peta via iframe -->
-  <div class="viz-block viz-block--full">
-    <div class="viz-frame">
-      <iframe src="peta.html" title="Peta Deforestasi Indonesia" loading="lazy" style="width:100%;display:block;border:0;height:100vh;"></iframe>
-    </div>
-    <div class="viz-caption embed-caption">Peta interaktif deforestasi per pulau besar Indonesia 2019–2025.</div>
-  </div>
+  <!-- Include-ready block (Laravel target: @include('partials.peta-embed')) -->
+  <div class="viz-block viz-block--full" data-include-html="partials/peta-embed.html"></div>
 
-  <!-- Embed tematik via iframe -->
-  <div class="viz-block viz-block--full">
-    <div class="viz-frame">
-      <iframe src="tematik.html" title="Peta Tematik Deforestasi Indonesia" loading="lazy" style="width:100%;display:block;border:0;height:100vh;"></iframe>
-    </div>
-    <div class="viz-caption embed-caption">Peta tematik interaktif deforestasi 2025 berbasis provinsi, kabupaten, area konservasi, dan habitat megafauna.</div>
-  </div>
+  <!-- Include-ready block (Laravel target: @include('partials.tematik-embed')) -->
+  <div class="viz-block viz-block--full" data-include-html="partials/tematik-embed.html"></div>
 
   <hr class="divider">
 
@@ -570,13 +550,8 @@ regulasi yang melindungi seluruh hutan alam tersisa
     Pemberian izin-izin konversi, seperti tambang, sawit, kebun kayu, di area-area yang memiliki tutupan hutan alam juga menjadi pemicu deforestasi. Analisis Auriga Nusantara menunjukkan bahwa per 2024 terdapat 9,6 juta hektare tutupan hutan alam di dalam konsesi konversi. Pada 2025, deforestasi di dalam konsesi seperti ini mencapai 114.823 hektare atau 26% dari deforestasi nasional. Visual berikut menampilkan sepuluh teratas deforestasi dalam konsesi per kategori.
   </p>
 
-  <!-- Embed konsesi via iframe -->
-  <div class="viz-block viz-block--full">
-    <div class="viz-frame">
-      <iframe src="konsesi.html" title="Deforestasi dalam Konsesi" loading="lazy" style="width:100%;display:block;border:0;height:100vh;"></iframe>
-    </div>
-    <div class="viz-caption embed-caption">Peta interaktif 10 konsesi teratas deforestasi per kategori.</div>
-  </div>
+  <!-- Include-ready block (Laravel target: @include('partials.konsesi-embed')) -->
+  <div class="viz-block viz-block--full" data-include-html="partials/konsesi-embed.html"></div>
 
   <hr class="divider">
 
