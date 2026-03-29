@@ -19,14 +19,14 @@
 :root {
   --rust:       #C0522A;
   --rust-dark:  #8C3A1C;
-  --rust-light: #F2E8E3;
-  --ink:        #1A1714;
-  --ink-mid:    #4A4540;
-  --ink-soft:   #8A8078;
+  --rust-light: rgba(192,82,42,.15);
+  --ink:        #ffffff;
+  --ink-mid:    rgba(255,255,255,.75);
+  --ink-soft:   rgba(255,255,255,.5);
   --cream:      #F9F8F6;
-  --white:      #FFFFFF;
-  --border:     #E2DBD4;
-  --dot-color:  #C8BFB5;
+  --white:      rgba(255,255,255,.06);
+  --border:     rgba(255,255,255,.1);
+  --dot-color:  rgba(255,255,255,.12);
 
   --font: 'Plus Jakarta Sans', sans-serif;
   --radius: 7px;
@@ -36,7 +36,7 @@
 
 html { scroll-behavior: smooth; }
 body {
-  background: var(--cream);
+  background: #0d0d0d;
   font-family: var(--font);
   color: var(--ink);
   overflow-x: hidden;
@@ -104,6 +104,47 @@ body {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 6vw 120px;
+}
+
+#pin-wrapper {
+  position: relative;
+  padding-top: 76px;
+}
+
+.scroll-prompt {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(20,16,12,.92);
+  color: var(--rust-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  box-shadow: 0 10px 28px rgba(26,23,20,.08);
+  pointer-events: none;
+  opacity: 1;
+}
+
+.scroll-prompt svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  animation: scrollNudge 1.3s ease-in-out infinite;
+}
+
+@keyframes scrollNudge {
+  0%, 100% { transform: translateY(0); opacity: .65; }
+  50% { transform: translateY(4px); opacity: 1; }
 }
 
 /* each row */
@@ -178,7 +219,7 @@ body {
 
 .pill {
   background: var(--rust);
-  color: var(--white);
+  color: #ffffff;
   border-radius: var(--radius);
   padding: 10px 14px;
   font-size: 11.5px; font-weight: 700;
@@ -200,11 +241,11 @@ body {
   font-weight: 800;
   padding: 28px 18px;
   border-radius: 9px;
-  background: var(--ink);
-  box-shadow: 0 4px 28px rgba(0,0,0,.18);
+  background: var(--rust);
+  box-shadow: 0 4px 28px rgba(192,82,42,.35);
   cursor: default;
 }
-.pill.big:hover { background: #28231F; transform: translateY(-2px); }
+.pill.big:hover { background: var(--rust-dark); transform: translateY(-2px); }
 
 /* click ripple */
 .pill::after {
@@ -289,6 +330,13 @@ body {
   .p-steps { flex-wrap: wrap; gap: 10px; padding: 16px 0; }
   .p-arrow { display: none; }
   .p-unit { flex: none; width: calc(50% - 5px); }
+  .scroll-prompt {
+    top: 10px;
+    width: calc(100% - 32px);
+    justify-content: center;
+    text-align: center;
+    padding: 9px 14px;
+  }
 }
 </style>
 </head>
@@ -316,6 +364,12 @@ body {
 
 <!-- ── PIPELINE ── -->
 <div id="pin-wrapper">
+<div class="scroll-prompt" id="scroll-prompt">
+  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 5v14M6 13l6 6 6-6"/>
+  </svg>
+  <span>Silakan scroll untuk melihat alur</span>
+</div>
 <main class="pipeline">
 
   <!-- ════ ROW 1: DEEP LEARNING MODELING ════ -->
@@ -665,46 +719,54 @@ gsap.from(['#brand', '#page-title', '#page-desc', '#hint'], {
 
 // ── PIPELINE PINNED SCROLL ANIMATION ──
 // Semua pipeline elemen mulai dari opacity 0
-const r12 = [
-  '#lbl1','#pw-r1b1','#arr-r1a1','#pw-r1b2','#arr-r1a2','#pw-r1b3','#arr-r1a3','#pw-r1b4',
-  '#lbl2','#pw-r2b1','#arr-r2a1','#pw-r2b2','#arr-r2a2','#pw-r2b3','#arr-r2a3','#pw-r2b4',
-];
+const r1 = ['#lbl1','#pw-r1b1','#arr-r1a1','#pw-r1b2','#arr-r1a2','#pw-r1b3','#arr-r1a3','#pw-r1b4'];
+const r2 = ['#lbl2','#pw-r2b1','#arr-r2a1','#pw-r2b2','#arr-r2a2','#pw-r2b3','#arr-r2a3','#pw-r2b4'];
 const r3 = ['#lbl3','#pw-r3b4','#arr-r3a3','#pw-r3b3','#arr-r3a2','#pw-r3b2','#arr-r3a1','#pw-r3b1'];
 const r4 = ['#lbl4','#pw-r4b1','#arr-r4a1','#pw-r4b2','#arr-r4a2','#pw-r4b3'];
+const scrollPrompt = document.getElementById('scroll-prompt');
 
-gsap.set([...r12, ...r3, ...r4], { opacity: 0, y: 22 });
+gsap.set([...r1, ...r2, ...r3, ...r4], { opacity: 0, y: 22 });
 
 // Buat timeline master
 const tl = gsap.timeline();
 
-// Row 1 & 2 muncul satu per satu
-tl.to(r12, {
-  opacity: 1, y: 0,
-  duration: 0.6,
-  stagger: 0.18,
-  ease: 'power2.out',
-});
+function addParallelRows(timeline, rowA, rowB, gap = 0.18) {
+  const maxSteps = Math.max(rowA.length, rowB.length);
+  for (let i = 0; i < maxSteps; i++) {
+    const targets = [rowA[i], rowB[i]].filter(Boolean);
+    if (!targets.length) continue;
+    timeline.to(targets, {
+      opacity: 1, y: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+    }, i === 0 ? '>' : `>-${0.6 - gap}`);
+  }
+}
 
-// Gap sebelum row 3
+// Row 1 dan 2 berjalan sinkron per langkah
+addParallelRows(tl, r1, r2);
+
+// Gap sebelum row 3 dan 4
 tl.to({}, { duration: 0.4 });
 
-// Row 3 muncul satu per satu
-tl.to(r3, {
-  opacity: 1, y: 0,
-  duration: 0.6,
-  stagger: 0.18,
-  ease: 'power2.out',
+// Row 3 berjalan dulu sampai selesai
+r3.forEach((target, index) => {
+  tl.to(target, {
+    opacity: 1, y: 0,
+    duration: 0.6,
+    ease: 'power2.out',
+  }, index === 0 ? '>' : '>-0.42');
 });
 
-// Gap sebelum row 4
-tl.to({}, { duration: 0.4 });
+// Lalu row 4 berjalan normal
+tl.to({}, { duration: 0.25 });
 
-// Row 4 muncul satu per satu
-tl.to(r4, {
-  opacity: 1, y: 0,
-  duration: 0.6,
-  stagger: 0.18,
-  ease: 'power2.out',
+r4.forEach((target, index) => {
+  tl.to(target, {
+    opacity: 1, y: 0,
+    duration: 0.6,
+    ease: 'power2.out',
+  }, index === 0 ? '>' : '>-0.42');
 });
 
 // Pin pipeline dan scrub dengan scroll
@@ -716,6 +778,21 @@ ScrollTrigger.create({
   anticipatePin: 1,
   scrub: 1.2,
   animation: tl,
+  onUpdate: self => {
+    if (!scrollPrompt || scrollPrompt.dataset.hidden === 'true') return;
+    if (self.progress > 0.02) {
+      scrollPrompt.dataset.hidden = 'true';
+      gsap.to(scrollPrompt, {
+        opacity: 0,
+        y: -10,
+        duration: 0.35,
+        ease: 'power2.out',
+        onComplete: () => {
+          scrollPrompt.style.display = 'none';
+        }
+      });
+    }
+  },
   // markers: true, // uncomment untuk debug
 });
 

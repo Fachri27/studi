@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deforestasi Indonesia, 2001–2024</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #1a1f1e;
+  --surface:   #222928;
+  --bar:       #bc4a3c;
+  --bar-hover: #d4574a;
+  --bar-active:#e07060;
+  --text:      #e8f0ee;
+  --muted:     #7a9e97;
+  --border:    rgba(255,255,255,.07);
+  --panel-bg:  #1a2826;
+  --accent:    #e07060;
+  --x-axis-h: 78px;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  font-family: 'Poppins', sans-serif;
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── LAYOUT ── */
+#app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── CHART AREA ── */
+#chart-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 44px 32px;
+  min-width: 0;
+  transition: padding-right .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── TITLE ── */
+.chart-header {
+  margin-bottom: 32px;
+}
+.chart-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.01em;
+  margin-bottom: 4px;
+}
+.chart-sub {
+  font-size: .7rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── CHART BODY ── */
+#chart-body {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  min-height: 0;
+  position: relative;
+}
+
+/* ── Y AXIS ── */
+#y-axis {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  padding-bottom: var(--x-axis-h);
+  width: 72px;
+  flex-shrink: 0;
+}
+.y-tick {
+  font-size: .6rem;
+  color: var(--muted);
+  text-align: right;
+  padding-right: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* ── BARS CONTAINER ── */
+#bars-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+
+/* ── GRID LINES ── */
+#grid-lines {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+}
+.grid-line {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  position: absolute;
+  left: 0;
+}
+
+/* ── BARS SVG ── */
+#bars-svg-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--x-axis-h);
+  display: grid;
+  align-items: flex-end;
+  column-gap: 3px;
+  padding: 0 2px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+  gap: 0;
+}
+
+.bar-rect {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: var(--bar);
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  transition: background .15s;
+  position: relative;
+}
+
+.bar-col:hover .bar-rect {
+  background: var(--bar-hover);
+}
+
+.bar-col.active .bar-rect {
+  background: var(--bar-active);
+}
+
+/* ── X AXIS ── */
+#x-axis {
+  display: grid;
+  column-gap: 3px;
+  padding: 0 2px;
+  margin-top: 0;
+  height: var(--x-axis-h);
+  align-items: start;
+}
+.x-label {
+  flex: 1;
+  font-size: .52rem;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 400;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding-top: 4px;
+}
+.x-label.highlight { color: var(--accent); font-weight: 600; }
+
+/* ── Y LABEL ── */
+.y-axis-label {
+  font-size: .6rem;
+  color: var(--muted);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  align-self: center;
+  padding-right: 8px;
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+
+/* ── DETAIL PANEL ── */
+#detail-panel {
+  width: 0;
+  overflow: hidden;
+  background: var(--panel-bg);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+  flex-shrink: 0;
+}
+
+#detail-panel.open {
+  width: 300px;
+}
+
+.panel-inner {
+  width: 300px;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.panel-close {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0;
+  transition: color .15s;
+  margin-bottom: 28px;
+}
+.panel-close:hover { color: var(--text); }
+
+.panel-year {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.panel-val {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 4px;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.panel-unit {
+  font-size: .65rem;
+  color: var(--muted);
+  margin-bottom: 28px;
+  opacity: 0;
+}
+
+.panel-divider {
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 24px;
+  opacity: 0;
+}
+
+/* PLACEHOLDER BLOCKS */
+.ph-label {
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  opacity: 0;
+}
+
+.ph-block {
+  border-radius: 6px;
+  background: rgba(255,255,255,.05);
+  margin-bottom: 10px;
+  opacity: 0;
+}
+
+.ph-block.tall { height: 64px; }
+.ph-block.mid  { height: 44px; }
+.ph-block.short{ height: 32px; }
+
+.panel-note {
+  margin-top: auto;
+  font-size: .62rem;
+  color: rgba(255,255,255,.15);
+  line-height: 1.6;
+  opacity: 0;
+}
+
+/* ── SOURCE ── */
+#source-bar {
+  padding: 10px 44px;
+  font-size: .55rem;
+  color: rgba(255,255,255,.2);
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- CHART -->
+  <div id="chart-area">
+    <div class="chart-header">
+      <div class="chart-title">Deforestasi Indonesia, 2001–2024</div>
+      <div class="chart-sub">Luas hutan yang hilang per tahun · hektare</div>
+    </div>
+
+    <div id="chart-body">
+      <!-- Y label -->
+      <div class="y-axis-label">Deforestasi (ha)</div>
+
+      <!-- Y axis ticks -->
+      <div id="y-axis"></div>
+
+      <!-- Bars + grid -->
+      <div id="bars-wrap">
+        <div id="grid-lines" style="flex:1; position:relative;">
+          <!-- injected -->
+        </div>
+        <div id="bars-svg-wrap">
+          <!-- injected -->
+        </div>
+        <div id="x-axis"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div id="detail-panel">
+    <div class="panel-inner">
+      <button class="panel-close" id="panel-close">✕</button>
+      <div class="panel-year" id="panel-year">2016</div>
+      <div class="panel-val" id="panel-val">1.840.000</div>
+      <div class="panel-unit" id="panel-unit">hektare deforestasi</div>
+      <div class="panel-divider" id="panel-divider"></div>
+
+      <div class="ph-label" id="ph-label-1">Informasi Tambahan</div>
+      <div class="ph-block tall" id="ph-1"></div>
+      <div class="ph-block mid"  id="ph-2"></div>
+
+      <div class="ph-label" id="ph-label-2" style="margin-top:18px">Konteks</div>
+      <div class="ph-block short" id="ph-3"></div>
+      <div class="ph-block mid"   id="ph-4"></div>
+
+      <div class="panel-note" id="panel-note">
+        Data: University of Maryland Lossyear · Auriga STADI<br>
+        simontini.id
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+/* ─── DATA ─── */
+const DATA = [
+  { year: 2001, val: 160000 },
+  { year: 2002, val: 265000 },
+  { year: 2003, val: 470000 },
+  { year: 2004, val: 465000 },
+  { year: 2005, val: 455000 },
+  { year: 2006, val: 520000 },
+  { year: 2007, val: 555000 },
+  { year: 2008, val: 630000 },
+  { year: 2009, val: 615000 },
+  { year: 2010, val: 595000 },
+  { year: 2011, val: 845000 },
+  { year: 2012, val: 545000 },
+  { year: 2013, val: 505000 },
+  { year: 2014, val: 745000 },
+  { year: 2015, val: 760000 },
+  { year: 2016, val: 1840000 },
+  { year: 2017, val: 485000 },
+  { year: 2018, val: 385000 },
+  { year: 2019, val: 405000 },
+  { year: 2020, val: 190000 },
+  { year: 2021, val: 200000 },
+  { year: 2022, val: 230000 },
+  { year: 2023, val: 260000 },
+  { year: 2024, val: 285000 },
+];
+
+const MAX_VAL = Math.max(...DATA.map(d => d.val));
+const Y_TICKS = [0, 400000, 800000, 1200000, 1600000, 2000000];
+
+/* ─── FORMAT ─── */
+function fmt(v) {
+  return v.toLocaleString('id-ID');
+}
+
+/* ─── BUILD Y AXIS ─── */
+const yAxis = document.getElementById('y-axis');
+Y_TICKS.forEach(t => {
+  const el = document.createElement('div');
+  el.className = 'y-tick';
+  el.textContent = t === 0 ? '0' : (t >= 1000000 ? (t/1000000).toFixed(1).replace('.',',') + 'jt' : (t/1000) + 'rb');
+  yAxis.appendChild(el);
+});
+
+/* ─── BUILD GRID LINES ─── */
+const gridWrap = document.getElementById('grid-lines');
+Y_TICKS.forEach(t => {
+  const line = document.createElement('div');
+  line.className = 'grid-line';
+  line.style.bottom = ((t / MAX_VAL) * 100) + '%';
+  gridWrap.appendChild(line);
+});
+
+/* ─── BUILD BARS + X AXIS ─── */
+const barsWrap = document.getElementById('bars-svg-wrap');
+const xAxis   = document.getElementById('x-axis');
+const barEls  = [];
+
+const colsTemplate = `repeat(${DATA.length}, minmax(0, 1fr))`;
+barsWrap.style.gridTemplateColumns = colsTemplate;
+xAxis.style.gridTemplateColumns = colsTemplate;
+
+DATA.forEach((d, i) => {
+  const col = document.createElement('div');
+  col.className = 'bar-col';
+  col.dataset.index = i;
+
+  const rect = document.createElement('div');
+  rect.className = 'bar-rect';
+  const pct = (d.val / MAX_VAL) * 100;
+  rect.style.height = pct + '%';
+
+  col.appendChild(rect);
+  barsWrap.appendChild(col);
+  barEls.push({ col, rect });
+
+  // x label
+  const lbl = document.createElement('div');
+  lbl.className = 'x-label' + (d.year % 4 === 1 ? ' highlight' : '');
+  lbl.textContent = d.year;
+  xAxis.appendChild(lbl);
+
+});  // end forEach bars
+
+/* ─── GSAP INTRO ANIMATION ─── */
+gsap.to(barEls.map(b => b.rect), {
+  scaleY: 1,
+  duration: .9,
+  ease: 'power3.out',
+  stagger: .045,
+  delay: .2,
+});
+
+/* ─── PANEL STATE ─── */
+let activeIndex = null;
+let panelOpen   = false;
+
+const panel      = document.getElementById('detail-panel');
+const panelYear  = document.getElementById('panel-year');
+const panelVal   = document.getElementById('panel-val');
+const panelUnit  = document.getElementById('panel-unit');
+const panelDiv   = document.getElementById('panel-divider');
+const phItems    = ['#ph-label-1','#ph-1','#ph-2','#ph-label-2','#ph-3','#ph-4','#panel-note'].map(s => document.querySelector(s));
+const panelClose = document.getElementById('panel-close');
+
+function openPanel(i) {
+  const d = DATA[i];
+
+  // update active bar style
+  barEls.forEach((b, idx) => b.col.classList.toggle('active', idx === i));
+  activeIndex = i;
+
+  // update text
+  panelYear.textContent = d.year;
+  panelVal.textContent  = fmt(d.val);
+
+  // open panel if closed
+  if (!panelOpen) {
+    panelOpen = true;
+    panel.classList.add('open');
+  }
+
+  // animate content in
+  const tl = gsap.timeline();
+  tl.set([panelVal, panelUnit, panelDiv, ...phItems], { opacity: 0, y: 10 })
+    .to(panelVal,  { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .05)
+    .to(panelUnit, { opacity: 1, y: 0, duration: .3,  ease: 'power2.out' }, .1)
+    .to(panelDiv,  { opacity: 1, y: 0, duration: .3,  ease: 'power2.out' }, .15)
+    .to(phItems,   { opacity: 1, y: 0, duration: .4,  ease: 'power2.out', stagger: .06 }, .2);
+}
+
+function closePanel() {
+  panelOpen = false;
+  panel.classList.remove('open');
+  barEls.forEach(b => b.col.classList.remove('active'));
+  activeIndex = null;
+  gsap.to([panelVal, panelUnit, panelDiv, ...phItems], { opacity: 0, duration: .2 });
+}
+
+panelClose.addEventListener('click', closePanel);
+
+/* keyboard ESC */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePanel();
+});
+
+/* ─── HOVER SCALE PULSE + PANEL ─── */
+barEls.forEach(({ col, rect }, i) => {
+  col.addEventListener('mouseenter', () => {
+    gsap.to(rect, { scaleY: 1.025, transformOrigin: 'bottom center', duration: .18, ease: 'power1.out' });
+    openPanel(i);
+  });
+  col.addEventListener('mouseleave', () => {
+    gsap.to(rect, { scaleY: 1, duration: .22, ease: 'power1.out' });
+  });
+});
+
+/* close panel when mouse leaves chart entirely */
+document.getElementById('app').addEventListener('mouseleave', closePanel);
+</script>
+</body>
+</html>

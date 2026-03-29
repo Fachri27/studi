@@ -80,16 +80,62 @@ body { background: var(--cream); font-family: 'IBM Plex Sans', sans-serif; color
   background:rgba(245,240,232,.96);
   border:1.5px solid rgba(212,196,160,.8);
   border-top:3px solid var(--red);
-  padding:14px 16px 12px;
-  min-width:170px;
+  padding:14px 16px 14px;
+  min-width:210px;
 }
-.chart-name { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--dark); margin-bottom:4px; }
-.chart-unit { font-family:'IBM Plex Mono',monospace; font-size:.55rem; color:var(--text-muted); margin-bottom:7px; }
-.bar-group { display:flex; align-items:flex-end; gap:5px; height:80px; }
-.bar-wrap  { display:flex; flex-direction:column; align-items:center; gap:3px; flex:1; }
-.bar { width:100%; background:#b04030; border-radius:2px 2px 0 0; transform-origin:bottom; min-height:2px; }
+.chart-name { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--dark); margin-bottom:2px; line-height:1.05; }
+.chart-unit { font-family:'IBM Plex Sans',sans-serif; font-size:.52rem; font-weight:700; color:var(--dark); margin-bottom:10px; }
+.chart-plot { display:grid; grid-template-columns:40px 1fr; gap:8px; align-items:end; }
+.y-axis { display:flex; flex-direction:column; justify-content:space-between; height:92px; padding-bottom:14px; }
+.y-tick {
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:.52rem;
+  font-weight:700;
+  color:var(--dark);
+  line-height:1;
+}
+.plot-area {
+  position:relative;
+  height:106px;
+  display:flex;
+  align-items:flex-end;
+}
+.grid-lines {
+  position:absolute;
+  inset:0 0 14px 0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  pointer-events:none;
+}
+.grid-lines span {
+  display:block;
+  width:100%;
+  border-top:1px solid rgba(192,64,48,.35);
+}
+.bar-group {
+  position:relative;
+  z-index:1;
+  width:100%;
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  height:92px;
+  padding-bottom:14px;
+  border-bottom:2px solid var(--dark);
+}
+.bar-wrap  { display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:4px; flex:1; height:100%; }
+.bar {
+  width:100%;
+  max-width:22px;
+  background:#c14c3b;
+  border-radius:0;
+  transform-origin:bottom;
+  min-height:2px;
+  box-shadow:0 1px 0 rgba(255,255,255,.15) inset;
+}
 .bar.hi { background:var(--red); box-shadow:0 0 8px rgba(139,42,26,.55); }
-.bar-lbl { font-family:'IBM Plex Mono',monospace; font-size:.55rem; color:var(--text-muted); }
+.bar-lbl { font-family:'IBM Plex Sans',sans-serif; font-size:.58rem; font-weight:700; color:var(--dark); line-height:1; }
 
 /* BUBBLES */
 #bubbles {
@@ -121,6 +167,7 @@ body { background: var(--cream); font-family: 'IBM Plex Sans', sans-serif; color
 /* TABLE */
 #table-section { background:var(--dark); color:var(--cream); padding:80px 48px; position:relative; }
 #table-section::before { content:''; position:absolute; top:0;left:0;right:0; height:4px; background:linear-gradient(90deg,var(--red),var(--red-light),var(--red)); }
+.table-wrap { max-width: 980px; margin: 0 auto; }
 #table-section h2 { font-family:'Playfair Display',serif; font-size:clamp(1.5rem,3vw,2.2rem); font-weight:900; margin-bottom:6px; }
 #table-section h2 span { color:var(--red-light); }
 .t-sub { font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--tan); margin-bottom:36px; letter-spacing:.05em; }
@@ -160,81 +207,119 @@ td:first-child { text-align:left; font-family:'IBM Plex Sans',sans-serif; font-w
         <div class="chart-inner">
           <div class="chart-name">Sumatera</div>
           <div class="chart-unit">ribu hektare</div>
-          <div class="bar-group" id="bars-sumatra"></div>
+          <div class="chart-plot">
+            <div class="y-axis" id="axis-sumatra"></div>
+            <div class="plot-area">
+              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="bar-group" id="bars-sumatra"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="island-chart" id="chart-kalimantan">
         <div class="chart-inner">
           <div class="chart-name">Kalimantan</div>
           <div class="chart-unit">ribu hektare</div>
-          <div class="bar-group" id="bars-kalimantan"></div>
+          <div class="chart-plot">
+            <div class="y-axis" id="axis-kalimantan"></div>
+            <div class="plot-area">
+              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="bar-group" id="bars-kalimantan"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="island-chart" id="chart-sulawesi">
         <div class="chart-inner">
           <div class="chart-name">Sulawesi</div>
           <div class="chart-unit">ribu hektare</div>
-          <div class="bar-group" id="bars-sulawesi"></div>
+          <div class="chart-plot">
+            <div class="y-axis" id="axis-sulawesi"></div>
+            <div class="plot-area">
+              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="bar-group" id="bars-sulawesi"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="island-chart" id="chart-papua">
         <div class="chart-inner">
           <div class="chart-name">Papua</div>
           <div class="chart-unit">ribu hektare</div>
-          <div class="bar-group" id="bars-papua"></div>
+          <div class="chart-plot">
+            <div class="y-axis" id="axis-papua"></div>
+            <div class="plot-area">
+              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="bar-group" id="bars-papua"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="island-chart" id="chart-jawa">
         <div class="chart-inner">
           <div class="chart-name">Jawa</div>
           <div class="chart-unit">hektare</div>
-          <div class="bar-group" id="bars-jawa"></div>
+          <div class="chart-plot">
+            <div class="y-axis" id="axis-jawa"></div>
+            <div class="plot-area">
+              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="bar-group" id="bars-jawa"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="island-chart" id="chart-maluku">
         <div class="chart-inner">
           <div class="chart-name">Maluku &amp; NTT</div>
           <div class="chart-unit">ribu hektare</div>
-          <div class="bar-group" id="bars-maluku"></div>
+          <div class="chart-plot">
+            <div class="y-axis" id="axis-maluku"></div>
+            <div class="plot-area">
+              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="bar-group" id="bars-maluku"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <div id="bubbles">
-      <div class="bub" id="b0"><div class="b-yr">2021</div><div class="b-val">229k</div><div class="b-u">ha</div></div>
-      <div class="bub" id="b1"><div class="b-yr">2022</div><div class="b-val">230k</div><div class="b-u">ha</div></div>
-      <div class="bub" id="b2"><div class="b-yr">2023</div><div class="b-val">257k</div><div class="b-u">ha</div></div>
-      <div class="bub" id="b3"><div class="b-yr">2024</div><div class="b-val">261k</div><div class="b-u">ha</div></div>
-      <div class="bub" id="b4"><div class="b-yr">2025</div><div class="b-val">433k</div><div class="b-u">ha</div></div>
+      <div class="bub" id="b0"><div class="b-yr">2021</div><div class="b-val">229.982</div><div class="b-u">ha</div></div>
+      <div class="bub" id="b1"><div class="b-yr">2022</div><div class="b-val">230.760</div><div class="b-u">ha</div></div>
+      <div class="bub" id="b2"><div class="b-yr">2023</div><div class="b-val">257.385</div><div class="b-u">ha</div></div>
+      <div class="bub" id="b3"><div class="b-yr">2024</div><div class="b-val">261.574</div><div class="b-u">ha</div></div>
+      <div class="bub" id="b4"><div class="b-yr">2025</div><div class="b-val">433.751</div><div class="b-u">ha</div></div>
     </div>
   </div>
 </div>
 
 <div id="table-section">
-  <h2>Data Lengkap <span>Deforestasi</span></h2>
-  <p class="t-sub">// Per pulau 2023–2025 &amp; perluasan tahun terakhir</p>
-  <table>
-    <thead>
-      <tr>
-        <th rowspan="2" style="vertical-align:bottom;text-align:left">Pulau</th>
-        <th colspan="3" class="th-g">Deforestasi (ha)</th>
-        <th colspan="2" class="th-g" style="color:#ff6b4a">Perluasan 2025 vs 2024</th>
-      </tr>
-      <tr>
-        <th>2023</th><th>2024</th><th>2025</th><th>Hektare</th><th>Persen</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Kalimantan</td><td>124.611</td><td>129.896</td><td>158.283</td><td>28.387</td><td class="pct">22%</td></tr>
-      <tr><td>Sumatera</td><td>33.311</td><td>91.248</td><td>144.150</td><td>52.902</td><td class="pct">58%</td></tr>
-      <tr><td>Papua</td><td>55.981</td><td>17.341</td><td>77.678</td><td>60.337</td><td class="pct hi">348%</td></tr>
-      <tr><td>Sulawesi</td><td>36.814</td><td>17.361</td><td>39.685</td><td>22.324</td><td class="pct">129%</td></tr>
-      <tr><td>Maluku</td><td>4.034</td><td>3.537</td><td>7.527</td><td>3.990</td><td class="pct">113%</td></tr>
-      <tr><td>Bali &amp; Nusa Tenggara</td><td>2.052</td><td>1.780</td><td>4.209</td><td>2.429</td><td class="pct">136%</td></tr>
-      <tr><td>Jawa</td><td>582</td><td>411</td><td>2.221</td><td>1.810</td><td class="pct hi">440%</td></tr>
-      <tr class="tot"><td>Total</td><td>257.385</td><td>261.574</td><td>433.751</td><td>172.177</td><td class="pct hi">66%</td></tr>
-    </tbody>
-  </table>
+  <div class="table-wrap">
+    <h2>Data Lengkap <span>Deforestasi</span></h2>
+    <p class="t-sub">// Per pulau 2023–2025 &amp; perluasan tahun terakhir</p>
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2" style="vertical-align:bottom;text-align:left">Pulau</th>
+          <th colspan="3" class="th-g">Deforestasi (ha)</th>
+          <th colspan="2" class="th-g" style="color:#ff6b4a">Perluasan 2025 vs 2024</th>
+        </tr>
+        <tr>
+          <th>2023</th><th>2024</th><th>2025</th><th>Hektare</th><th>Persen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Kalimantan</td><td>124.611</td><td>129.896</td><td>158.283</td><td>28.387</td><td class="pct">22%</td></tr>
+        <tr><td>Sumatera</td><td>33.311</td><td>91.248</td><td>144.150</td><td>52.902</td><td class="pct">58%</td></tr>
+        <tr><td>Papua</td><td>55.981</td><td>17.341</td><td>77.678</td><td>60.337</td><td class="pct hi">348%</td></tr>
+        <tr><td>Sulawesi</td><td>36.814</td><td>17.361</td><td>39.685</td><td>22.324</td><td class="pct">129%</td></tr>
+        <tr><td>Maluku</td><td>4.034</td><td>3.537</td><td>7.527</td><td>3.990</td><td class="pct">113%</td></tr>
+        <tr><td>Bali &amp; Nusa Tenggara</td><td>2.052</td><td>1.780</td><td>4.209</td><td>2.429</td><td class="pct">136%</td></tr>
+        <tr><td>Jawa</td><td>582</td><td>411</td><td>2.221</td><td>1.810</td><td class="pct hi">440%</td></tr>
+        <tr class="tot"><td>Total</td><td>257.385</td><td>261.574</td><td>433.751</td><td>172.177</td><td class="pct hi">66%</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>
@@ -251,26 +336,38 @@ const DATA = {
   maluku:     [3, 3.5, 4, 3.5, 7.5],
 };
 
-// Sequence: which islands appear at each year step
-const STEPS = [
-  { year:0, show:['sumatra'] },          // 2021
-  { year:1, show:['kalimantan'] },        // 2022
-  { year:2, show:['sulawesi','papua'] },  // 2023
-  { year:3, show:['maluku','jawa'] },     // 2024
-  { year:4, show:[] },                    // 2025 – all already visible
-];
-
 const ALL_ISLANDS = ['sumatra','kalimantan','sulawesi','papua','maluku','jawa'];
 
 // ── BUILD BARS ─────────────────────────────────────────
+function getAxisMax(id, data) {
+  const max = Math.max(...data);
+  if (id === 'jawa') return Math.max(3, Math.ceil(max));
+  return Math.max(50, Math.ceil(max / 50) * 50);
+}
+
+function buildAxis(id, max) {
+  const axis = document.getElementById('axis-' + id);
+  if (!axis) return;
+  axis.innerHTML = '';
+
+  const steps = [max, max * 0.75, max * 0.5, max * 0.25, 0];
+  steps.forEach(value => {
+    const tick = document.createElement('div');
+    tick.className = 'y-tick';
+    tick.textContent = Number.isInteger(value) ? String(value) : value.toFixed(1);
+    axis.appendChild(tick);
+  });
+}
+
 function buildBars(id, data) {
   const wrap = document.getElementById('bars-'+id);
-  const max = Math.max(...data);
+  const max = getAxisMax(id, data);
+  buildAxis(id, max);
   data.forEach((v,i) => {
     const bw = document.createElement('div'); bw.className='bar-wrap';
     const bar = document.createElement('div'); bar.className='bar';
     bar.style.height='0px';
-    bar.dataset.target = Math.round((v/max)*52);
+    bar.dataset.target = Math.round((v/max)*78);
     bar.dataset.idx=i;
     const lbl = document.createElement('div'); lbl.className='bar-lbl'; lbl.textContent=String(YEARS[i]).slice(2);
     bw.appendChild(bar); bw.appendChild(lbl); wrap.appendChild(bw);
@@ -300,6 +397,16 @@ function growAllBars(upToYear) {
   ALL_ISLANDS.forEach(id => growBars(id, upToYear));
 }
 
+function setBarsState(upToYear) {
+  ALL_ISLANDS.forEach(id => {
+    const bars = document.querySelectorAll('#bars-'+id+' .bar');
+    bars.forEach((bar, i) => {
+      gsap.set(bar, { height: i <= upToYear ? bar.dataset.target+'px' : '0px' });
+      bar.classList.toggle('hi', i === upToYear);
+    });
+  });
+}
+
 function setYearLabel(idx) {
   const el = document.getElementById('year-ghost');
   gsap.to(el, { opacity:0, y:-15, duration:.18, onComplete:() => {
@@ -310,6 +417,57 @@ function setYearLabel(idx) {
 
 function showChart(id) {
   gsap.to('#chart-'+id, { opacity:1, scale:1, y:0, duration:.55, ease:'back.out(1.5)' });
+}
+
+function hideAllCharts() {
+  gsap.set('.island-chart', { opacity:0, scale:.75, y:12 });
+}
+
+function revealFirstYearSequence() {
+  ALL_ISLANDS.forEach((id, idx) => {
+    const chartSelector = '#chart-' + id;
+    const firstBar = document.querySelector('#bars-' + id + ' .bar[data-idx="0"]');
+    const delay = idx * 0.12;
+
+    gsap.to(chartSelector, {
+      opacity:1,
+      scale:1,
+      y:0,
+      duration:.55,
+      delay,
+      ease:'back.out(1.5)'
+    });
+
+    if (firstBar) {
+      firstBar.classList.add('hi');
+      gsap.fromTo(firstBar,
+        { height:'0px' },
+        { height:firstBar.dataset.target+'px', duration:.45, delay:delay + .08, ease:'power2.out' }
+      );
+    }
+  });
+}
+
+function animateYearBars(yearIdx) {
+  ALL_ISLANDS.forEach(id => {
+    const bars = document.querySelectorAll('#bars-'+id+' .bar');
+    bars.forEach((bar, i) => {
+      bar.classList.toggle('hi', i === yearIdx);
+      if (i < yearIdx) {
+        gsap.set(bar, { height:bar.dataset.target+'px' });
+      } else if (i > yearIdx) {
+        gsap.set(bar, { height:'0px' });
+      }
+    });
+
+    const currentBar = bars[yearIdx];
+    if (currentBar) {
+      gsap.fromTo(currentBar,
+        { height:'0px' },
+        { height:currentBar.dataset.target+'px', duration:.45, ease:'power2.out' }
+      );
+    }
+  });
 }
 
 // ── INIT ─────────────────────────────────────────────
@@ -323,20 +481,19 @@ gsap.to('#indonesia-map', { opacity:1, duration:1.2, ease:'power2.out', delay:.4
 // ── PHASES ───────────────────────────────────────────
 // Each phase = 100vh of scroll (scene is 700vh total)
 // Phase 0 (0%  –14%): map appears  (no charts yet)
-// Phase 1 (14%–28%): 2021 → Sumatra
-// Phase 2 (28%–42%): 2022 → Kalimantan
-// Phase 3 (42%–56%): 2023 → Sulawesi + Papua
-// Phase 4 (56%–70%): 2024 → Maluku + Jawa
-// Phase 5 (70%–85%): 2025 → all bars jump
+// Phase 1 (14%–28%): 2021 → semua chart keluar satu per satu
+// Phase 2 (28%–42%): 2022 → hanya bar 2022 tumbuh
+// Phase 3 (42%–56%): 2023 → hanya bar 2023 tumbuh
+// Phase 4 (56%–70%): 2024 → hanya bar 2024 tumbuh
+// Phase 5 (70%–85%): 2025 → hanya bar 2025 tumbuh
 // Phase 6 (85%–100%): hold state
 
 const phases = [
-  // year, islands to reveal, start%, end%
-  { yi:0, ids:['sumatra'],            s:'14%', e:'28%' },
-  { yi:1, ids:['kalimantan'],         s:'28%', e:'42%' },
-  { yi:2, ids:['sulawesi','papua'],   s:'42%', e:'56%' },
-  { yi:3, ids:['maluku','jawa'],      s:'56%', e:'70%' },
-  { yi:4, ids:[],                     s:'70%', e:'85%' },
+  { yi:0, s:'14%', e:'28%' },
+  { yi:1, s:'28%', e:'42%' },
+  { yi:2, s:'42%', e:'56%' },
+  { yi:3, s:'56%', e:'70%' },
+  { yi:4, s:'70%', e:'85%' },
 ];
 
 phases.forEach(ph => {
@@ -348,8 +505,14 @@ phases.forEach(ph => {
       currentYearIdx = ph.yi;
       setYearLabel(ph.yi);
       activateBubble(ph.yi);
-      ph.ids.forEach(id => showChart(id));
-      growAllBars(ph.yi);
+      if (ph.yi === 0) {
+        hideAllCharts();
+        setBarsState(-1);
+        revealFirstYearSequence();
+      } else {
+        gsap.set('.island-chart', { opacity:1, scale:1, y:0 });
+        animateYearBars(ph.yi);
+      }
       if (ph.yi === 4) gsap.to('#indonesia-map', { opacity:1.0, duration:.4, yoyo:true, repeat:1 });
     },
     onLeaveBack() {
@@ -358,11 +521,13 @@ phases.forEach(ph => {
       if (prev >= 0) {
         setYearLabel(prev);
         activateBubble(prev);
-        growAllBars(prev);
+        gsap.set('.island-chart', { opacity:1, scale:1, y:0 });
+        setBarsState(prev);
+      } else {
+        activateBubble(-1);
+        hideAllCharts();
+        setBarsState(-1);
       }
-      ph.ids.forEach(id => {
-        gsap.to('#chart-'+id, { opacity:0, scale:.75, duration:.3 });
-      });
     },
   });
 });

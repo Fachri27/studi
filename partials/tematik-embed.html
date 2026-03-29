@@ -1,0 +1,1173 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.css" />
+<div class="simontini-tematik">
+<style>
+.simontini-tematik,
+.simontini-tematik *,
+.simontini-tematik *::before,
+.simontini-tematik *::after { box-sizing: border-box; }
+
+.simontini-tematik * { margin: 0; padding: 0; }
+
+.simontini-tematik {
+  --red: #8b2a1a;
+  --red-light: #c04030;
+  --cream: #f5f0e8;
+  --dark: #1a1a1a;
+  --muted: #5a5040;
+  --tan: #d4c4a0;
+  --border: #e1d5c6;
+  --panel: #f8f4ee;
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  position: relative;
+}
+
+/* SIDEBAR */
+#sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  background: var(--dark);
+  color: var(--cream);
+  padding: 28px 20px;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+#sidebar h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+#sidebar .sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--tan);
+  margin-bottom: 18px;
+}
+.simontini-tematik .mode-btn {
+  width: 100%;
+  border: 1.5px solid rgba(255,255,255,.12);
+  background: transparent;
+  color: rgba(245,240,232,.65);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 9px;
+  text-align: left;
+  cursor: pointer;
+  font-size: .84rem;
+  font-weight: 600;
+  transition: .2s;
+}
+.simontini-tematik .mode-btn:hover { border-color: var(--red-light); color: #fff; }
+.simontini-tematik .mode-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+#sidebar .divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 16px 0;
+}
+
+.simontini-tematik .kpi {
+  background: rgba(139,42,26,.14);
+  border-left: 3px solid var(--red);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.simontini-tematik .kpi .label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--tan);
+}
+.simontini-tematik .kpi .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  line-height: 1;
+  margin-top: 4px;
+}
+.simontini-tematik .kpi .unit {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .56rem;
+  color: var(--tan);
+  margin-top: 3px;
+}
+
+.simontini-tematik .kpi #sidebar-notes {
+  list-style: none;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+.simontini-tematik .kpi #sidebar-notes li {
+  font-size: .73rem;
+  line-height: 1.6;
+  margin-bottom: 6px;
+  color: rgba(245,240,232,.78);
+  padding-left: 14px;
+  position: relative;
+}
+.simontini-tematik .kpi #sidebar-notes li:last-child {
+  margin-bottom: 0;
+}
+.simontini-tematik .kpi #sidebar-notes li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--red-light);
+}
+
+/* MAP + OVERLAY */
+#wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background: #ece8df;
+}
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+#title-block {
+  position: absolute;
+  top: 74px;
+  left: 18px;
+  z-index: 600;
+  pointer-events: none;
+}
+#title-block h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: clamp(1.2rem, 2vw, 2.15rem);
+  line-height: 1.2;
+  color: var(--dark);
+  text-shadow: 0 2px 10px rgba(255,255,255,.7);
+}
+
+#interaction-hint {
+  position: absolute;
+  top: 22px;
+  right: 18px;
+  z-index: 625;
+  background: rgba(26,26,26,.78);
+  color: rgba(245,240,232,.9);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .55rem;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+
+#others-bubble {
+  position: absolute;
+  right: 22px;
+  top: 96px;
+  z-index: 620;
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  background: rgba(192,64,48,.95);
+  color: #fff;
+  display: none;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 16px;
+  box-shadow: 0 8px 26px rgba(139,42,26,.35);
+}
+#others-bubble .small {
+  font-size: .68rem;
+  line-height: 1.3;
+}
+#others-bubble .big {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  line-height: 1;
+  margin-top: 6px;
+}
+#others-bubble .mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .56rem;
+  margin-top: 2px;
+  opacity: .9;
+}
+
+#notes-box {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 620;
+  width: min(430px, 42vw);
+  border: 1px solid #918376;
+  background: rgba(248,244,238,.94);
+  padding: 14px 14px 10px;
+  box-shadow: 0 8px 24px rgba(26,26,26,.12);
+}
+
+/* Saat mode menampilkan tabel, geser notes ke atas agar tidak menimpa tabel */
+#wrap.notes-top #notes-box {
+  top: 96px;
+  bottom: auto;
+  width: min(430px, 36vw);
+}
+#notes-box ul {
+  margin: 0;
+  padding-left: 18px;
+}
+#notes-box li {
+  font-size: .82rem;
+  line-height: 1.48;
+  margin-bottom: 6px;
+}
+
+#table-wrap {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  z-index: 610;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.simontini-tematik .table-card {
+  background: rgba(248,244,238,.95);
+  border: 1px solid #9e9183;
+  box-shadow: 0 8px 24px rgba(26,26,26,.12);
+  overflow: hidden;
+  border-radius: 0;
+}
+.simontini-tematik .table-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .6rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--red-light);
+  padding: 7px 10px;
+}
+.simontini-tematik .table-card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .72rem;
+  table-layout: fixed;
+}
+.simontini-tematik .table-card th, .simontini-tematik .table-card td {
+  border-bottom: 1px solid #d7ccc0;
+  padding: 5px 8px;
+  vertical-align: top;
+}
+.simontini-tematik .table-card th,
+.simontini-tematik .table-card td {
+  overflow-wrap: anywhere;
+}
+.simontini-tematik .table-card th:nth-child(1),
+.simontini-tematik .table-card td:nth-child(1) {
+  width: 10%;
+}
+.simontini-tematik .table-card th:nth-child(2),
+.simontini-tematik .table-card td:nth-child(2) {
+  width: 44%;
+}
+.simontini-tematik .table-card th:nth-child(3),
+.simontini-tematik .table-card td:nth-child(3),
+.simontini-tematik .table-card th:nth-child(4),
+.simontini-tematik .table-card td:nth-child(4) {
+  width: 23%;
+}
+.simontini-tematik .table-card th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  text-align: left;
+  color: #fff;
+  background: var(--red-light);
+}
+.simontini-tematik .table-card tr:nth-child(even) td { background: #f1e7e1; }
+.simontini-tematik .table-card td:last-child,
+.simontini-tematik .table-card th:last-child { text-align: right; }
+.simontini-tematik .table-card tbody tr {
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.simontini-tematik .table-card tbody tr:hover td {
+  background: rgba(192,64,48,.14) !important;
+}
+.simontini-tematik .table-card tbody tr.active-row td {
+  background: rgba(192,64,48,.2) !important;
+}
+.simontini-tematik .table-card tbody tr.total-row td {
+  font-weight: 700;
+  background: rgba(192,64,48,.18) !important;
+  border-top: 2px solid var(--red-light);
+}
+
+/* Leaflet custom */
+.simontini-tematik .leaflet-container { background: #efebe3 !important; }
+.simontini-tematik .rank-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red-light);
+  border: 2px solid rgba(255,255,255,.95);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .75rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(139,42,26,.35);
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+.simontini-tematik .rank-dot.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 8px rgba(192,64,48,.18), 0 7px 18px rgba(139,42,26,.4);
+  filter: saturate(1.12);
+}
+.simontini-tematik .species-dot {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid rgba(192,64,48,.95);
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  box-shadow: 0 3px 10px rgba(26,26,26,.22);
+  transition: transform .16s ease, box-shadow .16s ease;
+  overflow: hidden;
+}
+.simontini-tematik .species-dot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.simontini-tematik .species-dot.is-image {
+  padding: 0;
+  font-size: 0;
+}
+.simontini-tematik .species-dot.active {
+  transform: scale(1.14);
+  box-shadow: 0 0 0 8px rgba(192,64,48,.17), 0 8px 20px rgba(26,26,26,.3);
+}
+.simontini-tematik .leaflet-tooltip.label-tip {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+.simontini-tematik .leaflet-tooltip::before { display: none !important; }
+.simontini-tematik .label-box {
+  white-space: nowrap;
+  font-size: .92rem;
+  line-height: 1.12;
+  color: var(--dark);
+  text-shadow: 0 2px 6px rgba(255,255,255,.95);
+}
+.simontini-tematik .label-box .name { font-weight: 600; }
+.simontini-tematik .label-box .value {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+.simontini-tematik .label-box .species-name {
+  font-size: .86rem;
+  color: #3b3128;
+}
+.simontini-tematik .label-box .species-val {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.95rem;
+  color: var(--red);
+  line-height: 1.05;
+}
+
+.simontini-tematik .callout-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--dark);
+  text-shadow: 0 2px 8px rgba(255,255,255,.95);
+  white-space: nowrap;
+  line-height: 1.1;
+}
+.simontini-tematik .callout-label .rank {
+  font-family: 'Playfair Display', serif;
+  color: var(--red-light);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-right: 4px;
+}
+.simontini-tematik .callout-label .name {
+  font-size: .95rem;
+  font-weight: 600;
+}
+.simontini-tematik .callout-label .value {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+.simontini-tematik .callout-label.species .name {
+  font-size: .85rem;
+  font-weight: 500;
+  color: #3b3128;
+}
+.simontini-tematik .callout-label.species .value {
+  color: var(--red);
+  font-size: 1.9rem;
+}
+
+.simontini-tematik .leaflet-popup-content-wrapper {
+  border-top: 3px solid var(--red-light);
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+.simontini-tematik .leaflet-popup-content {
+  margin: 10px 12px;
+  line-height: 1.35;
+}
+.simontini-tematik .popup-name {
+  font-weight: 700;
+  font-size: .9rem;
+  margin-bottom: 4px;
+}
+.simontini-tematik .popup-value {
+  font-family: 'Playfair Display', serif;
+  color: var(--red);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.simontini-tematik .popup-meta {
+  margin-top: 5px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .58rem;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* Responsive */
+@media (max-width: 1280px) {
+  #table-wrap {
+    left: 14px;
+    right: 14px;
+    gap: 10px;
+  }
+  #notes-box {
+    width: min(390px, 40vw);
+  }
+  #wrap.notes-top #notes-box {
+    top: 84px;
+    width: min(390px, 34vw);
+  }
+}
+
+@media (max-width: 980px) {
+  .simontini-tematik { flex-direction: column; overflow: hidden; }
+  #sidebar {
+    width: 100%;
+    max-height: 32vh;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 16px 14px;
+  }
+  #sidebar h1 { font-size: 1.08rem; }
+  #sidebar .sub { margin-bottom: 12px; }
+  .simontini-tematik .mode-btn { font-size: .78rem; padding: 9px 10px; margin-bottom: 7px; }
+
+  #title-block { top: 64px; left: 10px; }
+  #title-block h2 { font-size: clamp(.95rem, 2.2vw, 1.2rem); }
+
+  #interaction-hint {
+    top: 8px;
+    right: 8px;
+    font-size: .48rem;
+    padding: 4px 7px;
+  }
+
+  #notes-box {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: 24vh;
+    overflow-y: auto;
+    right: 18px;
+    bottom: 18px;
+  }
+  #wrap.notes-top #notes-box {
+    top: 10px;
+    bottom: auto;
+    width: auto;
+  }
+  #table-wrap {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    grid-template-columns: 1fr;
+    max-height: none;
+    overflow: visible;
+    gap: 10px;
+  }
+  .simontini-tematik .table-card {
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .simontini-tematik .table-card table {
+    min-width: 0;
+    font-size: .64rem;
+  }
+  .simontini-tematik .table-card th, .simontini-tematik .table-card td {
+    padding: 4px 5px;
+  }
+
+  #others-bubble {
+    width: 132px;
+    height: 132px;
+    right: 10px;
+    top: 56px;
+  }
+  #others-bubble .big { font-size: 1.55rem; }
+}
+
+@media (max-width: 640px) {
+  #title-block { top: 60px; }
+
+  #sidebar {
+    max-height: 30vh;
+    padding: 12px 10px;
+  }
+  #sidebar h1 { font-size: .95rem; }
+  .simontini-tematik .mode-btn { font-size: .72rem; padding: 8px 9px; }
+
+  #interaction-hint { display: none; }
+
+  #others-bubble {
+    width: 108px;
+    height: 108px;
+    top: 52px;
+    right: 8px;
+    padding: 10px;
+  }
+  #others-bubble .small { font-size: .55rem; }
+  #others-bubble .big { font-size: 1.2rem; }
+  #others-bubble .mono { font-size: .48rem; }
+
+  #notes-box {
+    font-size: .72rem;
+    padding: 10px 10px 8px;
+    max-height: 22vh;
+  }
+  #notes-box li {
+    font-size: .72rem;
+    line-height: 1.4;
+  }
+
+  #table-wrap {
+    max-height: none;
+    gap: 8px;
+  }
+  .simontini-tematik .table-title { font-size: .52rem; padding: 6px 8px; }
+  .simontini-tematik .table-card table { min-width: 0; font-size: .6rem; }
+  .simontini-tematik .table-card th, .simontini-tematik .table-card td { padding: 4px; }
+}
+</style>
+  <aside id="sidebar">
+    <h1>Peta Tematik<br>Deforestasi</h1>
+    <p class="sub">Pilih jenis analisis · 2025</p>
+
+    <button class="mode-btn active" data-mode="provinsi">📊 Deforestasi berbasis provinsi</button>
+    <button class="mode-btn" data-mode="kabupaten">🗺️ Deforestasi berbasis kabupaten</button>
+    <button class="mode-btn" data-mode="konservasi">🌿 Deforestasi di area konservasi</button>
+    <button class="mode-btn" data-mode="megafauna">🦏 Habitat megafauna ikonik</button>
+
+    <div class="divider"></div>
+
+    <div class="kpi">
+      <div class="label" id="kpi-label">Total</div>
+      <div class="val" id="kpi-val">433.751</div>
+      <div class="unit" id="kpi-unit">hektare</div>
+
+      <ul id="sidebar-notes"></ul>
+    </div>
+  </aside>
+
+  <main id="wrap">
+    <div id="map"></div>
+
+    <div id="interaction-hint">klik titik / klik baris tabel / tombol 1–4</div>
+
+    <div id="title-block">
+      <h2 id="map-title">Deforestasi berbasis provinsi</h2>
+    </div>
+
+    <div id="others-bubble">
+      <div class="small" id="bubble-label">Kabupaten lainnya</div>
+      <div class="big" id="bubble-val">338.018</div>
+      <div class="mono" id="bubble-unit">hektare</div>
+    </div>
+
+    <div id="notes-box"><ul id="notes-list"></ul></div>
+
+    <div id="table-wrap"></div>
+  </main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.js"></script>
+<script>
+(() => {
+const root = document.currentScript.closest('.simontini-tematik');
+if (!root || root.dataset.tematikInitialized === '1') return;
+root.dataset.tematikInitialized = '1';
+
+const qs = (selector) => root.querySelector(selector);
+const qsa = (selector) => Array.from(root.querySelectorAll(selector));
+const getById = (id) => qs(`#${id}`);
+
+const map = L.map(getById('map'), {
+  zoomControl: true,
+  attributionControl: false,
+  gestureHandling: true,
+  minZoom: 4,
+  maxZoom: 9
+}).setView([-2.3, 118], 5);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+const markerLayer = L.layerGroup().addTo(map);
+const calloutLayer = L.layerGroup().addTo(map);
+let markerRegistry = [];
+let activeMarker = null;
+let activeRow = null;
+let currentMode = 'provinsi';
+let activeEntry = null;
+
+const MODES = {
+  provinsi: {
+    title: 'Deforestasi berbasis provinsi',
+    kpiLabel: 'Total deforestasi 2025',
+    kpiVal: '433.751',
+    kpiUnit: 'hektare',
+    notesSidebar: [
+      '10 provinsi teratas didominasi Kalimantan dan Sumatera.',
+      'Kalimantan Tengah naik ke peringkat pertama pada 2025.',
+      'Aceh, Sumatera Utara, dan Sumatera Barat melonjak tajam.'
+    ],
+    notesBox: [
+      'Sepuluh teratas provinsi 2025: Kalimantan Tengah, Kalimantan Timur, Aceh, Kalimantan Barat, Papua Tengah, Sumatera Barat, Sumatera Utara, Kalimantan Utara, Riau, dan Papua Pegunungan.',
+      'Tiga provinsi di Sumatera bagian utara mengalami lonjakan tinggi: Aceh, Sumatera Utara, dan Sumatera Barat.'
+    ],
+    markers: [
+      { lat: -1.8, lng: 113.0, rank: 1, name: 'Kalimantan Tengah', value: '56.900', dir: 'right' },
+      { lat: 0.9, lng: 117.1, rank: 2, name: 'Kalimantan Timur', value: '47.135', dir: 'right' },
+      { lat: 4.3, lng: 96.8, rank: 3, name: 'Aceh', value: '38.157', dir: 'right' },
+      { lat: -0.5, lng: 111.3, rank: 4, name: 'Kalimantan Barat', value: '31.876', dir: 'left' },
+      { lat: -3.2, lng: 138.5, rank: 5, name: 'Papua Tengah', value: '26.978', dir: 'left' },
+      { lat: -0.9, lng: 100.5, rank: 6, name: 'Sumatera Barat', value: '26.940', dir: 'right' },
+      { lat: 2.2, lng: 99.3, rank: 7, name: 'Sumatera Utara', value: '20.512', dir: 'right' },
+      { lat: 2.8, lng: 116.5, rank: 8, name: 'Kalimantan Utara', value: '19.716', dir: 'right' },
+      { lat: 0.5, lng: 101.7, rank: 9, name: 'Riau', value: '17.812', dir: 'left' },
+      { lat: -5.7, lng: 140.6, rank: 10, name: 'Papua Pegunungan', value: '16.468', dir: 'left' }
+    ],
+    tables: [
+      {
+        title: 'Top Provinsi 2025 (1–10)',
+        headers: ['#', 'Provinsi', '2025 (ha)', '2024 (ha)'],
+        rows: [
+          ['1', 'Kalimantan Tengah', '56.900', '33.389'],
+          ['2', 'Kalimantan Timur', '47.135', '44.483'],
+          ['3', 'Aceh', '38.157', '8.962'],
+          ['4', 'Kalimantan Barat', '31.876', '39.598'],
+          ['5', 'Papua Tengah', '26.978', '6.360'],
+          ['6', 'Sumatera Barat', '26.940', '2.606'],
+          ['7', 'Sumatera Utara', '20.512', '7.303'],
+          ['8', 'Kalimantan Utara', '19.716', '8.767'],
+          ['9', 'Riau', '17.812', '20.812'],
+          ['10', 'Papua Pegunungan', '16.468', '2.688']
+        ]
+      },
+      {
+        title: 'Provinsi Lainnya (11–20)',
+        headers: ['#', 'Provinsi', '2025 (ha)', '2024 (ha)'],
+        rows: [
+          ['11', 'Sulawesi Tengah', '15.839', '7.019'],
+          ['12', 'Jambi', '15.334', '14.839'],
+          ['13', 'Bengkulu', '13.095', '4.300'],
+          ['14', 'Sumatera Selatan', '9.771', '20.184'],
+          ['15', 'Papua Barat Daya', '9.459', '2.966'],
+          ['16', 'Papua Barat', '9.108', '2.303'],
+          ['17', 'Sulawesi Tenggara', '9.104', '4.413'],
+          ['18', 'Papua', '8.421', '1.768'],
+          ['19', 'Papua Selatan', '7.248', '5.010'],
+          ['20', 'Sulawesi Selatan', '5.526', '1.928'],
+          ['Total', 'Seluruh provinsi', '433.751', '261.575']
+        ]
+      }
+    ]
+  },
+
+  kabupaten: {
+    title: 'Deforestasi berbasis kabupaten',
+    kpiLabel: 'Kabupaten terdampak',
+    kpiVal: '383',
+    kpiUnit: 'kabupaten/kota',
+    notesSidebar: [
+      'Top-10 kabupaten mencakup 22% deforestasi nasional.',
+      'Didominasi Kalimantan dan Tanah Papua.',
+      'Kutai Timur dan Kapuas menjadi hotspot utama.'
+    ],
+    notesBox: [
+      'Dari total 514 kabupaten/kota di Indonesia, deforestasi terjadi di 383 kabupaten/kota.',
+      'Sepuluh teratas kabupaten/kota deforestasi berada di Pulau Kalimantan dan Tanah Papua.',
+      'Sepuluh teratas kabupaten/kota deforestasi mencakup sekitar 22% deforestasi nasional.'
+    ],
+    bubble: { label: 'Kabupaten lainnya (373)', value: '338.018', unit: 'hektare' },
+    markers: [
+      { lat: 1.2, lng: 117.5, rank: 1, name: 'Berau', value: '19.163', dir: 'right' },
+      { lat: 0.7, lng: 117.4, rank: 2, name: 'Kutai Timur', value: '12.781', dir: 'left' },
+      { lat: -0.6, lng: 112.9, rank: 3, name: 'Kapuas', value: '11.850', dir: 'left' },
+      { lat: 0.9, lng: 114.4, rank: 4, name: 'Kapuas Hulu', value: '9.393', dir: 'left' },
+      { lat: -1.8, lng: 113.4, rank: 5, name: 'Katingan', value: '8.934', dir: 'left' },
+      { lat: -0.8, lng: 131.3, rank: 6, name: 'Sorong', value: '7.168', dir: 'right' },
+      { lat: -0.3, lng: 114.7, rank: 7, name: 'Murung Raya', value: '7.140', dir: 'bottom' },
+      { lat: -8.4, lng: 140.4, rank: 8, name: 'Merauke', value: '6.557', dir: 'top' },
+      { lat: -1.5, lng: 113.0, rank: 9, name: 'Gunung Mas', value: '6.539', dir: 'bottom' },
+      { lat: 2.9, lng: 117.3, rank: 10, name: 'Bulungan', value: '6.208', dir: 'right' }
+    ],
+    tables: []
+  },
+
+  konservasi: {
+    title: 'Deforestasi di area konservasi*',
+    kpiLabel: 'Deforestasi konservasi',
+    kpiVal: '25.077',
+    kpiUnit: 'hektare',
+    notesSidebar: [
+      'Termasuk kawasan konservasi, KBA, dan habitat spesies dilindungi.',
+      'Papua dan Sumatera menjadi lokasi dominan.',
+      'Tekanan tertinggi terjadi di TN Kerinci Seblat dan Jayawijaya.'
+    ],
+    notesBox: [
+      '* Meliputi Kawasan Konservasi, Key Biodiversity Area, dan habitat spesies dilindungi.',
+      'Total deforestasi di 10 kawasan konservasi teratas mencapai 25.077 hektare.',
+      'Jika termasuk KBA, luas terdampak mencapai 46.081 hektare.'
+    ],
+    markers: [
+      { lat: -2.4, lng: 101.5, rank: 1, name: 'TN Kerinci Seblat', value: '6.362', dir: 'left' },
+      { lat: -4.0, lng: 138.8, rank: 2, name: 'SM Pegunungan Jayawijaya', value: '3.210', dir: 'right' },
+      { lat: 3.8, lng: 97.3, rank: 3, name: 'TN Gunung Leuser', value: '1.379', dir: 'left' },
+      { lat: 0.2, lng: 104.6, rank: 4, name: 'TB Lingga Isaq', value: '1.199', dir: 'left' },
+      { lat: -3.5, lng: 137.2, rank: 5, name: 'CA Enarotali', value: '1.049', dir: 'right' },
+      { lat: -2.7, lng: 138.7, rank: 6, name: 'SM Mamberamo Foja', value: '950', dir: 'right' },
+      { lat: -3.6, lng: 138.1, rank: 7, name: 'TN Lorentz', value: '889', dir: 'right' },
+      { lat: -1.0, lng: 132.8, rank: 8, name: 'CA Pegunungan Tamrau Selatan', value: '796', dir: 'right' },
+      { lat: -1.2, lng: 100.8, rank: 9, name: 'CA Batang Pangean I', value: '779', dir: 'left' },
+      { lat: 0.7, lng: 101.2, rank: 10, name: 'SM Bukit Rimbang Bukit Baling', value: '539', dir: 'left' }
+    ],
+    tables: [
+      {
+        title: 'Kawasan Konservasi',
+        headers: ['Kawasan', 'Deforestasi (ha)'],
+        rows: [
+          ['TN Kerinci Seblat', '6.362'],
+          ['SM Pegunungan Jayawijaya', '3.210'],
+          ['TN Gunung Leuser', '1.379'],
+          ['TB Lingga Isaq', '1.199'],
+          ['CA Enarotali', '1.049'],
+          ['SM Mamberamo Foja', '950'],
+          ['TN Lorentz', '889'],
+          ['CA Pegunungan Tamrau Selatan', '796'],
+          ['CA Batang Pangean I', '779'],
+          ['SM Bukit Rimbang Bukit Baling', '539'],
+          ['Kawasan Konservasi Lainnya (153)', '7.924'],
+          ['Total', '25.077']
+        ]
+      },
+      {
+        title: 'Key Biodiversity Area',
+        headers: ['KBA', 'Hektare'],
+        rows: [
+          ['Batang Toru', '5.021'],
+          ['Kerinci Seblat', '2.776'],
+          ['Gunung Leuser', '2.277'],
+          ['Hutan Rawa Gambut Barumun-Rokan', '2.248'],
+          ['Bukit Baka-Bukit Raya', '2.004'],
+          ['Routa', '1.830'],
+          ['Wanggar – Weyland Catchment', '1.240'],
+          ['Trumon - Singkil', '1.132'],
+          ['Sangkulirang', '1.128'],
+          ['Dirgahayu Rimba', '1.026'],
+          ['240 KBA lainnya', '25.400'],
+          ['Total', '46.081']
+        ]
+      }
+    ]
+  },
+
+  megafauna: {
+    title: 'Deforestasi di habitat megafauna ikonik',
+    kpiLabel: 'Total habitat terdampak',
+    kpiVal: '156.463',
+    kpiUnit: 'hektare',
+    notesSidebar: [
+      'Mencakup habitat harimau, badak, gajah, dan orangutan.',
+      'Sebaran terbesar terdapat di Sumatera dan Kalimantan.',
+      'Nilai tidak menghitung duplikasi area habitat yang beririsan.'
+    ],
+    notesBox: [
+      'Deforestasi seluas 156.463 hektare terjadi pada 29 juta hektare habitat spesies ikonik.',
+      'Angka ini tidak menghitung pengulangan di habitat yang saling beririsan.',
+      'Spesies kunci: harimau, badak, gajah, dan orangutan.'
+    ],
+    species: [
+      { lat: 0.3, lng: 100.0, icon: '🐅', image: 'assets/images/satwa/image.png', name: 'Panthera tigris sumatrae', value: '78.049 hektare', dir: 'left' },
+      { lat: -2.2, lng: 101.7, icon: '🐘', image: 'assets/images/satwa/image-2.png', name: 'Elephas maximus sumatranus', value: '25.301', dir: 'left' },
+      { lat: -3.2, lng: 102.6, icon: '🦏', image: 'assets/images/satwa/badak-sumatra.svg', name: 'Dicerorhinus sumatrensis sumatrensis', value: '18.477', dir: 'right' },
+      { lat: 2.2, lng: 99.2, icon: '🦧', image: 'assets/images/satwa/orangutan-tapanuli.svg', name: 'Pongo tapanuliensis', value: '505', dir: 'right' },
+      { lat: 1.0, lng: 102.6, icon: '🦧', image: 'assets/images/satwa/orangutan-sumatra.svg', name: 'Pongo abelii', value: '16.519', dir: 'right' },
+      { lat: 1.9, lng: 114.7, icon: '🦧', image: 'assets/images/satwa/orangutan-kalimantan.svg', name: 'Pongo pygmaeus', value: '66.890', dir: 'right' },
+      { lat: 0.6, lng: 126.6, icon: '🦏', image: 'assets/images/satwa/badak-harrissoni.svg', name: 'Dicerorhinus sumatrensis harrissoni', value: '3.057', dir: 'right' }
+    ],
+    tables: []
+  }
+};
+
+function formatNum(v) {
+  return v;
+}
+
+function clearModeVisuals() {
+  markerLayer.clearLayers();
+  calloutLayer.clearLayers();
+  markerRegistry = [];
+  activeMarker = null;
+  activeRow = null;
+  activeEntry = null;
+  getById('table-wrap').innerHTML = '';
+}
+
+function setActiveMarker(marker) {
+  if (activeMarker && activeMarker._icon) {
+    activeMarker._icon.querySelector('.rank-dot, .species-dot')?.classList.remove('active');
+  }
+  activeMarker = marker;
+  if (activeMarker && activeMarker._icon) {
+    activeMarker._icon.querySelector('.rank-dot, .species-dot')?.classList.add('active');
+  }
+}
+
+function clearActiveRow() {
+  if (activeRow) activeRow.classList.remove('active-row');
+  activeRow = null;
+}
+
+function registerMarker(entry) {
+  markerRegistry.push(entry);
+}
+
+function findMarkerByLabel(label) {
+  const q = (label || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!q) return null;
+  return markerRegistry.find(item => {
+    const n = (item.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    return n.includes(q) || q.includes(n);
+  }) || null;
+}
+
+function focusMarkerByLabel(label, rowEl = null) {
+  const found = findMarkerByLabel(label);
+  if (!found) return;
+
+  if (rowEl) {
+    clearActiveRow();
+    rowEl.classList.add('active-row');
+    activeRow = rowEl;
+  }
+
+  setActiveMarker(found.marker);
+  map.flyTo(found.marker.getLatLng(), Math.max(map.getZoom(), 6), { duration: 0.6 });
+  setTimeout(() => showCallout(found), 260);
+}
+
+function getCalloutPoints(latlng, distance = 92) {
+  const zoom = map.getZoom();
+  const p = map.project(latlng, zoom);
+  const elbow = 28;
+
+  // paksa semua callout mengarah ke atas
+  const p2 = L.point(p.x, p.y - elbow);
+  const p3 = L.point(p.x, p.y - distance);
+
+  return {
+    a: map.unproject(p, zoom),
+    b: map.unproject(p2, zoom),
+    c: map.unproject(p3, zoom)
+  };
+}
+
+function renderCalloutLabel(entry, pos) {
+  const isSpecies = entry.kind === 'species';
+  const item = entry.item;
+
+  const html = isSpecies
+    ? `<div class="callout-label species"><span class="name">${item.name}</span><span class="value">${item.value}</span></div>`
+    : `<div class="callout-label"><span class="name"><span class="rank">${item.rank}</span>${item.name}</span><span class="value">${item.value}</span></div>`;
+
+  L.marker(pos, {
+    interactive: false,
+    icon: L.divIcon({
+      className: '',
+      html,
+      iconSize: [220, 90],
+      iconAnchor: [110, 84]
+    })
+  }).addTo(calloutLayer);
+}
+
+function showCallout(entry) {
+  if (!entry) return;
+  activeEntry = entry;
+  calloutLayer.clearLayers();
+  setActiveMarker(entry.marker);
+
+  const item = entry.item;
+  const points = getCalloutPoints(entry.marker.getLatLng(), entry.kind === 'species' ? 110 : 98);
+
+  L.polyline([points.a, points.b, points.c], {
+    color: '#4d4943',
+    weight: 1.8,
+    opacity: .88,
+    lineCap: 'round',
+    lineJoin: 'round'
+  }).addTo(calloutLayer);
+
+  renderCalloutLabel(entry, points.c);
+}
+
+function createRankMarker(item) {
+  const icon = L.divIcon({
+    className: '',
+    html: `<div class="rank-dot">${item.rank}</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+  const marker = L.marker([item.lat, item.lng], { icon }).addTo(markerLayer);
+
+  const offsets = {
+    right: [20, 0], left: [-20, 0], top: [0, -18], bottom: [0, 18]
+  };
+  const direction = item.dir || 'right';
+
+  const entry = { name: item.name, marker, value: item.value, mode: currentMode, item, kind: 'rank' };
+
+  marker.on('mouseover', () => setActiveMarker(marker));
+  marker.on('mouseout', () => {
+    if (!activeEntry || activeEntry.marker !== marker) setActiveMarker(null);
+  });
+  marker.on('click', () => {
+    showCallout(entry);
+    clearActiveRow();
+  });
+
+  registerMarker(entry);
+}
+
+function createSpeciesMarker(item) {
+  const markerContent = item.image
+    ? `<div class="species-dot is-image"><img src="${item.image}" alt="${item.name}"></div>`
+    : `<div class="species-dot">${item.icon}</div>`;
+  const icon = L.divIcon({
+    className: '',
+    html: markerContent,
+    iconSize: [54, 54],
+    iconAnchor: [27, 27]
+  });
+  const marker = L.marker([item.lat, item.lng], { icon }).addTo(markerLayer);
+  const direction = item.dir || 'right';
+
+  const entry = { name: item.name, marker, value: item.value, mode: currentMode, item, kind: 'species' };
+
+  marker.on('mouseover', () => setActiveMarker(marker));
+  marker.on('mouseout', () => {
+    if (!activeEntry || activeEntry.marker !== marker) setActiveMarker(null);
+  });
+  marker.on('click', () => {
+    showCallout(entry);
+    clearActiveRow();
+  });
+
+  registerMarker(entry);
+}
+
+function renderTableCard(tbl) {
+  const card = document.createElement('div');
+  card.className = 'table-card';
+
+  const title = document.createElement('div');
+  title.className = 'table-title';
+  title.textContent = tbl.title;
+
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  tbl.headers.forEach(h => {
+    const th = document.createElement('th');
+    th.textContent = h;
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+
+  const tbody = document.createElement('tbody');
+  tbl.rows.forEach(row => {
+    const tr = document.createElement('tr');
+    const isTotalRow = String(row[0]).toLowerCase() === 'total';
+    if (isTotalRow) tr.classList.add('total-row');
+    row.forEach((cell) => {
+      const td = document.createElement('td');
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+
+    if (!isTotalRow) {
+      const maybeLabel = row[1] || row[0] || '';
+      tr.addEventListener('click', () => focusMarkerByLabel(maybeLabel, tr));
+    }
+
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  card.appendChild(title);
+  card.appendChild(table);
+  return card;
+}
+
+function fitModeToData(mode) {
+  const points = [];
+  (mode.markers || []).forEach(p => points.push([p.lat, p.lng]));
+  (mode.species || []).forEach(p => points.push([p.lat, p.lng]));
+
+  if (points.length) {
+    const bounds = L.latLngBounds(points);
+    map.flyToBounds(bounds.pad(0.35), {
+      maxZoom: window.innerWidth < 980 ? 5 : 6,
+      duration: 0.7
+    });
+  } else {
+    map.setView([-2.3, 118], window.innerWidth < 980 ? 4 : 5);
+  }
+}
+
+function renderMode(modeKey) {
+  const mode = MODES[modeKey];
+  currentMode = modeKey;
+  clearModeVisuals();
+  const wrapEl = getById('wrap');
+
+  // button active
+  qsa('.mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === modeKey);
+  });
+
+  // title + kpi
+  getById('map-title').textContent = mode.title;
+  getById('kpi-label').textContent = mode.kpiLabel;
+  getById('kpi-val').textContent = mode.kpiVal;
+  getById('kpi-unit').textContent = mode.kpiUnit;
+
+  // sidebar notes
+  getById('sidebar-notes').innerHTML = mode.notesSidebar.map(n => `<li>${n}</li>`).join('');
+
+  // notes box
+  getById('notes-list').innerHTML = mode.notesBox.map(n => `<li>${n}</li>`).join('');
+
+  // bubble
+  const bubble = getById('others-bubble');
+  if (mode.bubble) {
+    bubble.style.display = 'flex';
+    getById('bubble-label').textContent = mode.bubble.label;
+    getById('bubble-val').textContent = mode.bubble.value;
+    getById('bubble-unit').textContent = mode.bubble.unit;
+  } else {
+    bubble.style.display = 'none';
+  }
+
+  // markers
+  if (mode.markers) {
+    mode.markers.forEach(createRankMarker);
+  }
+  if (mode.species) {
+    mode.species.forEach(createSpeciesMarker);
+  }
+
+  // tables
+  const tableWrap = getById('table-wrap');
+  if (mode.tables && mode.tables.length) {
+    mode.tables.forEach(t => tableWrap.appendChild(renderTableCard(t)));
+    tableWrap.style.display = 'grid';
+    wrapEl.classList.add('notes-top');
+
+    // mode spesifik: provinsi table lebih lebar namun notes masih tampil
+    if (modeKey === 'provinsi') {
+      getById('notes-box').style.display = 'block';
+    }
+  } else {
+    tableWrap.style.display = 'none';
+    wrapEl.classList.remove('notes-top');
+  }
+
+  // per-mode layout tuning
+  if (modeKey === 'kabupaten') {
+    getById('notes-box').style.display = 'block';
+  } else if (modeKey === 'megafauna') {
+    getById('notes-box').style.display = 'block';
+  } else {
+    getById('notes-box').style.display = 'block';
+  }
+
+  fitModeToData(mode);
+  requestAnimationFrame(() => map.invalidateSize());
+}
+
+qsa('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => renderMode(btn.dataset.mode));
+});
+
+map.on('zoomend moveend', () => {
+  if (activeEntry) showCallout(activeEntry);
+});
+
+window.addEventListener('keydown', (e) => {
+  const mapping = { '1': 'provinsi', '2': 'kabupaten', '3': 'konservasi', '4': 'megafauna' };
+  const mode = mapping[e.key];
+  if (!mode) return;
+  renderMode(mode);
+});
+
+renderMode('provinsi');
+})();
+</script>
+</div>
+<div class="viz-caption embed-caption">
+  Peta tematik interaktif deforestasi 2025 berbasis provinsi, kabupaten, area konservasi, dan habitat megafauna.
+</div>
