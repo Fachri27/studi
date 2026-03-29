@@ -117,7 +117,7 @@ function transformIncludeToIframe() {
   });
 }
 
-const preferIframeEmbed = false; // false: keep partial inject (bilik html biasa), true: iframe fallback
+const preferIframeEmbed = true; // false: keep partial inject (bilik html biasa), true: iframe fallback
 const partialVersion = '20260329';
 
 async function loadHtmlPartials() {
