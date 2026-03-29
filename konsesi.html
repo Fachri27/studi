@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Deforestasi dalam Konsesi</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
@@ -20,7 +20,7 @@
   --muted: #5a5040;
 }
 
-body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:var(--dark); display:flex; height:100vh; overflow:hidden; }
+body { font-family:'Poppins',sans-serif; background:var(--cream); color:var(--dark); display:flex; height:100vh; overflow:hidden; }
 
 /* SIDEBAR */
 #sidebar {
@@ -49,12 +49,12 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
 }
 
 #sidebar h1 {
-  font-family:'Playfair Display',serif;
-  font-size:1.25rem; font-weight:900; line-height:1.2;
+  font-family:'Poppins',sans-serif;
+  font-size:1.25rem; font-weight:700; line-height:1.2;
   color:var(--cream); margin-bottom:6px;
 }
 #sidebar .s-sub {
-  font-family:'IBM Plex Mono',monospace;
+  font-family:'Poppins',sans-serif;
   font-size:.6rem; color:var(--tan); letter-spacing:.08em;
   text-transform:uppercase; margin-bottom:20px;
 }
@@ -64,7 +64,7 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
   margin-bottom:8px; border-radius:6px;
   border:1.5px solid rgba(255,255,255,.1);
   background:transparent; color:rgba(245,240,232,.6);
-  font-family:'IBM Plex Sans',sans-serif; font-size:.82rem; font-weight:600;
+  font-family:'Poppins',sans-serif; font-size:.82rem; font-weight:600;
   cursor:pointer; transition:.2s;
   display:flex; align-items:center; gap:10px;
 }
@@ -77,15 +77,15 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
   background:rgba(139,42,26,.15); border-left:3px solid var(--red);
   border-radius:4px; padding:12px 14px; margin-bottom:10px;
 }
-.stat-block .s-label { font-family:'IBM Plex Mono',monospace; font-size:.55rem; color:var(--tan); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
-.stat-block .s-val { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--cream); line-height:1; }
-.stat-block .s-unit { font-size:.6rem; font-family:'IBM Plex Mono',monospace; color:var(--tan); }
+.stat-block .s-label { font-family:'Poppins',sans-serif; font-size:.55rem; color:var(--tan); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+.stat-block .s-val { font-family:'Poppins',sans-serif; font-size:1.5rem; font-weight:700; color:var(--cream); line-height:1; }
+.stat-block .s-unit { font-size:.6rem; font-family:'Poppins',sans-serif; color:var(--tan); }
 
 .bullet-list { list-style:none; padding:0; margin-top:6px; }
 .bullet-list li {
   font-size:.72rem; line-height:1.55; color:rgba(245,240,232,.65);
   padding-left:12px; position:relative; margin-bottom:5px;
-  font-family:'IBM Plex Mono',monospace;
+  font-family:'Poppins',sans-serif;
 }
 .bullet-list li::before { content:'—'; position:absolute; left:0; color:var(--red-light); }
 
@@ -98,8 +98,8 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
   pointer-events:none;
 }
 #map-title h2 {
-  font-family:'Playfair Display',serif;
-  font-size:clamp(1rem,1.8vw,1.45rem); font-weight:900;
+  font-family:'Poppins',sans-serif;
+  font-size:clamp(1rem,1.8vw,1.45rem); font-weight:700;
   color:var(--dark); line-height:1.25;
 }
 
@@ -123,9 +123,9 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
   #others-badge .ob-val { font-size:1.1rem; }
   #others-badge .ob-label { font-size:.5rem; }
 }
-#others-badge .ob-label { font-family:'IBM Plex Mono',monospace; font-size:.55rem; letter-spacing:.05em; line-height:1.4; opacity:.85; }
-#others-badge .ob-val   { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; line-height:1; }
-#others-badge .ob-unit  { font-family:'IBM Plex Mono',monospace; font-size:.55rem; opacity:.85; }
+#others-badge .ob-label { font-family:'Poppins',sans-serif; font-size:.55rem; letter-spacing:.05em; line-height:1.4; opacity:.85; }
+#others-badge .ob-val   { font-family:'Poppins',sans-serif; font-size:1.4rem; font-weight:700; line-height:1; }
+#others-badge .ob-unit  { font-family:'Poppins',sans-serif; font-size:.55rem; opacity:.85; }
 
 /* LEAFLET */
 .leaflet-container { background:#e8e4da !important; }
@@ -133,7 +133,7 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
 .dot-marker {
   border-radius:50%;
   background:var(--red); color:#fff;
-  font-family:'IBM Plex Mono',monospace; font-weight:700;
+  font-family:'Poppins',sans-serif; font-weight:700;
   display:flex; align-items:center; justify-content:center;
   border:2px solid rgba(255,255,255,.9);
   box-shadow:0 2px 8px rgba(139,42,26,.5);
@@ -144,7 +144,7 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
 .cluster-icon {
   background:var(--red); color:#fff; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
-  font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px;
+  font-family:'Poppins',sans-serif; font-weight:700; font-size:13px;
   border:3px solid rgba(255,255,255,.9);
   box-shadow:0 3px 12px rgba(139,42,26,.55);
 }
@@ -156,23 +156,23 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
   background:transparent; border:none; box-shadow:none;
   padding:0; white-space:nowrap; pointer-events:none;
 }
-.label-box { font-family:'IBM Plex Sans',sans-serif; font-size:.72rem; line-height:1.3; }
+.label-box { font-family:'Poppins',sans-serif; font-size:.72rem; line-height:1.3; }
 .label-box .lb-name { color:var(--dark); font-weight:600; }
-.label-box .lb-val  { color:var(--red); font-family:'IBM Plex Mono',monospace; font-size:.85rem; font-weight:700; }
+.label-box .lb-val  { color:var(--red); font-family:'Poppins',sans-serif; font-size:.85rem; font-weight:700; }
 .leaflet-tooltip::before { display:none !important; }
 
 .leaflet-popup-content-wrapper {
   border-radius:8px; padding:0; overflow:hidden;
   border-top:3px solid var(--red);
-  font-family:'IBM Plex Sans',sans-serif;
+  font-family:'Poppins',sans-serif;
   box-shadow:0 8px 28px rgba(26,26,26,.18);
 }
 .popup-inner { padding:12px 16px; }
-.popup-rank  { font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:var(--muted); }
+.popup-rank  { font-family:'Poppins',sans-serif; font-size:.6rem; color:var(--muted); }
 .popup-name  { font-size:.9rem; font-weight:700; margin:3px 0 6px; color:var(--dark); }
-.popup-val   { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--red); line-height:1; }
-.popup-unit  { font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:var(--muted); margin-top:2px; }
-.popup-type  { display:inline-block; margin-top:8px; font-family:'IBM Plex Mono',monospace; font-size:.6rem; background:rgba(139,42,26,.1); color:var(--red); border-radius:4px; padding:2px 7px; }
+.popup-val   { font-family:'Poppins',sans-serif; font-size:1.4rem; font-weight:700; color:var(--red); line-height:1; }
+.popup-unit  { font-family:'Poppins',sans-serif; font-size:.6rem; color:var(--muted); margin-top:2px; }
+.popup-type  { display:inline-block; margin-top:8px; font-family:'Poppins',sans-serif; font-size:.6rem; background:rgba(139,42,26,.1); color:var(--red); border-radius:4px; padding:2px 7px; }
 </style>
 </head>
 <body>
@@ -181,10 +181,10 @@ body { font-family:'IBM Plex Sans',sans-serif; background:var(--cream); color:va
   <h1>Deforestasi<br>dalam Konsesi</h1>
   <p class="s-sub">// Sepuluh teratas per kategori · 2025</p>
 
-  <button class="cat-btn active" onclick="loadData('kebun-kayu')" id="btn-kebun-kayu">🌲 Konsesi Kebun Kayu</button>
-  <button class="cat-btn" onclick="loadData('logging')" id="btn-logging">🪵 Konsesi Logging</button>
-  <button class="cat-btn" onclick="loadData('sawit')" id="btn-sawit">🌴 Konsesi Sawit</button>
-  <button class="cat-btn" onclick="loadData('tambang')" id="btn-tambang">⛏️ Konsesi Tambang</button>
+  <button class="cat-btn active" onclick="loadData('kebun-kayu')" id="btn-kebun-kayu">Konsesi Kebun Kayu</button>
+  <button class="cat-btn" onclick="loadData('logging')" id="btn-logging">Konsesi Logging</button>
+  <button class="cat-btn" onclick="loadData('sawit')" id="btn-sawit">Konsesi Sawit</button>
+  <button class="cat-btn" onclick="loadData('tambang')" id="btn-tambang">Konsesi Tambang</button>
 
   <div class="s-divider"></div>
 
@@ -221,7 +221,7 @@ const map = L.map('map', {
   attributionControl:false,
   gestureHandling:true
 }).setView([-2, 118], 5);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { subdomains:'abcd', maxZoom:19 }).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', { subdomains:'abcd', maxZoom:19 }).addTo(map);
 
 let markersLayer = null;
 function clearLayers() {

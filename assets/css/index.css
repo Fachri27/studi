@@ -173,7 +173,7 @@ body.is-preloading { overflow: hidden; }
   min-height: 100vh;
   background-image: url('../images/asset-1.jpg');
   background-size: cover;
-  background-position: center 0px;
+  background-position: center 80%;
   will-change: background-position;
   display: flex; flex-direction: column;
   justify-content: flex-end;
@@ -221,12 +221,12 @@ body.is-preloading { overflow: hidden; }
 }
 .hero-stat .hs-val {
   font-family: 'Poppins', sans-serif;
-  font-size: 2rem; font-weight: 700; line-height: 1;
+  font-size: 3.6rem; font-weight: 800; line-height: 1;
   color: var(--cream);
 }
 .hero-stat .hs-unit {
   font-family: 'Poppins', sans-serif;
-  font-size: .58rem; letter-spacing: .1em;
+  font-size: .70rem; letter-spacing: .1em;
   color: rgba(245,240,232,.45);
   text-transform: uppercase;
 }
@@ -236,7 +236,7 @@ body.is-preloading { overflow: hidden; }
 }
 .hero-desc {
   max-width: 420px;
-  font-size: .82rem; line-height: 1.75;
+  font-size: 18px; line-height: 1.75;
   color: white;
 }
 .scroll-hint {
@@ -335,19 +335,19 @@ body.is-preloading { overflow: hidden; }
 }
 .stat-cell.red { background: var(--red); }
 .sc-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .55rem; letter-spacing: .12em;
   text-transform: uppercase; color: var(--muted);
 }
 .stat-cell.red .sc-label { color: rgba(255,255,255,.55); }
 .sc-val {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.75rem; font-weight: 700; line-height: 1;
   color: var(--dark);
 }
 .stat-cell.red .sc-val { color: #fff; }
 .sc-unit {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .58rem; color: var(--muted);
 }
 .stat-cell.red .sc-unit { color: rgba(255,255,255,.5); }
@@ -369,20 +369,20 @@ body.is-preloading { overflow: hidden; }
 }
 .pull-quote::before {
   content: '\201C';
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 5rem; line-height: .8;
   color: var(--red); opacity: .4;
   position: absolute; top: 20px; left: 28px;
 }
 .pull-quote p {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.25rem; font-style: italic;
   line-height: 1.65; color: var(--cream);
   padding-left: 32px;
 }
 .pull-quote cite {
   display: block; margin-top: 14px; padding-left: 32px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .6rem; letter-spacing: .1em;
   color: rgba(245,240,232,.4);
   font-style: normal;
@@ -394,14 +394,14 @@ body.is-preloading { overflow: hidden; }
   margin-bottom: 28px;
 }
 .chapter-num {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .65rem; letter-spacing: .15em; font-weight: 600;
   color: var(--red); border: 1.5px solid var(--red);
   padding: 5px 9px; border-radius: 4px;
   white-space: nowrap; flex-shrink: 0; margin-top: 5px;
 }
 .chapter-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: clamp(1.3rem, 2.8vw, 2rem);
   font-weight: 700; line-height: 1.2;
   letter-spacing: -.02em;
@@ -439,7 +439,7 @@ body.is-preloading { overflow: hidden; }
 }
 .data-table th {
   background: var(--dark); color: var(--cream);
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
   padding: 10px 14px; text-align: left; font-weight: 600;
 }
@@ -449,11 +449,11 @@ body.is-preloading { overflow: hidden; }
 }
 .data-table tr:hover td { background: rgba(139,42,26,.04); }
 .data-table td.num {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   color: var(--red); font-weight: 600; text-align: right;
 }
 .data-table td.rank {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   color: var(--muted); font-size: .65rem;
 }
 
@@ -483,7 +483,7 @@ body.is-preloading { overflow: hidden; }
   padding-top: 40px;
 }
 .viz-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .58rem; letter-spacing: .15em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 10px;
   display: flex; align-items: center; gap: 8px;
@@ -493,7 +493,7 @@ body.is-preloading { overflow: hidden; }
   background: var(--muted); display: inline-block;
 }
 .viz-caption {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .62rem; color: var(--muted); margin-top: 10px;
   line-height: 1.6;
 }
@@ -569,12 +569,12 @@ body.is-preloading { overflow: hidden; }
   border-bottom: 1px solid rgba(255,255,255,.07);
 }
 .embed-bar-title {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .6rem; letter-spacing: .12em;
   color: rgba(245,240,232,.45); text-transform: uppercase;
 }
 .viz-expand {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .58rem; color: rgba(245,240,232,.35);
   background: none; border: none; cursor: pointer;
   letter-spacing: .08em; text-transform: uppercase;
@@ -597,14 +597,14 @@ body.is-preloading { overflow: hidden; }
 }
 .method-step:last-child { border-bottom: none; }
 .ms-num {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .65rem; letter-spacing: .1em;
   color: var(--red); background: var(--red-pale);
   padding: 5px 8px; border-radius: 4px;
   flex-shrink: 0; font-weight: 600; margin-top: 2px;
 }
 .ms-body h4 {
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: .9rem; font-weight: 700; color: var(--dark);
   margin-bottom: 6px;
 }
@@ -659,7 +659,7 @@ body.is-preloading { overflow: hidden; }
   border-color: var(--red);
 }
 .tc-block h4 {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 12px;
 }
@@ -707,7 +707,7 @@ body.is-preloading { overflow: hidden; }
   width: 10%;
   text-align: center;
   white-space: nowrap;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   color: var(--muted);
 }
 
@@ -725,7 +725,7 @@ body.is-preloading { overflow: hidden; }
   width: 19%;
   text-align: right;
   white-space: nowrap;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
 }
 
 .province-table tbody td:nth-child(4),
@@ -769,7 +769,7 @@ body.is-preloading { overflow: hidden; }
   border: 1px solid var(--border); padding: 22px 20px;
 }
 .rec-card .rc-num {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .55rem; letter-spacing: .15em;
   color: var(--red); margin-bottom: 10px; display: block;
 }
@@ -789,7 +789,7 @@ body.is-preloading { overflow: hidden; }
 }
 .ab-group { flex: 1; min-width: 160px; }
 .ab-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 8px;
 }
@@ -831,14 +831,14 @@ footer {
   flex-wrap: wrap; gap: 16px;
 }
 .footer-brand {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .65rem; letter-spacing: .2em;
   text-transform: uppercase; color: rgba(245,240,232,.35);
   display: flex; align-items: center; gap: 7px;
 }
 .footer-brand svg { width: 14px; height: 14px; fill: rgba(245,240,232,.35); }
 .footer-cite {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .58rem; color: rgba(245,240,232,.2);
   line-height: 1.7; max-width: 560px;
 }
@@ -871,9 +871,13 @@ footer {
   #hero h1 { font-size: clamp(2rem, 9vw, 3rem); margin-bottom: 20px; }
   .hero-meta { flex-direction: column; gap: 14px; align-items: flex-start; }
   .hero-divider { display: none; }
-  .hero-stat .hs-val { font-size: 1.6rem; }
+  .hero-stat .hs-val { font-size: 4.5rem; }
   .hero-desc { max-width: 100%; font-size: .8rem; }
   .scroll-hint { display: none; }
+
+  .jumlah-kasus {
+    font-size: 50px;
+  }
 
   /* Sections */
   .page-section { padding: 56px 5vw; }

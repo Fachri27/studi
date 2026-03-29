@@ -463,6 +463,79 @@
   text-transform: uppercase;
 }
 
+/* Satwa Badges */
+#satwa-badges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 450;
+}
+
+.satwa-badge {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  pointer-events: auto;
+  cursor: pointer;
+  gap: 12px;
+  z-index: 500;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.satwa-badge-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid rgba(139, 42, 26, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.satwa-badge-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.satwa-badge:hover .satwa-badge-circle {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  border-color: rgba(192, 64, 48, 0.95);
+}
+
+.satwa-badge.active .satwa-badge-circle {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 4px rgba(192, 64, 48, 0.2), 0 8px 24px rgba(139, 42, 26, 0.35);
+  border-color: rgba(192, 64, 48, 0.95);
+}
+
+.satwa-badge-label {
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.2;
+}
+
+.satwa-badge-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--red);
+  font-weight: 700;
+  margin: 2px 0 0 0;
+}
+
 /* Responsive */
 @media (max-width: 1280px) {
   #table-wrap {
@@ -610,6 +683,7 @@
 
   <main id="wrap">
     <div id="map"></div>
+    <div id="satwa-badges"></div>
 
     <div id="interaction-hint">klik titik / klik baris tabel / tombol 1–4</div>
 
@@ -648,8 +722,8 @@ const map = L.map(getById('map'), {
   maxZoom: 9
 }).setView([-2.3, 118], 5);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd',
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
   maxZoom: 19
 }).addTo(map);
 
@@ -863,6 +937,7 @@ function clearModeVisuals() {
   activeRow = null;
   activeEntry = null;
   getById('table-wrap').innerHTML = '';
+  getById('satwa-badges').innerHTML = '';
 }
 
 function setActiveMarker(marker) {
@@ -992,30 +1067,122 @@ function createRankMarker(item) {
 }
 
 function createSpeciesMarker(item) {
-  const markerContent = item.image
-    ? `<div class="species-dot is-image"><img src="${item.image}" alt="${item.name}"></div>`
-    : `<div class="species-dot">${item.icon}</div>`;
+  // Create invisible marker for interaction reference (not displayed on map)
   const icon = L.divIcon({
     className: '',
-    html: markerContent,
-    iconSize: [54, 54],
-    iconAnchor: [27, 27]
+    html: '<div style="display:none;"></div>',
+    iconSize: [0, 0],
+    iconAnchor: [0, 0]
   });
   const marker = L.marker([item.lat, item.lng], { icon }).addTo(markerLayer);
-  const direction = item.dir || 'right';
 
   const entry = { name: item.name, marker, value: item.value, mode: currentMode, item, kind: 'species' };
 
-  marker.on('mouseover', () => setActiveMarker(marker));
-  marker.on('mouseout', () => {
-    if (!activeEntry || activeEntry.marker !== marker) setActiveMarker(null);
-  });
   marker.on('click', () => {
     showCallout(entry);
     clearActiveRow();
   });
 
   registerMarker(entry);
+  
+  // Create satwa badge
+  createSatwaBadge(item, entry);
+}
+
+function createSatwaBadge(item, entry) {
+  const badgesContainer = getById('satwa-badges');
+  const badge = document.createElement('div');
+  badge.className = 'satwa-badge';
+  badge.dataset.species = item.name;
+  
+  const nameShort = item.name.split(' ').pop();
+  const valueStr = item.value.toString().replace(/[a-z\s]/gi, '').trim();
+  
+  badge.innerHTML = `
+    <div class="satwa-badge-circle">
+      <img src="${item.image || ''}" alt="${item.name}">
+    </div>
+    <div class="satwa-badge-label">${nameShort}</div>
+    <div class="satwa-badge-value">${valueStr}</div>
+  `;
+  
+  badge.addEventListener('mouseover', () => {
+    setActiveMarker(entry.marker);
+    badge.classList.add('active');
+  });
+  
+  badge.addEventListener('mouseout', () => {
+    if (!activeEntry || activeEntry.marker !== entry.marker) {
+      setActiveMarker(null);
+    }
+    badge.classList.remove('active');
+  });
+  
+  badge.addEventListener('click', () => {
+    showCallout(entry);
+    clearActiveRow();
+  });
+  
+  badgesContainer.appendChild(badge);
+  
+  return { badge, entry };
+}
+
+function positionSatwaBadges(species) {
+  if (!species || species.length === 0) return;
+  
+  const wrap = getById('wrap');
+  const mapRect = getById('map').getBoundingClientRect();
+  const wrapRect = wrap.getBoundingClientRect();
+  
+  const positions = calculateBadgePositions(species.length, mapRect);
+  const badges = wrap.querySelectorAll('.satwa-badge');
+  
+  badges.forEach((badge, idx) => {
+    if (positions[idx]) {
+      badge.style.left = positions[idx].x + 'px';
+      badge.style.top = positions[idx].y + 'px';
+    }
+  });
+}
+
+function calculateBadgePositions(count, mapRect) {
+  const positions = [];
+  const padding = 40;
+  const centerX = mapRect.width / 2;
+  const centerY = mapRect.height / 2;
+  
+  // Posisikan badges di corner dan edge dengan lebih terstruktur
+  const cornerPositions = [
+    // Top corners
+    { x: padding + 60, y: padding + 80 },
+    { x: mapRect.width - padding - 60, y: padding + 80 },
+    // Bottom corners
+    { x: padding + 60, y: mapRect.height - padding - 80 },
+    { x: mapRect.width - padding - 60, y: mapRect.height - padding - 80 },
+    // Sides
+    { x: padding, y: centerY - 100 },
+    { x: mapRect.width - padding - 20, y: centerY + 100 },
+    { x: centerX - 100, y: padding + 40 },
+    { x: centerX + 100, y: mapRect.height - padding - 40 }
+  ];
+  
+  // Jika lebih dari 8 badges, tambahkan di positions lain
+  for (let i = 0; i < count && i < cornerPositions.length; i++) {
+    positions.push(cornerPositions[i]);
+  }
+  
+  // Jika ada sisa, posisikan di tengah area
+  for (let i = cornerPositions.length; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2;
+    const radius = Math.min(mapRect.width, mapRect.height) / 3;
+    positions.push({
+      x: centerX + Math.cos(angle) * radius,
+      y: centerY + Math.sin(angle) * radius
+    });
+  }
+  
+  return positions;
 }
 
 function renderTableCard(tbl) {
@@ -1141,6 +1308,10 @@ function renderMode(modeKey) {
     getById('notes-box').style.display = 'block';
   } else if (modeKey === 'megafauna') {
     getById('notes-box').style.display = 'block';
+    // Position satwa badges after a short delay to ensure layout is ready
+    setTimeout(() => {
+      positionSatwaBadges(mode.species);
+    }, 100);
   } else {
     getById('notes-box').style.display = 'block';
   }
@@ -1162,6 +1333,12 @@ window.addEventListener('keydown', (e) => {
   const mode = mapping[e.key];
   if (!mode) return;
   renderMode(mode);
+});
+
+window.addEventListener('resize', () => {
+  if (currentMode === 'megafauna' && MODES.megafauna.species) {
+    positionSatwaBadges(MODES.megafauna.species);
+  }
 });
 
 renderMode('provinsi');

@@ -38,14 +38,17 @@ const hero = document.getElementById('hero');
 /* hero parallax */
 if (hero && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   let rafId = null;
+  const basePercent = 80; // keep boat area near bottom by default
+  const parallaxFactor = 0.035; // subtle movement
 
   const updateHeroParallax = () => {
     rafId = null;
     const rect = hero.getBoundingClientRect();
     if (rect.bottom <= 0 || rect.top >= window.innerHeight * 1.2) return;
 
-    const shiftY = Math.round(rect.top * -0.18);
-    hero.style.backgroundPosition = `center ${shiftY}px`;
+    const shiftPercent = basePercent + Math.round(rect.top * -parallaxFactor);
+    const clamped = Math.max(55, Math.min(96, shiftPercent));
+    hero.style.backgroundPosition = `center ${clamped}%`;
   };
 
   const requestParallaxUpdate = () => {

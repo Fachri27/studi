@@ -4,11 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Peta Tematik Deforestasi 2025</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.css" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button, input, select, textarea { font-family: 'Poppins', sans-serif; }
 :root {
   --red: #8b2a1a;
   --red-light: #c04030;
@@ -20,7 +21,7 @@
   --panel: #f8f4ee;
 }
 body {
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   background: var(--cream);
   color: var(--dark);
   height: 100vh;
@@ -39,13 +40,14 @@ body {
   border-right: 1px solid rgba(255,255,255,.08);
 }
 #sidebar h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.35rem;
+  font-weight: 700;
   line-height: 1.15;
   margin-bottom: 8px;
 }
 #sidebar .sub {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .62rem;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -83,20 +85,21 @@ body {
   margin-bottom: 10px;
 }
 .kpi .label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .56rem;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--tan);
 }
 .kpi .val {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1.7rem;
+  font-weight: 700;
   line-height: 1;
   margin-top: 4px;
 }
 .kpi .unit {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .56rem;
   color: var(--tan);
   margin-top: 3px;
@@ -146,8 +149,8 @@ body {
   pointer-events: none;
 }
 #title-block h2 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 900;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
   font-size: clamp(1.2rem, 2vw, 2.15rem);
   line-height: 1.2;
   color: var(--dark);
@@ -164,7 +167,7 @@ body {
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 999px;
   padding: 6px 10px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .55rem;
   letter-spacing: .07em;
   text-transform: uppercase;
@@ -194,13 +197,14 @@ body {
   line-height: 1.3;
 }
 #others-bubble .big {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 2rem;
+  font-weight: 700;
   line-height: 1;
   margin-top: 6px;
 }
 #others-bubble .mono {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .56rem;
   margin-top: 2px;
   opacity: .9;
@@ -252,7 +256,7 @@ body {
   border-radius: 0;
 }
 .table-title {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .6rem;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -290,7 +294,7 @@ body {
   width: 23%;
 }
 .table-card th {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .58rem;
   text-transform: uppercase;
   letter-spacing: .05em;
@@ -329,7 +333,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Poppins', sans-serif;
   font-size: .75rem;
   font-weight: 700;
   box-shadow: 0 2px 8px rgba(139,42,26,.35);
@@ -378,59 +382,116 @@ body {
   padding: 0;
 }
 .leaflet-tooltip::before { display: none !important; }
-.label-box {
-  white-space: nowrap;
-  font-size: .92rem;
-  line-height: 1.12;
-  color: var(--dark);
-  text-shadow: 0 2px 6px rgba(255,255,255,.95);
-}
-.label-box .species-name {
-  font-size: .95rem;
-  font-weight: 600;
-}
-.callout-label .value {
-  display: block;
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  line-height: 1;
-}
-.callout-label.species .name {
-  font-size: .85rem;
-  font-weight: 500;
-  color: #3b3128;
-}
-.callout-label.species .value {
-  color: var(--red);
-  font-size: 1.9rem;
-}
-
 .leaflet-popup-content-wrapper {
-  border-top: 3px solid var(--red-light);
-  border-radius: 8px;
-  font-family: 'IBM Plex Sans', sans-serif;
+  border-radius: 8px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  border-top: 3px solid var(--red);
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 8px 28px rgba(26,26,26,.18);
+  min-width: 180px;
 }
 .leaflet-popup-content {
-  margin: 10px 12px;
-  line-height: 1.35;
+  margin: 0 !important;
+  min-width: 180px;
 }
-.popup-name {
-  font-weight: 700;
-  font-size: .9rem;
-  margin-bottom: 4px;
+.leaflet-popup-tip-container { display: block; }
+.popup-inner { padding: 12px 16px; }
+.popup-rank  { font-size: .6rem; color: var(--muted); margin-bottom: 3px; }
+.popup-name  { font-size: .9rem; font-weight: 700; margin: 3px 0 6px; color: var(--dark); line-height: 1.3; }
+.popup-val   { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--red); line-height: 1; }
+.popup-unit  { font-size: .6rem; color: var(--muted); margin-top: 2px; }
+.popup-type  { display: inline-block; margin-top: 8px; font-size: .6rem; background: rgba(139,42,26,.1); color: var(--red); border-radius: 4px; padding: 2px 7px; }
+
+/* Satwa Badges */
+#satwa-badges {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 450;
 }
-.popup-value {
-  font-family: 'Playfair Display', serif;
+#satwa-badges.visible {
+  display: block;
+}
+
+.satwa-badge {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  pointer-events: auto;
+  cursor: pointer;
+  background: transparent;
+  overflow: visible;
+}
+
+/* badge dir=left: popup ke kiri lingkaran (diatur via .satwa-badge.dir-left .satwa-popup) */
+
+.satwa-badge-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(139, 42, 26, 0.75);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.satwa-badge:hover .satwa-badge-circle {
+  border-color: rgba(192, 64, 48, 0.95);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.38);
+}
+
+.satwa-badge-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Popup melayang di samping lingkaran — muncul saat diklik, tidak geser lingkaran */
+.satwa-popup {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 112px;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.satwa-badge.dir-left .satwa-popup {
+  left: auto;
+  right: 112px;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.satwa-badge.active .satwa-popup {
+  display: flex;
+}
+
+.satwa-popup-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--red-light);
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(255,255,255,0.7);
+}
+
+.satwa-popup-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
   color: var(--red);
-  font-size: 1.3rem;
-  line-height: 1;
-}
-.popup-meta {
-  margin-top: 5px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: .58rem;
-  color: var(--muted);
-  text-transform: uppercase;
+  font-weight: 900;
+  line-height: 1.05;
+  text-shadow: 0 1px 6px rgba(255,255,255,0.6);
 }
 
 /* Responsive */
@@ -563,10 +624,10 @@ body {
     <h1>Peta Tematik<br>Deforestasi</h1>
     <p class="sub">Pilih jenis analisis · 2025</p>
 
-    <button class="mode-btn active" data-mode="provinsi">📊 Deforestasi berbasis provinsi</button>
-    <button class="mode-btn" data-mode="kabupaten">🗺️ Deforestasi berbasis kabupaten</button>
-    <button class="mode-btn" data-mode="konservasi">🌿 Deforestasi di area konservasi</button>
-    <button class="mode-btn" data-mode="megafauna">🦏 Habitat megafauna ikonik</button>
+    <button class="mode-btn active" data-mode="provinsi">Deforestasi berbasis provinsi</button>
+    <button class="mode-btn" data-mode="kabupaten">Deforestasi berbasis kabupaten</button>
+    <button class="mode-btn" data-mode="konservasi">Deforestasi di area kawasan konservasi</button>
+    <button class="mode-btn" data-mode="megafauna">Habitat megafauna ikonik</button>
 
     <div class="divider"></div>
 
@@ -581,6 +642,7 @@ body {
 
   <main id="wrap">
     <div id="map"></div>
+    <div id="satwa-badges"></div>
 
     <div id="interaction-hint">klik titik / klik baris tabel / tombol 1–4</div>
 
@@ -610,13 +672,13 @@ const map = L.map('map', {
   maxZoom: 9
 }).setView([-2.3, 118], 5);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd',
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
   maxZoom: 19
 }).addTo(map);
 
 const markerLayer = L.layerGroup().addTo(map);
-const calloutLayer = L.layerGroup().addTo(map);
+const calloutLayer = { clearLayers: () => {} }; // unused, popup pakai bindPopup native
 let markerRegistry = [];
 let activeMarker = null;
 let activeRow = null;
@@ -719,8 +781,8 @@ const MODES = {
   },
 
   konservasi: {
-    title: 'Deforestasi di area konservasi*',
-    kpiLabel: 'Deforestasi konservasi',
+    title: 'Deforestasi di area kawasan konservasi*',
+    kpiLabel: 'Deforestasi di area kawasan konservasi',
     kpiVal: '25.077',
     kpiUnit: 'hektare',
     notesSidebar: [
@@ -745,44 +807,6 @@ const MODES = {
       { lat: -1.2, lng: 100.8, rank: 9, name: 'CA Batang Pangean I', value: '779', dir: 'left' },
       { lat: 0.7, lng: 101.2, rank: 10, name: 'SM Bukit Rimbang Bukit Baling', value: '539', dir: 'left' }
     ],
-    tables: [
-      {
-        title: 'Kawasan Konservasi',
-        headers: ['Kawasan', 'Deforestasi (ha)'],
-        rows: [
-          ['TN Kerinci Seblat', '6.362'],
-          ['SM Pegunungan Jayawijaya', '3.210'],
-          ['TN Gunung Leuser', '1.379'],
-          ['TB Lingga Isaq', '1.199'],
-          ['CA Enarotali', '1.049'],
-          ['SM Mamberamo Foja', '950'],
-          ['TN Lorentz', '889'],
-          ['CA Pegunungan Tamrau Selatan', '796'],
-          ['CA Batang Pangean I', '779'],
-          ['SM Bukit Rimbang Bukit Baling', '539'],
-          ['Kawasan Konservasi Lainnya (153)', '7.924'],
-          ['Total', '25.077']
-        ]
-      },
-      {
-        title: 'Key Biodiversity Area',
-        headers: ['KBA', 'Hektare'],
-        rows: [
-          ['Batang Toru', '5.021'],
-          ['Kerinci Seblat', '2.776'],
-          ['Gunung Leuser', '2.277'],
-          ['Hutan Rawa Gambut Barumun-Rokan', '2.248'],
-          ['Bukit Baka-Bukit Raya', '2.004'],
-          ['Routa', '1.830'],
-          ['Wanggar – Weyland Catchment', '1.240'],
-          ['Trumon - Singkil', '1.132'],
-          ['Sangkulirang', '1.128'],
-          ['Dirgahayu Rimba', '1.026'],
-          ['240 KBA lainnya', '25.400'],
-          ['Total', '46.081']
-        ]
-      }
-    ]
   },
 
   megafauna: {
@@ -801,13 +825,13 @@ const MODES = {
       'Spesies kunci: harimau, badak, gajah, dan orangutan.'
     ],
     species: [
-      { lat: 0.3, lng: 100.0, icon: '🐅', image: 'assets/images/satwa/image.png', name: 'Panthera tigris sumatrae', value: '78.049 hektare', dir: 'left' },
-      { lat: -2.2, lng: 101.7, icon: '🐘', image: 'assets/images/satwa/image-2.png', name: 'Elephas maximus sumatranus', value: '25.301', dir: 'left' },
-      { lat: -3.2, lng: 102.6, icon: '🦏', image: 'assets/images/satwa/image-3.png', name: 'Dicerorhinus sumatrensis sumatrensis', value: '18.477', dir: 'right' },
-      { lat: 2.2, lng: 99.2, icon: '🦧', image: 'assets/images/satwa/image-4.png', name: 'Pongo tapanuliensis', value: '505', dir: 'right' },
+      { lat: 3.4, lng: 94.2, icon: '🐅', image: 'assets/images/satwa/image.png', name: 'Panthera tigris sumatrae', value: '78.049 hektare', dir: 'left' },
+      { lat: -0.38, lng: 96.0, icon: '🐘', image: 'assets/images/satwa/image-2.png', name: 'Elephas maximus sumatranus', value: '25.301', dir: 'left' },
+      { lat: -6.2, lng: 101.7, icon: '🦏', image: 'assets/images/satwa/image-3.png', name: 'Dicerorhinus sumatrensis sumatrensis', value: '18.477', dir: 'left' },
+      { lat: 5.7, lng: 98.2, icon: '🦧', image: 'assets/images/satwa/image-4.png', name: 'Pongo tapanuliensis', value: '505', dir: 'right' },
       { lat: 1.0, lng: 102.6, icon: '🦧', image: 'assets/images/satwa/image-5.png', name: 'Pongo abelii', value: '16.519', dir: 'right' },
-      { lat: 1.9, lng: 114.7, icon: '🦧', image: 'assets/images/satwa/image-6.png', name: 'Pongo pygmaeus', value: '66.890', dir: 'right' },
-      { lat: 0.6, lng: 126.6, icon: '🦏', image: 'assets/images/satwa/image-7.png', name: 'Dicerorhinus sumatrensis harrissoni', value: '3.057', dir: 'right' }
+      { lat: 3.5, lng: 111.5, icon: '🦧', image: 'assets/images/satwa/image-6.png', name: 'Pongo pygmaeus', value: '66.890', dir: 'left' },
+      { lat: 2.5, lng: 121.5, icon: '🦏', image: 'assets/images/satwa/image-7.png', name: 'Dicerorhinus sumatrensis harrissoni', value: '3.057', dir: 'left' }
     ],
     tables: []
   }
@@ -819,12 +843,15 @@ function formatNum(v) {
 
 function clearModeVisuals() {
   markerLayer.clearLayers();
-  calloutLayer.clearLayers();
+  map.closePopup();
   markerRegistry = [];
   activeMarker = null;
   activeRow = null;
   activeEntry = null;
   document.getElementById('table-wrap').innerHTML = '';
+  const sp = document.getElementById('satwa-badges');
+  sp.innerHTML = '';
+  sp.classList.remove('visible');
 }
 
 function setActiveMarker(marker) {
@@ -870,60 +897,25 @@ function focusMarkerByLabel(label, rowEl = null) {
   setTimeout(() => showCallout(found), 260);
 }
 
-function getCalloutPoints(latlng, distance = 92) {
-  const zoom = map.getZoom();
-  const p = map.project(latlng, zoom);
-  const elbow = 28;
-
-  // paksa semua callout mengarah ke atas
-  const p2 = L.point(p.x, p.y - elbow);
-  const p3 = L.point(p.x, p.y - distance);
-
-  return {
-    a: map.unproject(p, zoom),
-    b: map.unproject(p2, zoom),
-    c: map.unproject(p3, zoom)
-  };
-}
-
-function renderCalloutLabel(entry, pos) {
+function buildPopupHtml(entry) {
   const isSpecies = entry.kind === 'species';
   const item = entry.item;
-
-  const html = isSpecies
-    ? `<div class="callout-label species"><span class="name">${item.name}</span><span class="value">${item.value}</span></div>`
-    : `<div class="callout-label"><span class="name"><span class="rank">${item.rank}</span>${item.name}</span><span class="value">${item.value}</span></div>`;
-
-  L.marker(pos, {
-    interactive: false,
-    icon: L.divIcon({
-      className: '',
-      html,
-      iconSize: [220, 90],
-      iconAnchor: [110, 84]
-    })
-  }).addTo(calloutLayer);
+  const unitMap = { provinsi: 'hektare deforestasi', kabupaten: 'hektare deforestasi', konservasi: 'hektare', megafauna: 'hektare habitat terdampak' };
+  const tagMap  = { provinsi: 'provinsi', kabupaten: 'kabupaten', konservasi: 'kawasan konservasi', megafauna: 'megafauna' };
+  const unit = unitMap[entry.mode] || 'hektare';
+  const tag  = tagMap[entry.mode]  || entry.mode;
+  const rank = !isSpecies ? `<div class="popup-rank"></div>` : `<div class="popup-rank">Megafauna ikonik</div>`;
+  return `<div class="popup-inner">${rank}<div class="popup-name">${item.name}</div><div class="popup-val">${item.value}</div><div class="popup-unit">${unit}</div><div class="popup-type">${tag}</div></div>`;
 }
 
 function showCallout(entry) {
   if (!entry) return;
   activeEntry = entry;
-  calloutLayer.clearLayers();
   setActiveMarker(entry.marker);
-
-  const item = entry.item;
-  const points = getCalloutPoints(entry.marker.getLatLng(), entry.kind === 'species' ? 110 : 98);
-
-  L.polyline([points.a, points.b, points.c], {
-    color: '#4d4943',
-    weight: 1.8,
-    opacity: .88,
-    lineCap: 'round',
-    lineJoin: 'round'
-  }).addTo(calloutLayer);
-
-  renderCalloutLabel(entry, points.c);
+  entry.marker.bindPopup(buildPopupHtml(entry), { closeButton: true, maxWidth: 280, minWidth: 190 }).openPopup();
 }
+
+function renderCalloutLabel() {}
 
 function createRankMarker(item) {
   const icon = L.divIcon({
@@ -954,30 +946,89 @@ function createRankMarker(item) {
 }
 
 function createSpeciesMarker(item) {
-  const markerContent = item.image
-    ? `<div class="species-dot is-image"><img src="${item.image}" alt="${item.name}"></div>`
-    : `<div class="species-dot">${item.icon}</div>`;
+  // Create invisible marker for interaction reference (not displayed on map)
   const icon = L.divIcon({
     className: '',
-    html: markerContent,
-    iconSize: [54, 54],
-    iconAnchor: [27, 27]
+    html: '<div style="display:none;"></div>',
+    iconSize: [0, 0],
+    iconAnchor: [0, 0]
   });
   const marker = L.marker([item.lat, item.lng], { icon }).addTo(markerLayer);
-  const direction = item.dir || 'right';
 
   const entry = { name: item.name, marker, value: item.value, mode: currentMode, item, kind: 'species' };
 
-  marker.on('mouseover', () => setActiveMarker(marker));
-  marker.on('mouseout', () => {
-    if (!activeEntry || activeEntry.marker !== marker) setActiveMarker(null);
-  });
   marker.on('click', () => {
     showCallout(entry);
     clearActiveRow();
   });
 
   registerMarker(entry);
+  
+  // Create satwa badge
+  createSatwaBadge(item, entry);
+}
+
+function createSatwaBadge(item, entry) {
+  const badgesContainer = document.getElementById('satwa-badges');
+  const badge = document.createElement('div');
+  badge.className = 'satwa-badge' + (item.dir === 'left' ? ' dir-left' : '');
+  badge.dataset.species = item.name;
+
+  badge.innerHTML = `
+    <div class="satwa-badge-circle">
+      <img src="${item.image || ''}" alt="${item.name}">
+    </div>
+    <div class="satwa-popup">
+      <div class="satwa-popup-label">${item.name}</div>
+      <div class="satwa-popup-value">${item.value}</div>
+    </div>
+  `;
+
+  badge.style.cursor = 'pointer';
+  badge.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isActive = badge.classList.contains('active');
+    document.querySelectorAll('.satwa-badge.active').forEach(b => b.classList.remove('active'));
+    if (!isActive) badge.classList.add('active');
+  });
+
+  badgesContainer.appendChild(badge);
+  return { badge, entry };
+}
+
+function positionSatwaBadges(species) {
+  if (!species || species.length === 0) return;
+
+  const badgesContainer = document.getElementById('satwa-badges');
+  badgesContainer.classList.add('visible');
+  const badges = badgesContainer.querySelectorAll('.satwa-badge');
+  const mapEl = document.getElementById('map');
+  const mapRect = mapEl.getBoundingClientRect();
+  const circleSize = 100;
+  const gap = 12;
+
+  badges.forEach((badge, idx) => {
+    const item = species[idx];
+    if (!item) return;
+
+    const pt = map.latLngToContainerPoint([item.lat, item.lng]);
+    const screenX = mapRect.left + pt.x;
+    const screenY = mapRect.top + pt.y;
+
+    const mapW = mapRect.right;
+    const mapH = mapRect.bottom;
+
+    // badge selalu 100x100 (lingkaran), pusatkan di titik geo
+    let x = screenX - circleSize / 2;
+    let y = screenY - circleSize / 2;
+
+    // clamp agar tidak keluar batas peta
+    x = Math.max(mapRect.left + 4, Math.min(mapW - circleSize - 4, x));
+    y = Math.max(mapRect.top + 4, Math.min(mapH - circleSize - 4, y));
+
+    badge.style.left = x + 'px';
+    badge.style.top = y + 'px';
+  });
 }
 
 function renderTableCard(tbl) {
@@ -1031,12 +1082,12 @@ function fitModeToData(mode) {
 
   if (points.length) {
     const bounds = L.latLngBounds(points);
-    map.flyToBounds(bounds.pad(0.35), {
-      maxZoom: window.innerWidth < 980 ? 5 : 6,
+    map.flyToBounds(bounds.pad(0.18), {
+      maxZoom: window.innerWidth < 980 ? 6 : 7,
       duration: 0.7
     });
   } else {
-    map.setView([-2.3, 118], window.innerWidth < 980 ? 4 : 5);
+    map.setView([-2.3, 118], window.innerWidth < 980 ? 5 : 6);
   }
 }
 
@@ -1103,6 +1154,7 @@ function renderMode(modeKey) {
     document.getElementById('notes-box').style.display = 'block';
   } else if (modeKey === 'megafauna') {
     document.getElementById('notes-box').style.display = 'block';
+    positionSatwaBadges(mode.species);
   } else {
     document.getElementById('notes-box').style.display = 'block';
   }
@@ -1115,7 +1167,15 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 });
 
 map.on('zoomend moveend', () => {
-  if (activeEntry) showCallout(activeEntry);
+  if (currentMode === 'megafauna' && MODES.megafauna.species) {
+    positionSatwaBadges(MODES.megafauna.species);
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (currentMode === 'megafauna' && MODES.megafauna.species) {
+    positionSatwaBadges(MODES.megafauna.species);
+  }
 });
 
 window.addEventListener('keydown', (e) => {
@@ -1124,6 +1184,8 @@ window.addEventListener('keydown', (e) => {
   if (!mode) return;
   renderMode(mode);
 });
+
+
 
 renderMode('provinsi');
 </script>
