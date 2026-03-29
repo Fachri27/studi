@@ -172,12 +172,8 @@ regulasi yang melindungi seluruh hutan alam tersisa
     </div>
   </div>
 
-  <!-- Alur di-iframe agar CSS global dari partial tidak bocor ke halaman utama -->
-  <div class="viz-block viz-block--full">
-    <div class="viz-frame">
-      <iframe src="alur.html" title="Alur Pemrosesan Data" loading="lazy" style="display:block; width:100%; border:0; height:100vh;"></iframe>
-    </div>
-  </div>
+  <!-- Include-ready block (Laravel target: @include('partials.alur-embed')) -->
+  <div class="viz-block viz-block--full" data-include-html="partials/alur-embed.html"></div>
 </div>
 </section>
 

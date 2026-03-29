@@ -117,8 +117,12 @@ function transformIncludeToIframe() {
   });
 }
 
+const preferIframeEmbed = false; // false: keep partial inject (bilik html biasa), true: iframe fallback
+
 async function loadHtmlPartials() {
-  transformIncludeToIframe();
+  if (preferIframeEmbed) {
+    transformIncludeToIframe();
+  }
   const hosts = Array.from(document.querySelectorAll('[data-include-html]'));
   if (!hosts.length) return;
 
