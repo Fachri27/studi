@@ -683,7 +683,6 @@ let activeEntry = null;
 
 const MODES = {
   provinsi: {
-    title: 'Deforestasi berbasis provinsi',
     kpiLabel: 'Total deforestasi 2025',
     kpiVal: '433.751',
     kpiUnit: 'hektare',
@@ -763,7 +762,6 @@ const MODES = {
   },
 
   kabupaten: {
-    title: 'Deforestasi berbasis kabupaten',
     kpiLabel: 'Kabupaten terdampak',
     kpiVal: '383',
     kpiUnit: 'kabupaten/kota',
@@ -794,7 +792,6 @@ const MODES = {
   },
 
   konservasi: {
-    title: 'Deforestasi di area kawasan konservasi*',
     kpiLabel: 'Deforestasi di area kawasan konservasi',
     kpiVal: '25.077',
     kpiUnit: 'hektare',
@@ -823,7 +820,6 @@ const MODES = {
   },
 
   megafauna: {
-    title: 'Deforestasi di habitat megafauna ikonik',
     kpiLabel: 'Total habitat terdampak',
     kpiVal: '156.463',
     kpiUnit: 'hektare',
@@ -925,7 +921,8 @@ function showCallout(entry) {
   if (!entry) return;
   activeEntry = entry;
   setActiveMarker(entry.marker);
-  entry.marker.bindPopup(buildPopupHtml(entry), { closeButton: true, maxWidth: 280, minWidth: 190 }).openPopup();
+  entry.marker.setPopupContent(buildPopupHtml(entry));
+  entry.marker.openPopup();
 }
 
 function renderCalloutLabel() {}
@@ -945,6 +942,8 @@ function createRankMarker(item) {
   const direction = item.dir || 'right';
 
   const entry = { name: item.name, marker, value: item.value, mode: currentMode, item, kind: 'rank' };
+
+  marker.bindPopup('', { closeButton: true, maxWidth: 280, minWidth: 190 });
 
   marker.on('mouseover', () => setActiveMarker(marker));
   marker.on('mouseout', () => {
