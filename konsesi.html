@@ -201,9 +201,9 @@ body { font-family:'Poppins',sans-serif; background:var(--cream); color:var(--da
 </div>
 
 <div id="map-wrap">
-  <div id="map-title">
+  <!-- <div id="map-title">
     <h2 id="map-heading">Sepuluh teratas deforestasi<br>di konsesi kebun kayu</h2>
-  </div>
+  </div> -->
   <div id="map"></div>
   <div id="others-badge">
     <div class="ob-label" id="ob-label">202 izin<br>Lainnya</div>
@@ -231,75 +231,71 @@ function clearLayers() {
 
 const DATASETS = {
   'kebun-kayu': {
-    heading: 'Sepuluh teratas deforestasi<br>di konsesi kebun kayu',
     othersLabel: '202 izin<br>Lainnya', othersVal: '21.799', statTotal: '21.799',
     bullets: ['Deforestasi dalam 212 konsesi kebun kayu','34% deforestasi terjadi pada 10 perusahaan teratas'],
     geojsonFile: 'kebun-kayu.geojson',
     points: [
-      { lat:2.126959285437297,  lng:117.55112979226557, rank:1,  name:'PT TANJUNG REDEB HUTANI',               value:1408.925, dir:'right'  },
-      { lat:0.397174210774834,  lng:110.992844937424763, rank:2,  name:'PT FINNANTARA INTIGA',                  value:1341.478, dir:'left'   },
-      { lat:0.407421960214845,  lng:116.367172445672026, rank:3,  name:'PT MAHAKARYA PERDANA GEMILANG UNIT II', value:1323.751, dir:'right'  },
-      { lat:0.566679872006894,  lng:117.174814762389829, rank:4,  name:'PT DIVA PERDANA PESONA',                value:1296.016, dir:'right'  },
-      { lat:-1.335276267511383, lng:114.138747007539251, rank:5,  name:'PT BUMI HIJAU PRIMA',                   value:1294.413, dir:'left'   },
-      { lat:-2.009800604760271, lng:111.153569955554644, rank:6,  name:'PT GRACE PUTRI PERDANA',                value:1170.785, dir:'left'   },
-      { lat:1.853305859481002,  lng:117.594275093006445, rank:7,  name:'PT HUTAN BERAU LESTARI',                value:1096.726, dir:'right'  },
-      { lat:0.026386043655114,  lng:115.929349893182021, rank:8,  name:'PT SENDAWAR ADHI KARYA',                value:1018.834, dir:'right'  },
-      { lat:1.340801486700338,  lng:118.240850579581576, rank:9,  name:'PT SWADAYA PERKASA',                    value:661.554,  dir:'right'  },
-      { lat:1.374270568895824,  lng:101.806156676794458, rank:10, name:'PT SEKATO PRATAMA MAKMUR',              value:652.129,  dir:'bottom' },
+      { lat:2.126959285437297,  lng:117.55112979226557, rank:1,  name:'PT TANJUNG REDEB HUTANI',               value:1408, dir:'right'  },
+      { lat:0.397174210774834,  lng:110.992844937424763, rank:2,  name:'PT FINNANTARA INTIGA',                  value:1341, dir:'left'   },
+      { lat:0.407421960214845,  lng:116.367172445672026, rank:3,  name:'PT MAHAKARYA PERDANA GEMILANG UNIT II', value:1323, dir:'right'  },
+      { lat:0.566679872006894,  lng:117.174814762389829, rank:4,  name:'PT DIVA PERDANA PESONA',                value:1296, dir:'right'  },
+      { lat:-1.335276267511383, lng:114.138747007539251, rank:5,  name:'PT BUMI HIJAU PRIMA',                   value:1294, dir:'left'   },
+      { lat:-2.009800604760271, lng:111.153569955554644, rank:6,  name:'PT GRACE PUTRI PERDANA',                value:1170, dir:'left'   },
+      { lat:1.853305859481002,  lng:117.594275093006445, rank:7,  name:'PT HUTAN BERAU LESTARI',                value:1096, dir:'right'  },
+      { lat:0.026386043655114,  lng:115.929349893182021, rank:8,  name:'PT SENDAWAR ADHI KARYA',                value:1018, dir:'right'  },
+      { lat:1.340801486700338,  lng:118.240850579581576, rank:9,  name:'PT SWADAYA PERKASA',                    value:661,  dir:'right'  },
+      { lat:1.374270568895824,  lng:101.806156676794458, rank:10, name:'PT SEKATO PRATAMA MAKMUR',              value:652,  dir:'bottom' },
     ]
   },
   'logging': {
-    heading: 'Sepuluh teratas deforestasi<br>di konsesi logging',
     othersLabel: '227 izin<br>Lainnya', othersVal: '53.661', statTotal: '53.661',
     bullets: ['Deforestasi dalam 237 konsesi logging','28% deforestasi dalam konsesi logging terjadi pada 10 perusahaan teratas'],
     geojsonFile: 'logging.geojson',
     points: [
-      { lat:0.881264893236657,  lng:117.026904047300249, rank:1,  name:'PT KIANI LESTARI',                        value:3739.443, dir:'right'  },
-      { lat:-1.252358059458737, lng:114.487610383463576, rank:2,  name:'PT DASA INTIGA',                          value:3195.255, dir:'left'  },
-      { lat:2.098063545278295,  lng:101.015865352762475, rank:3,  name:'PT DIAMOND RAYA TIMBER',                  value:2741.375, dir:'right' },
-      { lat:-3.017296513002015, lng:101.832872347710747, rank:4,  name:'PT ANUGERAH PRATAMA INSPIRASI',           value:2210.853, dir:'bottom'},
-      { lat:-0.75146963045224,  lng:116.510730877588813, rank:5,  name:'PT ITCI KARTIKA UTAMA (ITCIKU)',          value:1902.113, dir:'right' },
-      { lat:2.028798962469609,  lng:117.080426147312622, rank:6,  name:'PT INHUTANI I UNIT LABANAN',              value:1687.652, dir:'right' },
-      { lat:-3.502650172817841, lng:135.621210438578998, rank:7,  name:'PT JATI DHARMA INDAH PLYWOOD INDUSTRIES', value:1415.216, dir:'bottom'},
-      { lat:2.474287034103671,  lng:117.210276665613563, rank:8,  name:'PT INHUTANI I UNIT SAMBARATA',         value:1330.06, dir:'left'  },
-      { lat:-1.051472046229932, lng:113.055533404223866, rank:9,  name:'PT DWIMA JAYA UTAMA',                     value:1266.844, dir:'top'   },
-      { lat:1.288242736097689,  lng:99.580298186802281,  rank:10, name:'PT BARUMUN RAYA PADANG LANGKAT',          value:1259.728, dir:'left'  },
+      { lat:0.881264893236657,  lng:117.026904047300249, rank:1,  name:'PT KIANI LESTARI',                        value:3739, dir:'right'  },
+      { lat:-1.252358059458737, lng:114.487610383463576, rank:2,  name:'PT DASA INTIGA',                          value:3195, dir:'left'  },
+      { lat:2.098063545278295,  lng:101.015865352762475, rank:3,  name:'PT DIAMOND RAYA TIMBER',                  value:2741, dir:'right' },
+      { lat:-3.017296513002015, lng:101.832872347710747, rank:4,  name:'PT ANUGERAH PRATAMA INSPIRASI',           value:2210, dir:'bottom'},
+      { lat:-0.75146963045224,  lng:116.510730877588813, rank:5,  name:'PT ITCI KARTIKA UTAMA (ITCIKU)',          value:1902, dir:'right' },
+      { lat:2.028798962469609,  lng:117.080426147312622, rank:6,  name:'PT INHUTANI I UNIT LABANAN',              value:1687, dir:'right' },
+      { lat:-3.502650172817841, lng:135.621210438578998, rank:7,  name:'PT JATI DHARMA INDAH PLYWOOD INDUSTRIES', value:1415, dir:'bottom'},
+      { lat:2.474287034103671,  lng:117.210276665613563, rank:8,  name:'PT INHUTANI I UNIT SAMBARATA',         value:1330, dir:'left'  },
+      { lat:-1.051472046229932, lng:113.055533404223866, rank:9,  name:'PT DWIMA JAYA UTAMA',                     value:1266, dir:'top'   },
+      { lat:1.288242736097689,  lng:99.580298186802281,  rank:10, name:'PT BARUMUN RAYA PADANG LANGKAT',          value:1259, dir:'left'  },
     ]
   },
   'sawit': {
-    heading: 'Sepuluh teratas deforestasi<br>di konsesi sawit',
     othersLabel: '709 izin<br>Lainnya', othersVal: '24.300', statTotal: '24.300',
     bullets: ['Deforestasi seluas 37.910 ha dalam 719 konsesi sawit sepanjang 2025','36% (13.610 ha) terjadi pada 10 konsesi teratas','Pusat ekspansi berada di Kalimantan dan Tanah Papua'],
     geojsonFile: 'sawit.geojson',
     points: [
-      { lat:-1.171071756797254, lng:131.391544937632204, rank:1,  name:'Inti Kebun Lestari',      value:2624.028, dir:'top'    },
-      { lat:0.675035799730648,  lng:121.473335486617259, rank:2,  name:'Banyan Tumbuh Lestari',   value:2093.87, dir:'right'  },
-      { lat:-1.283649245406992, lng:131.24771276041497, rank:3,  name:'Inti Kebun Sejahtera',    value:2052.976, dir:'right'  },
-      { lat:-7.873776279100799, lng:140.650276678006122, rank:4,  name:'Merauke Sawit Jaya',      value:1807.696, dir:'left'   },
-      { lat:-1.444431042873964, lng:131.2297651958757, rank:5,  name:'Papua Lestari Abadi',     value:1299.573, dir:'right'  },
-      { lat:0.876612002390529,  lng:112.828968572362726, rank:6,  name:'Borneo International Anugerah', value:876.662, dir:'right' },
-      { lat:-1.6730810929783,   lng:113.408354095172541, rank:7,  name:'Agro Kalimantan Lestari', value:784.358,  dir:'left'   },
-      { lat:1.223818358664025,  lng:118.285216683843913, rank:8,  name:'Anugrah Surya Mandiri',   value:712.949,  dir:'top'    },
-      { lat:0.996544524718871,  lng:112.051890133518881, rank:9,  name:'Khatulistiwa Agro Abadi', value:681.979,  dir:'left'   },
-      { lat:-0.228874466961059, lng:104.847611995376113, rank:10, name:'Citra Sugi Aditya',       value:675.878,  dir:'bottom' },
+      { lat:-1.171071756797254, lng:131.391544937632204, rank:1,  name:'Inti Kebun Lestari',      value:2624, dir:'top'    },
+      { lat:0.675035799730648,  lng:121.473335486617259, rank:2,  name:'Banyan Tumbuh Lestari',   value:2093, dir:'right'  },
+      { lat:-1.283649245406992, lng:131.24771276041497, rank:3,  name:'Inti Kebun Sejahtera',    value:2052, dir:'right'  },
+      { lat:-7.873776279100799, lng:140.650276678006122, rank:4,  name:'Merauke Sawit Jaya',      value:1807, dir:'left'   },
+      { lat:-1.444431042873964, lng:131.2297651958757, rank:5,  name:'Papua Lestari Abadi',     value:1299, dir:'right'  },
+      { lat:0.876612002390529,  lng:112.828968572362726, rank:6,  name:'Borneo International Anugerah', value:876, dir:'right' },
+      { lat:-1.6730810929783,   lng:113.408354095172541, rank:7,  name:'Agro Kalimantan Lestari', value:784,  dir:'left'   },
+      { lat:1.223818358664025,  lng:118.285216683843913, rank:8,  name:'Anugrah Surya Mandiri',   value:712,  dir:'top'    },
+      { lat:0.996544524718871,  lng:112.051890133518881, rank:9,  name:'Khatulistiwa Agro Abadi', value:681,  dir:'left'   },
+      { lat:-0.228874466961059, lng:104.847611995376113, rank:10, name:'Citra Sugi Aditya',       value:675,  dir:'bottom' },
     ]
   },
   'tambang': {
-    heading: 'Sepuluh teratas deforestasi<br>di konsesi tambang',
     othersLabel: '1.131 izin<br>Lainnya', othersVal: '32.233', statTotal: '32.233',
     bullets: ['Deforestasi seluas 41.162 ha dalam 1.140 konsesi tambang sepanjang 2025','22% (8.929 ha) terjadi dalam 10 perusahaan teratas','Ekspansi tambang emas meningkat selain nikel di Indonesia'],
     geojsonFile: 'tambang.geojson',
     points: [
-      { lat:2.138922060693282, lng:117.395321188956885, rank:1,  name:'Berau Coal (Batubara)',             value:1473.338, dir:'right'  },
-      { lat:-3.003818526025582, lng:121.809448329238492, rank:2,  name:'Sulawesi Cahaya Mineral (Nikel)',   value:1085.358, dir:'right'  },
-      { lat:-0.090328260786384, lng:114.919059555847099, rank:3,  name:'Maruwai Coal (Batubara)',           value:919.677,  dir:'top'    },
-      { lat:0.627934768307973, lng:128.004841288293079, rank:4,  name:'Weda Bay Nickel (Nikel)',           value:902.338,  dir:'right'  },
-      { lat:-2.634066859436454, lng:121.488538466272828, rank:5,  name:'Vale Indonesia TBK (Nikel)',        value:842.344,  dir:'left'   },
-      { lat:1.370910557959839, lng:99.149585821220384,  rank:6,  name:'Agincourt Resources (Emas)',        value:839.596,  dir:'left'   },
-      { lat:-0.207788395378338, lng:115.026603507062106, rank:7,  name:'Lahai Coal (Batubara)',             value:770.339,  dir:'left'   },
-      { lat:-1.541190947688207, lng:112.517178689769239, rank:8,  name:'Blok Waringin Agung (Emas)',       value:763.503,  dir:'right'  },
-      { lat:-1.039139704484105, lng:114.625074268594773, rank:9,  name:'Suprabari Mapanindo Mineral',      value:673.402,  dir:'left'   },
-      { lat:-2.843717003693491, lng:121.980032209226394, rank:10, name:'Bintang Delapan Mineral (Nikel)',  value:658.905,  dir:'bottom' },
+      { lat:2.138922060693282, lng:117.395321188956885, rank:1,  name:'Berau Coal (Batubara)',             value:1473, dir:'right'  },
+      { lat:-3.003818526025582, lng:121.809448329238492, rank:2,  name:'Sulawesi Cahaya Mineral (Nikel)',   value:1085, dir:'right'  },
+      { lat:-0.090328260786384, lng:114.919059555847099, rank:3,  name:'Maruwai Coal (Batubara)',           value:919,  dir:'top'    },
+      { lat:0.627934768307973, lng:128.004841288293079, rank:4,  name:'Weda Bay Nickel (Nikel)',           value:902,  dir:'right'  },
+      { lat:-2.634066859436454, lng:121.488538466272828, rank:5,  name:'Vale Indonesia TBK (Nikel)',        value:842,  dir:'left'   },
+      { lat:1.370910557959839, lng:99.149585821220384,  rank:6,  name:'Agincourt Resources (Emas)',        value:839,  dir:'left'   },
+      { lat:-0.207788395378338, lng:115.026603507062106, rank:7,  name:'Lahai Coal (Batubara)',             value:770,  dir:'left'   },
+      { lat:-1.541190947688207, lng:112.517178689769239, rank:8,  name:'Blok Waringin Agung (Emas)',       value:763,  dir:'right'  },
+      { lat:-1.039139704484105, lng:114.625074268594773, rank:9,  name:'Suprabari Mapanindo Mineral',      value:673,  dir:'left'   },
+      { lat:-2.843717003693491, lng:121.980032209226394, rank:10, name:'Bintang Delapan Mineral (Nikel)',  value:658,  dir:'bottom' },
     ]
   }
 };
@@ -310,7 +306,6 @@ function loadData(type) {
   document.getElementById('btn-'+type).classList.add('active');
 
   const d = DATASETS[type];
-  document.getElementById('map-heading').innerHTML  = d.heading;
   document.getElementById('stat-total').textContent = d.statTotal;
   document.getElementById('ob-label').innerHTML     = d.othersLabel;
   document.getElementById('ob-val').textContent     = d.othersVal;
@@ -339,7 +334,7 @@ function loadData(type) {
           <div class="popup-rank">Peringkat #${p.rank}</div>
           <div class="popup-name">${p.name}</div>
           <div class="popup-val">${p.value.toLocaleString('id-ID')}</div>
-          <div class="popup-unit">hektare deforestasi</div>
+          <div class="popup-unit">hektare</div>
           <div class="popup-type">${type}</div>
         </div>
       `);
