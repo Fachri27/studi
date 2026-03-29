@@ -105,7 +105,7 @@ function transformIncludeToIframe() {
       height: '460px',
       darkBar: false,
       barTitle: null,
-      caption: 'Grafik interaktif tren deforestasi Indonesia 2001–2024. Arahkan kursor ke batang untuk melihat informasi detail.'
+      caption: 'Grafik interaktif tren deforestasi Indonesia 2001–2025. Arahkan kursor ke batang untuk melihat informasi detail.'
     },
     'partials/alur-embed.html': {
       src: 'alur.html',

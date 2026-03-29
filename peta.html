@@ -73,8 +73,6 @@ body { background: var(--cream); font-family: 'Poppins', sans-serif; color: var(
 #chart-kalimantan { left:31%; top:8%;  }
 #chart-sulawesi   { left:55%; top:10%; }
 #chart-papua      { left:72%; top:16%; }
-#chart-jawa       { left:28%; top:62%; }
-#chart-maluku     { left:63%; top:40%; }
 
 .chart-inner {
   background:rgba(245,240,232,.96);
@@ -255,32 +253,6 @@ td:first-child { text-align:left; font-family:'Poppins',sans-serif; font-weight:
           </div>
         </div>
       </div>
-      <div class="island-chart" id="chart-jawa">
-        <div class="chart-inner">
-          <div class="chart-name">Jawa</div>
-          <div class="chart-unit">hektare</div>
-          <div class="chart-plot">
-            <div class="y-axis" id="axis-jawa"></div>
-            <div class="plot-area">
-              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
-              <div class="bar-group" id="bars-jawa"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="island-chart" id="chart-maluku">
-        <div class="chart-inner">
-          <div class="chart-name">Maluku &amp; NTT</div>
-          <div class="chart-unit">ribu hektare</div>
-          <div class="chart-plot">
-            <div class="y-axis" id="axis-maluku"></div>
-            <div class="plot-area">
-              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
-              <div class="bar-group" id="bars-maluku"></div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div id="bubbles">
@@ -332,11 +304,9 @@ const DATA = {
   kalimantan: [95,105,124,129,158],
   sulawesi:   [18, 22, 36, 17,  39],
   papua:      [10, 20, 55, 17,  77],
-  jawa:       [0.4,0.5,0.58,0.41,2.2],
-  maluku:     [3, 3.5, 4, 3.5, 7.5],
 };
 
-const ALL_ISLANDS = ['sumatra','kalimantan','sulawesi','papua','maluku','jawa'];
+const ALL_ISLANDS = ['sumatra','kalimantan','sulawesi','papua'];
 
 // ── BUILD BARS ─────────────────────────────────────────
 function getAxisMax(id, data) {
