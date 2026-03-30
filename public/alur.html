@@ -88,7 +88,7 @@ h1 span { color: var(--rust); }
   display: flex; align-items: stretch;
   border-top: 1px solid var(--border);
   position: relative;
-  margin-top: 110px;
+  margin-top: 60px;
 }
 
 /* ── Lane label ──────────────────────────────────────── */
@@ -299,7 +299,6 @@ h1 span { color: var(--rust); }
         <div style="display:flex;flex-direction:column;flex:1;gap:0;">
           <div style="display:flex;align-items:center;flex:1;">
             <div class="card green a-card" id="r2c3a" onclick="toggle(this)" style="flex:1;">
-              <div class="card-label green">True Alert</div>
               <div class="card-title">True Alert</div>
               <div class="card-desc">Alert yang teridentifikasi sebagai kejadian deforestasi nyata. Diproses lebih lanjut.</div>
             </div>
@@ -307,7 +306,6 @@ h1 span { color: var(--rust); }
           </div>
           <div style="display:flex;align-items:center;flex:1;margin-top:8px;">
             <div class="card ghost a-card" id="r2c3b" onclick="toggle(this)" style="flex:1;">
-              <div class="card-label">False Alert</div>
               <div class="card-title">False Alert</div>
               <div class="card-desc">Positif palsu — tidak diproses lebih lanjut dalam alur ini.</div>
             </div>
@@ -573,7 +571,7 @@ function drawConnectors() {
       ' C'+cp1x+' '+cp1y+','+cp2x+' '+cp2y+','+B.cx+' '+(B.top-2)
     );
     svg.appendChild(curve);
-    mkLabel(svg, 'Agreg → BBox', (A.cx + B.cx) / 2, A.bottom + gap / 2);
+    mkLabel(svg, (A.cx + B.cx) / 2, A.bottom + gap / 2);
   }
 
   /* 2. Output Model → Normalisasi Citra (outer right loop row1 → row3) */
@@ -591,8 +589,32 @@ function drawConnectors() {
     p.setAttribute('marker-end', 'url(#xarr)');
     p.setAttribute('d', 'M'+OM.right+' '+OM.cy+' L'+far+' '+OM.cy+' L'+far+' '+NC.cy+' L'+(NC.right+2)+' '+NC.cy);
     svg.appendChild(p);
-    mkLabel(svg, 'Model → Normalisasi', far, OM.cy + (NC.cy - OM.cy) / 2);
+    mkLabel(svg, far, OM.cy + (NC.cy - OM.cy) / 2);
   }
+
+  /* 3. Data Deforestasi Indikatif → Overlay & Filter Area (row3 → row4) */
+var dataindikatif = document.getElementById('dataindikatif');
+var r4c1 = document.getElementById('r4c1');
+
+if (dataindikatif && r4c1) {
+  var DI = getR(dataindikatif, wrap), OV = getR(r4c1, wrap);
+  var gap2 = OV.top - DI.bottom;
+  var cp1x2 = DI.cx, cp1y2 = DI.bottom + gap2 * 0.2;
+  var cp2x2 = OV.cx, cp2y2 = OV.top - gap2 * 0.2;
+  var curve2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  curve2.setAttribute('fill', 'none');
+  curve2.setAttribute('stroke', '#C75B2E');
+  curve2.setAttribute('stroke-width', '1.5');
+  curve2.setAttribute('stroke-linecap', 'round');
+  curve2.setAttribute('opacity', '0.7');
+  curve2.setAttribute('marker-end', 'url(#xarr)');
+  curve2.setAttribute('d',
+    'M'+DI.cx+' '+DI.bottom+
+    ' C'+cp1x2+' '+cp1y2+','+cp2x2+' '+cp2y2+','+OV.cx+' '+(OV.top-2)
+  );
+  svg.appendChild(curve2);
+  mkLabel(svg, (DI.cx + OV.cx) / 2, DI.bottom + gap2 / 2);
+}
 }
 
 

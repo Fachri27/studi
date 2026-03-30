@@ -1214,24 +1214,7 @@ function renderTableCard(tbl) {
 }
 
 function fitModeToData(mode) {
-  const points = [];
-  (mode.markers || []).forEach(p => points.push([p.lat, p.lng]));
-  (mode.species || []).forEach(p => points.push([p.lat, p.lng]));
-
-  // Prevent map flyToBounds/setView if in megafauna mode and a species badge is active
-  const satwaBadges = document.getElementById('satwa-badges');
-  const isSatwaActive = currentMode === 'megafauna' && satwaBadges && satwaBadges.classList.contains('has-active');
-  if (!isSatwaActive) {
-    if (points.length) {
-      const bounds = L.latLngBounds(points);
-      map.flyToBounds(bounds.pad(0.18), {
-        maxZoom: window.innerWidth < 980 ? 6 : 7,
-        duration: 0.7
-      });
-    } else {
-      map.setView([-2.3, 118], window.innerWidth < 980 ? 5 : 6);
-    }
-  }
+  // Tidak melakukan apa-apa agar map tidak bergerak saat ganti mode
 }
 
 function renderMode(modeKey) {
@@ -1293,16 +1276,7 @@ function renderMode(modeKey) {
     positionSatwaBadges(mode.species);
   }
 
-  // Prevent map movement if already in megafauna mode and a species badge is active
-  const satwaBadges = document.getElementById('satwa-badges');
-  const isSatwaActive = modeKey === 'megafauna' && satwaBadges && satwaBadges.classList.contains('has-active');
-  if (!isSatwaActive) {
-    if (mode.view) {
-      map.setView([mode.view.lat, mode.view.lng], mode.view.zoom);
-    } else {
-      fitModeToData(mode);
-    }
-  }
+  // Tidak melakukan apa-apa agar map tidak bergerak saat ganti mode
 }
 
 

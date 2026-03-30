@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gallery Editorial</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f5f0e8;
+}
+
+/* container */
+.container {
+  max-width: 980px;
+  margin: 0;
+}
+
+/* gambar utama (cover) */
+.main-img {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* 🔥 ini kuncinya */
+}
+
+.main-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* bawah */
+.gallery-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  align-items: flex-start;
+}
+
+/* thumbnail */
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  gap: 8px;
+  flex: 1;
+}
+
+.thumbs img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.thumbs img:hover {
+  opacity: 0.8;
+}
+
+/* caption editorial */
+.caption {
+  width: 260px;
+  text-align: right;
+}
+
+.cap-title {
+  font-size: 13px;
+}
+
+.cap-sub {
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- GAMBAR UTAMA -->
+  <div class="main-img">
+    <img id="mainImage" 
+         src="assets/foto/DJI_20251225100421_0022_V (1).jpg"
+         data-title="Kawasan Hutan Produksi,"
+         data-sub="Bireun, Aceh, Desember 2023">
+  </div>
+
+  <!-- BAWAH -->
+  <div class="gallery-row">
+
+    <!-- THUMBNAIL -->
+    <div class="thumbs">
+      <img class="thumb"
+           src="assets/foto/DJI_20251224130209_0001_V.jpg"
+           data-title="Konsesi PBPH, PT Indah Nusa Puri"
+           data-sub="Aceh, Desember 2025">
+
+      <img class="thumb"
+           src="assets/foto/DJI_20251217164026_0172_D.jpg"
+           data-title="Konsesi PBPH, PT Toba Pulp Lestari"
+           data-sub="Aek Raja, Sumatera Utara, Desember 2025">
+
+      <img class="thumb"
+           src="assets/foto/DJI_20251228174156_0052_V.JPG"
+           data-title="Deforestasi, Kawasan Hutan Lindung"
+           data-sub="Sijunjung, Sumatera Barat, Desember 2025">
+        <img class="thumb"
+           src="assets/foto/DJI_20251228174156_0052_V.JPG"
+           data-title="Deforestasi, Kawasan Hutan Lindung"
+           data-sub="Sijunjung, Sumatera Barat, Desember 2025">
+    </div>
+
+    <!-- CAPTION -->
+    <div class="caption">
+      <span class="cap-title" id="capTitle">
+        Kawasan Hutan Produksi,
+      </span><br>
+      <span class="cap-sub" id="capSub">
+        Bireun, Aceh, Desember 2023
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+const mainImage = document.getElementById("mainImage");
+const capTitle = document.getElementById("capTitle");
+const capSub = document.getElementById("capSub");
+const thumbs = document.querySelectorAll(".thumb");
+
+thumbs.forEach(img => {
+  img.addEventListener("click", () => {
+
+    let oldSrc = mainImage.src;
+    let oldTitle = mainImage.getAttribute("data-title");
+    let oldSub = mainImage.getAttribute("data-sub");
+
+    mainImage.src = img.src;
+    mainImage.setAttribute("data-title", img.getAttribute("data-title"));
+    mainImage.setAttribute("data-sub", img.getAttribute("data-sub"));
+
+    img.src = oldSrc;
+    img.setAttribute("data-title", oldTitle);
+    img.setAttribute("data-sub", oldSub);
+
+    capTitle.textContent = mainImage.getAttribute("data-title");
+    capSub.textContent = mainImage.getAttribute("data-sub");
+
+  });
+});
+</script>
+
+</body>
+</html>
