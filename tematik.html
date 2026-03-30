@@ -172,7 +172,7 @@ body {
   border-radius: 999px;
   padding: 6px 10px;
   font-family: 'Poppins', sans-serif;
-  font-size: .55rem;
+  font-size: 12px;
   letter-spacing: .07em;
   text-transform: uppercase;
   backdrop-filter: blur(6px);
@@ -524,7 +524,7 @@ body {
   height: 72px;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid rgba(139, 42, 26, 0.65);
+  border: 3px solid var(--red);
   box-shadow: 0 4px 14px rgba(0,0,0,0.28);
   background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
@@ -532,7 +532,7 @@ body {
 
 .satwa-badge:hover .satwa-badge-circle,
 .satwa-badge.active .satwa-badge-circle {
-  border-color: rgba(192, 64, 48, 0.95);
+  border-color: var(--red);
   box-shadow: 0 0 0 4px rgba(192,64,48,.22), 0 6px 18px rgba(0,0,0,0.35);
 }
 
@@ -1017,7 +1017,12 @@ function focusMarkerByLabel(label, rowEl = null) {
   }
 
   setActiveMarker(found.marker);
-  map.flyTo(found.marker.getLatLng(), Math.max(map.getZoom(), 6), { duration: 0.6 });
+  // Prevent map flyTo if in megafauna mode and a species badge is active
+  const satwaBadges = document.getElementById('satwa-badges');
+  const isSatwaActive = currentMode === 'megafauna' && satwaBadges && satwaBadges.classList.contains('has-active');
+  if (!isSatwaActive) {
+    map.flyTo(found.marker.getLatLng(), Math.max(map.getZoom(), 6), { duration: 0.6 });
+  }
   setTimeout(() => showCallout(found), 260);
 }
 
@@ -1132,8 +1137,6 @@ function createSatwaBadge(item, entry) {
       activePolygonSpecies = item.name;
       // Show popup on map marker
       showCallout(entry);
-      // Fly to species location initially
-      map.flyTo([item.lat, item.lng], 6, { duration: 0.7 });
       // Load geojson: use cached or fetch from URL
       if (!item.geojson && item.geojsonUrl) {
         badge.classList.add('loading');
@@ -1149,16 +1152,16 @@ function createSatwaBadge(item, entry) {
       }
       // Render polygon if available
       if (item.geojson) {
-        const poly = L.geoJSON(item.geojson, {
+        L.geoJSON(item.geojson, {
           style: {
-            color: '#7c3aed',
-            weight: 2,
+            color: '#bc4a3c',
+            weight: 1,
             opacity: 0.85,
-            fillColor: '#7c3aed',
-            fillOpacity: 0
+            fillColor: '#bc4a3c',
+            fillOpacity: 1
           }
         }).addTo(polygonLayer);
-        map.flyToBounds(poly.getBounds().pad(0.1), { duration: 0.8, maxZoom: 6 });
+        // Removed map.flyToBounds to prevent zoom/fly on badge click
       }
     } else {
       map.closePopup();
@@ -1234,14 +1237,19 @@ function fitModeToData(mode) {
   (mode.markers || []).forEach(p => points.push([p.lat, p.lng]));
   (mode.species || []).forEach(p => points.push([p.lat, p.lng]));
 
-  if (points.length) {
-    const bounds = L.latLngBounds(points);
-    map.flyToBounds(bounds.pad(0.18), {
-      maxZoom: window.innerWidth < 980 ? 6 : 7,
-      duration: 0.7
-    });
-  } else {
-    map.setView([-2.3, 118], window.innerWidth < 980 ? 5 : 6);
+  // Prevent map flyToBounds/setView if in megafauna mode and a species badge is active
+  const satwaBadges = document.getElementById('satwa-badges');
+  const isSatwaActive = currentMode === 'megafauna' && satwaBadges && satwaBadges.classList.contains('has-active');
+  if (!isSatwaActive) {
+    if (points.length) {
+      const bounds = L.latLngBounds(points);
+      map.flyToBounds(bounds.pad(0.18), {
+        maxZoom: window.innerWidth < 980 ? 6 : 7,
+        duration: 0.7
+      });
+    } else {
+      map.setView([-2.3, 118], window.innerWidth < 980 ? 5 : 6);
+    }
   }
 }
 
@@ -1304,10 +1312,15 @@ function renderMode(modeKey) {
     positionSatwaBadges(mode.species);
   }
 
-  if (mode.view) {
-    map.setView([mode.view.lat, mode.view.lng], mode.view.zoom);
-  } else {
-    fitModeToData(mode);
+  // Prevent map movement if already in megafauna mode and a species badge is active
+  const satwaBadges = document.getElementById('satwa-badges');
+  const isSatwaActive = modeKey === 'megafauna' && satwaBadges && satwaBadges.classList.contains('has-active');
+  if (!isSatwaActive) {
+    if (mode.view) {
+      map.setView([mode.view.lat, mode.view.lng], mode.view.zoom);
+    } else {
+      fitModeToData(mode);
+    }
   }
 }
 
