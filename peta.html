@@ -83,14 +83,19 @@ body { background: var(--cream); font-family: 'Poppins', sans-serif; color: var(
 }
 .chart-name { font-family:'Poppins',sans-serif; font-size:1.1rem; font-weight:700; color:var(--dark); margin-bottom:2px; line-height:1.05; }
 .chart-unit { font-family:'Poppins',sans-serif; font-size:.52rem; font-weight:700; color:var(--dark); margin-bottom:10px; }
-.chart-plot { display:grid; grid-template-columns:40px 1fr; gap:8px; align-items:end; }
-.y-axis { display:flex; flex-direction:column; justify-content:space-between; height:92px; padding-bottom:14px; }
+.chart-plot { display:grid; grid-template-columns:40px 1fr; gap:8px; align-items:start; }
+.y-axis { position:relative; height:78px; margin-top:14px; }
 .y-tick {
+  position:absolute;
+  right:0;
+  text-align:right;
+  transform:translateY(-50%);
   font-family:'Poppins',sans-serif;
   font-size:.52rem;
   font-weight:700;
   color:var(--dark);
   line-height:1;
+  white-space:nowrap;
 }
 .plot-area {
   position:relative;
@@ -100,17 +105,19 @@ body { background: var(--cream); font-family: 'Poppins', sans-serif; color: var(
 }
 .grid-lines {
   position:absolute;
-  inset:0 0 14px 0;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
+  inset:14px 0 14px 0;
   pointer-events:none;
 }
 .grid-lines span {
-  display:block;
-  width:100%;
+  position:absolute;
+  left:0; right:0;
   border-top:1px solid rgba(192,64,48,.35);
 }
+.grid-lines span:nth-child(1) { top:0%; }
+.grid-lines span:nth-child(2) { top:25%; }
+.grid-lines span:nth-child(3) { top:50%; }
+.grid-lines span:nth-child(4) { top:75%; }
+.grid-lines span:nth-child(5) { top:100%; }
 .bar-group {
   position:relative;
   z-index:1;
@@ -208,7 +215,7 @@ td:first-child { text-align:left; font-family:'Poppins',sans-serif; font-weight:
           <div class="chart-plot">
             <div class="y-axis" id="axis-sumatra"></div>
             <div class="plot-area">
-              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="grid-lines"><span></span><span></span><span></span><span></span><span></span></div>
               <div class="bar-group" id="bars-sumatra"></div>
             </div>
           </div>
@@ -221,7 +228,7 @@ td:first-child { text-align:left; font-family:'Poppins',sans-serif; font-weight:
           <div class="chart-plot">
             <div class="y-axis" id="axis-kalimantan"></div>
             <div class="plot-area">
-              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="grid-lines"><span></span><span></span><span></span><span></span><span></span></div>
               <div class="bar-group" id="bars-kalimantan"></div>
             </div>
           </div>
@@ -234,7 +241,7 @@ td:first-child { text-align:left; font-family:'Poppins',sans-serif; font-weight:
           <div class="chart-plot">
             <div class="y-axis" id="axis-sulawesi"></div>
             <div class="plot-area">
-              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="grid-lines"><span></span><span></span><span></span><span></span><span></span></div>
               <div class="bar-group" id="bars-sulawesi"></div>
             </div>
           </div>
@@ -247,7 +254,7 @@ td:first-child { text-align:left; font-family:'Poppins',sans-serif; font-weight:
           <div class="chart-plot">
             <div class="y-axis" id="axis-papua"></div>
             <div class="plot-area">
-              <div class="grid-lines"><span></span><span></span><span></span><span></span></div>
+              <div class="grid-lines"><span></span><span></span><span></span><span></span><span></span></div>
               <div class="bar-group" id="bars-papua"></div>
             </div>
           </div>
@@ -310,9 +317,7 @@ const ALL_ISLANDS = ['sumatra','kalimantan','sulawesi','papua'];
 
 // ── BUILD BARS ─────────────────────────────────────────
 function getAxisMax(id, data) {
-  const max = Math.max(...data);
-  if (id === 'jawa') return Math.max(3, Math.ceil(max));
-  return Math.max(50, Math.ceil(max / 50) * 50);
+  return 200;
 }
 
 function buildAxis(id, max) {
@@ -321,10 +326,11 @@ function buildAxis(id, max) {
   axis.innerHTML = '';
 
   const steps = [max, max * 0.75, max * 0.5, max * 0.25, 0];
-  steps.forEach(value => {
+  steps.forEach((value, i) => {
     const tick = document.createElement('div');
     tick.className = 'y-tick';
     tick.textContent = Number.isInteger(value) ? String(value) : value.toFixed(1);
+    tick.style.top = (i * 25) + '%';
     axis.appendChild(tick);
   });
 }

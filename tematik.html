@@ -527,7 +527,7 @@ body {
 .satwa-badge.active .satwa-badge-name { display: none; }
 .satwa-badge-detail {
   display: none;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   gap: 1px;
   pointer-events: none;
@@ -748,6 +748,7 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical
   maxZoom: 19
 }).addTo(map);
 
+const stadi2025Layer = L.layerGroup().addTo(map);
 const markerLayer = L.layerGroup().addTo(map);
 const polygonLayer = L.layerGroup().addTo(map);
 const calloutLayer = { clearLayers: () => {} }; // unused, popup pakai bindPopup native
@@ -757,6 +758,7 @@ let activeRow = null;
 let currentMode = 'provinsi';
 let activeEntry = null;
 let activePolygonSpecies = null;
+let stadi2025Loaded = false;
 
 const MODES = {
   provinsi: {
@@ -1117,11 +1119,11 @@ function createSatwaBadge(item, entry) {
       if (item.geojson) {
         const poly = L.geoJSON(item.geojson, {
           style: {
-            color: '#c04030',
+            color: '#7c3aed',
             weight: 2,
-            opacity: 0.9,
-            fillColor: '#c04030',
-            fillOpacity: 0.18
+            opacity: 0.85,
+            fillColor: '#7c3aed',
+            fillOpacity: 0
           }
         }).addTo(polygonLayer);
         map.flyToBounds(poly.getBounds().pad(0.1), { duration: 0.8, maxZoom: 6 });
@@ -1273,6 +1275,26 @@ function renderMode(modeKey) {
   fitModeToData(mode);
 }
 
+async function loadStadi2025() {
+  if (stadi2025Loaded) return;
+  stadi2025Loaded = true;
+  try {
+    const res = await fetch('geojson/STADI2025.json');
+    const data = await res.json();
+    L.geoJSON(data, {
+      style: {
+        color: '#c04030',
+        weight: 1,
+        fillColor: '#c04030',
+        fillOpacity: 0.5
+      },
+      interactive: false
+    }).addTo(stadi2025Layer);
+  } catch (e) {
+    console.error('Gagal memuat STADI2025:', e);
+  }
+}
+
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => renderMode(btn.dataset.mode));
 });
@@ -1291,6 +1313,7 @@ document.getElementById('table-toggle').addEventListener('click', () => {
 });
 
 renderMode('provinsi');
+loadStadi2025();
 </script>
 </body>
 </html>
