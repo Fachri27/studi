@@ -126,7 +126,7 @@ function transformIncludeToIframe() {
       height: '100vh',
       darkBar: true,
       barTitle: 'Peta Tematik Deforestasi 2025',
-      caption: 'Peta tematik interaktif deforestasi 2025 berbasis provinsi, kabupaten, area konservasi, dan habitat megafauna.'
+      caption: ''
     },
     'partials/konsesi-embed.html': {
       src: 'konsesi.html',
