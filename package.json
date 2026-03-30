@@ -4,7 +4,8 @@
     "build": "npm run build:tailwind && npm run build:public",
     "build:public": "rm -rf public && mkdir -p public && cp -R assets partials geojson *.html public/",
     "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --minify",
-    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --watch"
+    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --watch",
+    "postinstall": "chmod +x node_modules/.bin/tailwindcss"
   },
   "dependencies": {
     "gsap": "^3.14.2"
