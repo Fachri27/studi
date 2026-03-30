@@ -214,12 +214,39 @@ body {
   opacity: .9;
 }
 
-#notes-box {
+#notes-wrap {
   position: absolute;
-  right: 18px;
-  bottom: 18px;
+  left: 18px;
+  bottom: 150px;
   z-index: 620;
   width: min(430px, 42vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+#map-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(248,244,238,.94);
+  border: 1px solid #918376;
+  border-bottom: none;
+  padding: 7px 12px;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--dark);
+  pointer-events: none;
+}
+#map-legend .leg-swatch {
+  width: 16px;
+  height: 16px;
+  background: #c04030;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+#notes-box {
   border: 1px solid #918376;
   background: rgba(248,244,238,.94);
   padding: 14px 14px 10px;
@@ -590,7 +617,7 @@ body {
 @media (max-width: 1280px) {
   #table-panel { width: min(560px, 52vw); }
   #table-wrap { gap: 0; }
-  #notes-box { width: min(390px, 40vw); }
+  #notes-wrap { width: min(390px, 40vw); }
 }
 
 @media (max-width: 980px) {
@@ -616,14 +643,15 @@ body {
     padding: 4px 7px;
   }
 
-  #notes-box {
+  #notes-wrap {
     left: 12px;
     right: 12px;
     width: auto;
+    bottom: 18px;
+  }
+  #notes-box {
     max-height: 24vh;
     overflow-y: auto;
-    right: 18px;
-    bottom: 18px;
   }
   #table-panel { width: min(96vw, 480px); }
   #table-wrap { padding: 0; gap: 0; }
@@ -724,7 +752,13 @@ body {
       <div class="mono" id="bubble-unit">hektare</div>
     </div>
 
-    <div id="notes-box"><ul id="notes-list"></ul></div>
+    <div id="notes-wrap">
+      <div id="map-legend">
+        <div class="leg-swatch"></div>
+        <span>Deforestasi di Indonesia</span>
+      </div>
+      <div id="notes-box"><ul id="notes-list"></ul></div>
+    </div>
 
     <div id="table-panel">
       <button id="table-toggle">Tabel ▶</button>
@@ -739,6 +773,8 @@ const map = L.map('map', {
   zoomControl: true,
   attributionControl: false,
   gestureHandling: true,
+  scrollWheelZoom: false,
+  doubleClickZoom: false,
   minZoom: 4,
   maxZoom: 9
 }).setView([-2.3, 118], 5);
@@ -809,13 +845,7 @@ const MODES = {
           ['16', '↑21', 'Papua Barat',           '9.108',  '2.303'],
           ['17', '↓14', 'Sulawesi Tenggara',     '9.104',  '4.413'],
           ['18', '↑24', 'Papua',                 '8.421',  '1.768'],
-          ['19', '↓13', 'Papua Selatan',         '7.248',  '5.010']
-        ]
-      },
-      {
-        title: 'Provinsi 2025 (20–37)',
-        headers: ['2025', '2024', 'Provinsi', '2025 (ha)', '2024 (ha)'],
-        rows: [
+          ['19', '↓13', 'Papua Selatan',         '7.248',  '5.010'],
           ['20', '↑23', 'Sulawesi Selatan',           '5.526',   '1.928'],
           ['21', '↑26', 'Sulawesi Barat',             '4.867',   '1.170'],
           ['22', '↓19', 'Maluku Utara',               '4.454',   '2.648'],
@@ -836,7 +866,7 @@ const MODES = {
           ['37', '37','Daerah Istimewa Yogyakarta',     '0',     '0.3'],
           ['Total', '', 'Seluruh provinsi',          '433.751', '261.575']
         ]
-      }
+      },
     ]
   },
 
@@ -844,6 +874,7 @@ const MODES = {
     kpiLabel: 'Deforestasi di 10 kabupaten teratas',
     kpiVal: '95.733',
     kpiUnit: 'hektare',
+    view: { lat: -2.3, lng: 118, zoom: 5 },
     notesSidebar: [
       'Top-10 kabupaten mencakup 22% deforestasi nasional.',
       'Didominasi Kalimantan dan Tanah Papua.',
@@ -902,6 +933,7 @@ const MODES = {
     kpiLabel: 'Total habitat terdampak',
     kpiVal: '156.463',
     kpiUnit: 'hektare',
+    view: { lat: -2.3, lng: 118, zoom: 5 },
     notesSidebar: [
       'Mencakup habitat harimau, badak, gajah, dan orangutan.',
       'Sebaran terbesar terdapat di Sumatera dan Kalimantan.',
@@ -1272,7 +1304,11 @@ function renderMode(modeKey) {
     positionSatwaBadges(mode.species);
   }
 
-  fitModeToData(mode);
+  if (mode.view) {
+    map.setView([mode.view.lat, mode.view.lng], mode.view.zoom);
+  } else {
+    fitModeToData(mode);
+  }
 }
 
 async function loadStadi2025() {
@@ -1285,8 +1321,9 @@ async function loadStadi2025() {
       style: {
         color: '#c04030',
         weight: 1,
+        opacity: 0.85,
         fillColor: '#c04030',
-        fillOpacity: 0.5
+        fillOpacity: 0
       },
       interactive: false
     }).addTo(stadi2025Layer);
@@ -1312,7 +1349,7 @@ document.getElementById('table-toggle').addEventListener('click', () => {
   setTimeout(() => map.invalidateSize(), 300);
 });
 
-renderMode('provinsi');
+renderMode('megafauna');
 loadStadi2025();
 </script>
 </body>

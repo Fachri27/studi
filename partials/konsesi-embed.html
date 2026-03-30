@@ -223,7 +223,9 @@
 const map = L.map('map', {
   zoomControl:true,
   attributionControl:false,
-  gestureHandling:true
+  gestureHandling:true,
+  scrollWheelZoom: false,
+  doubleClickZoom: false
 }).setView([-2, 118], 5);
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', { subdomains:'abcd', maxZoom:19 }).addTo(map);
 

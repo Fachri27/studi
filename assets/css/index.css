@@ -476,8 +476,10 @@ body.is-preloading { overflow: hidden; }
   margin-top: 8px;
 }
 .viz-block--slightly-wide {
-  width: min(980px, calc(100% + 10vw));
-  margin-left: 50%;
+  width: 980px;
+  max-width: 980px;
+  position: relative;
+  left: 50%;
   transform: translateX(-50%);
   margin-bottom: 8px;
 }
@@ -559,7 +561,7 @@ body.is-preloading { overflow: hidden; }
 .viz-block--full .viz-label,
 .viz-block--full .viz-caption {
   max-width: 900px;
-  margin-left: 410px;
+  margin-left: 430px;
   margin-right: auto;
   padding: 0 5vw;
   text-align: left;

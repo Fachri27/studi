@@ -109,7 +109,7 @@ body { font-family:'Poppins',sans-serif; background:var(--cream); color:var(--da
 }
 
 #others-badge {
-  position:absolute; bottom:28px; right:24px; z-index:500;
+  position:absolute; top:100px; right:100px; z-index:500;
   background:var(--red); border-radius:50%;
   width:120px; height:120px;
   display:flex; flex-direction:column;
@@ -221,7 +221,9 @@ body { font-family:'Poppins',sans-serif; background:var(--cream); color:var(--da
 const map = L.map('map', {
   zoomControl:true,
   attributionControl:false,
-  gestureHandling:true
+  gestureHandling:true,
+  scrollWheelZoom: false,
+  doubleClickZoom: false
 }).setView([-2, 118], 5);
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', { subdomains:'abcd', maxZoom:19 }).addTo(map);
 
@@ -233,7 +235,7 @@ function clearLayers() {
 
 const DATASETS = {
   'kebun-kayu': {
-    othersLabel: '202 izin<br>Lainnya', othersVal: '21.799', statTotal: '21.799',
+    othersLabel: '202 izin<br>Lainnya', othersVal: '21.799', statTotal: '11.265',
     bullets: ['Deforestasi dalam 212 konsesi kebun kayu','34% deforestasi terjadi pada 10 perusahaan teratas'],
     geojsonFile: 'kebun-kayu.geojson',
     points: [
