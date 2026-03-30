@@ -1311,26 +1311,7 @@ function renderMode(modeKey) {
   }
 }
 
-async function loadStadi2025() {
-  if (stadi2025Loaded) return;
-  stadi2025Loaded = true;
-  try {
-    const res = await fetch('geojson/STADI2025.json');
-    const data = await res.json();
-    L.geoJSON(data, {
-      style: {
-        color: '#c04030',
-        weight: 1,
-        opacity: 0.85,
-        fillColor: '#c04030',
-        fillOpacity: 0
-      },
-      interactive: false
-    }).addTo(stadi2025Layer);
-  } catch (e) {
-    console.error('Gagal memuat STADI2025:', e);
-  }
-}
+
 
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => renderMode(btn.dataset.mode));
@@ -1350,7 +1331,6 @@ document.getElementById('table-toggle').addEventListener('click', () => {
 });
 
 renderMode('megafauna');
-loadStadi2025();
 </script>
 </body>
 </html>

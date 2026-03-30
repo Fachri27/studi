@@ -1,15 +1,3 @@
-{
-  "scripts": {
-    "dev": "python3 -m http.server 8080",
-    "build": "npm run build:tailwind && npm run build:public",
-    "build:public": "rm -rf public && mkdir -p public && cp -R assets partials geojson *.html *.geojson public/",
-    "build:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --minify",
-    "watch:tailwind": "tailwindcss -c tailwind.config.js -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.generated.css --watch"
-  },
-  "dependencies": {
-    "gsap": "^3.14.2"
-  },
-  "devDependencies": {
-    "tailwindcss": "^3.4.17"
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:fba701e857a7710d7e75c84bbb2dc1e364f6bf61d56c5022599e5c8c9d6932ec
+size 628
