@@ -131,15 +131,17 @@ body { font-family:'Poppins',sans-serif; background:var(--cream); color:var(--da
 .leaflet-container { background:#e8e4da !important; }
 
 .dot-marker {
+  width:28px; height:28px;
   border-radius:50%;
   background:var(--red); color:#fff;
-  font-family:'Poppins',sans-serif; font-weight:700;
+  font-family:'Poppins',sans-serif; font-size:.75rem; font-weight:700;
   display:flex; align-items:center; justify-content:center;
-  border:2px solid rgba(255,255,255,.9);
-  box-shadow:0 2px 8px rgba(139,42,26,.5);
-  cursor:pointer; transition:.15s;
+  border:2px solid rgba(255,255,255,.95);
+  box-shadow:0 2px 8px rgba(139,42,26,.35);
+  cursor:pointer;
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
 }
-.dot-marker:hover { filter:brightness(1.2); }
+.dot-marker:hover { filter:brightness(1.15); transform:scale(1.15); }
 
 .cluster-icon {
   background:var(--red); color:#fff; border-radius:50%;
@@ -314,17 +316,12 @@ function loadData(type) {
   markersLayer = L.featureGroup();
 
   function processPoints(points) {
-    const maxVal = Math.max(...points.map(p => p.value));
-
     points.forEach(p => {
-      const size = Math.round(20 + (p.value / maxVal) * 28);
-      const fs   = Math.max(9, Math.round(size * 0.38));
-
       const icon = L.divIcon({
         className: '',
-        html: `<div class="dot-marker" style="width:${size}px;height:${size}px;font-size:${fs}px">${p.rank}</div>`,
-        iconSize: [size, size],
-        iconAnchor: [size/2, size/2]
+        html: `<div class="dot-marker">${p.rank}</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
       });
 
       const marker = L.marker([p.lat, p.lng], { icon });

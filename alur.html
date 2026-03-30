@@ -3,877 +3,678 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tahapan & Pemrosesan Data — SIMONTINI</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-
+<title>Alur Deteksi Deforestasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-/* Pipeline elements hidden by default - GSAP will animate these */
-.p-label,
-.pill-wrap,
-.p-arrow {
-  will-change: opacity, transform;
-}
-/* ─── RESET & BASE ─────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --rust:       #C0522A;
-  --rust-dark:  #8C3A1C;
-  --rust-light: rgba(192,82,42,.15);
-  --ink:        #ffffff;
-  --ink-mid:    rgba(255,255,255,.75);
-  --ink-soft:   rgba(255,255,255,.5);
-  --cream:      #F9F8F6;
-  --white:      rgba(255,255,255,.06);
-  --border:     rgba(255,255,255,.1);
-  --dot-color:  rgba(255,255,255,.12);
-
-  --font: 'Plus Jakarta Sans', sans-serif;
-  --radius: 7px;
-  --shadow-pill: 0 2px 12px rgba(192,82,42,.18);
-  --shadow-pill-hover: 0 6px 24px rgba(192,82,42,.28);
+  --bg: #0e0e0e;
+  --surface2: #1e1e1e;
+  --surface3: #262626;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --rust: #C75B2E;
+  --rust-pale: rgba(199,91,46,0.12);
+  --text: #e8e2d8;
+  --text-muted: #6b6460;
+  --label: #8a7e78;
 }
 
 html { scroll-behavior: smooth; }
 body {
-  background: #0d0d0d;
-  font-family: var(--font);
-  color: var(--ink);
-  overflow-x: hidden;
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
-/* ─── PROGRESS BAR ──────────────────────────────────── */
-#progress {
-  position: fixed; top: 0; left: 0; z-index: 1000;
-  height: 2px; width: 0;
-  background: linear-gradient(90deg, var(--rust), #E8795A);
-  transition: width .06s linear;
-}
-
-/* ─── HEADER ────────────────────────────────────────── */
-.site-header {
-  padding: 48px 6vw 36px;
+/* ── Header ──────────────────────────────────────────── */
+.header {
+  padding: 48px 60px 40px;
   border-bottom: 1px solid var(--border);
-  max-width: 1440px;
-  margin: 0 auto;
+  position: relative; overflow: hidden;
 }
-.brand {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 9.5px; font-weight: 800; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--rust);
-  margin-bottom: 24px;
-  opacity: 0; transform: translateY(-6px);
-  transition: opacity .5s ease, transform .5s ease;
-}
-.brand.vis { opacity: 1; transform: translateY(0); }
-.brand svg { width: 15px; height: 15px; fill: var(--rust); flex-shrink: 0; }
-
-.page-title {
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  font-weight: 800; line-height: 1.05;
-  letter-spacing: -.03em; color: var(--ink);
-  opacity: 0; transform: translateY(14px);
-  transition: opacity .65s ease .1s, transform .65s ease .1s;
-}
-.page-title.vis { opacity: 1; transform: translateY(0); }
-
-.page-desc {
-  margin-top: 14px;
-  font-size: 13.5px; font-weight: 400; line-height: 1.75;
-  color: var(--ink-soft); max-width: 540px;
-  opacity: 0; transform: translateY(10px);
-  transition: opacity .55s ease .25s, transform .55s ease .25s;
-}
-.page-desc.vis { opacity: 1; transform: translateY(0); }
-
-.hint {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 18px; padding: 7px 13px;
-  border: 1px solid var(--border); border-radius: 100px;
-  font-size: 11px; font-weight: 600; color: var(--rust);
-  background: var(--rust-light);
-  opacity: 0;
-  transition: opacity .5s ease .4s;
-}
-.hint.vis { opacity: 1; }
-.hint svg { width: 12px; height: 12px; stroke: var(--rust); fill: none; stroke-width: 2; }
-
-/* ─── PIPELINE LAYOUT ───────────────────────────────── */
-.pipeline {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 6vw 120px;
-}
-
-#pin-wrapper {
-  position: relative;
-  padding-top: 76px;
-}
-
-.scroll-prompt {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(20,16,12,.92);
-  color: var(--rust-dark);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .02em;
-  box-shadow: 0 10px 28px rgba(26,23,20,.08);
+.header::before {
+  content: '';
+  position: absolute; top: -60px; left: -60px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(199,91,46,0.15) 0%, transparent 70%);
   pointer-events: none;
-  opacity: 1;
 }
-
-.scroll-prompt svg {
-  width: 14px;
-  height: 14px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  animation: scrollNudge 1.3s ease-in-out infinite;
-}
-
-@keyframes scrollNudge {
-  0%, 100% { transform: translateY(0); opacity: .65; }
-  50% { transform: translateY(4px); opacity: 1; }
-}
-
-/* each row */
-.p-row {
-  display: grid;
-  grid-template-columns: 200px 1fr;
+.header-inner {
   position: relative;
-  min-height: 0;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  max-width: 1400px; margin: 0 auto;
 }
-.p-row + .p-row {
-  border-top: 1px dashed var(--dot-color);
+.eyebrow {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 12px;
+}
+h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 42px; font-weight: 800;
+  color: var(--text); line-height: 1.05; letter-spacing: -0.02em;
+}
+h1 span { color: var(--rust); }
+.subtitle { font-size: 14px; color: var(--text-muted); margin-top: 10px; font-weight: 300; }
+.badge {
+  font-size: 11px; font-weight: 500;
+  color: var(--rust); background: var(--rust-pale);
+  border: 1px solid rgba(199,91,46,0.25);
+  border-radius: 999px; padding: 6px 14px; letter-spacing: 0.04em;
 }
 
-/* ─── LABEL (left column) ───────────────────────────── */
-.p-label {
-  padding: 36px 24px 36px 0;
-  border-right: 1px solid var(--border);
+/* ── Diagram ─────────────────────────────────────────── */
+.diagram-wrap {
+  padding: 40px 60px 80px;
+  max-width: 1400px; margin: 0 auto;
+  position: relative;
+}
+
+/* ── Row ─────────────────────────────────────────────── */
+.row {
+  display: flex; align-items: stretch;
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+/* ── Lane label ──────────────────────────────────────── */
+.lane-label {
+  width: 160px; min-width: 160px;
+  padding: 28px 20px 28px 0;
   display: flex; flex-direction: column; justify-content: center;
-  gap: 7px;
-  /* animation */
-  opacity: 0; transform: translateX(-18px);
-  transition: opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1);
+  border-right: 1px solid var(--border);
 }
-.p-label.vis { opacity: 1; transform: translateX(0); }
-
-.p-label-num {
-  font-size: 11px; font-weight: 800;
-  letter-spacing: .22em; text-transform: uppercase;
-  color: var(--rust);
+.lane-num {
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  color: var(--rust); letter-spacing: 0.12em; margin-bottom: 6px;
 }
-.p-label-name {
-  font-size: 16px; font-weight: 800;
-  line-height: 1.35; text-transform: uppercase;
-  letter-spacing: .03em; color: var(--ink);
+.lane-name {
+  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--text); line-height: 1.35;
 }
 
-/* ─── STEPS TRACK ───────────────────────────────────── */
-.p-steps {
-  padding: 28px 0 28px 28px;
-  display: flex;
-  align-items: stretch;
-  gap: 0;
+/* ── Steps ───────────────────────────────────────────── */
+.steps {
+  flex: 1; padding: 24px 0 24px 32px;
+  display: flex; align-items: center; gap: 0; position: relative;
+}
+.steps.rev { flex-direction: row-reverse; }
+.steps.rev .arrow { transform: scaleX(-1); }
+
+/* ── Step unit ───────────────────────────────────────── */
+.step-unit { display: flex; align-items: center; flex: 1; }
+
+/* ── Card ────────────────────────────────────────────── */
+.card {
+  flex: 1; background: var(--surface2);
+  border: 1px solid var(--border2); border-radius: 10px;
+  padding: 18px 20px; cursor: pointer;
+  transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+  position: relative; overflow: hidden;
+}
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--rust), transparent);
+  opacity: 0; transition: opacity 0.22s ease;
+}
+.card:hover { background: var(--surface3); border-color: rgba(199,91,46,0.35); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(199,91,46,0.15); }
+.card:hover::before { opacity: 1; }
+.card.active { border-color: rgba(199,91,46,0.5); background: var(--surface3); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(199,91,46,0.2); }
+.card.active::before { opacity: 1; }
+.card.ghost { background: transparent; border-color: rgba(255,255,255,0.07); }
+.card.ghost .card-title { color: var(--text-muted); }
+.card.ghost:hover { background: var(--surface2); }
+.card.accent { border-color: rgba(199,91,46,0.3); background: rgba(199,91,46,0.06); }
+.card.green  { border-color: rgba(46,139,90,0.3); background: rgba(46,139,90,0.06); }
+
+.card-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--rust); margin-bottom: 8px;
+}
+.card-label.green { color: #2E8B5A; }
+.card-title {
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--text); line-height: 1.3;
+}
+.card-desc {
+  font-size: 12.5px; color: var(--text-muted);
+  line-height: 1.6; margin-top: 10px; display: none; font-weight: 300;
+}
+.card-desc.open { display: block; }
+.card-desc ul { padding-left: 14px; }
+.card-desc li { margin-bottom: 3px; }
+.card-desc em { font-style: italic; color: var(--label); }
+
+/* ── Final card ──────────────────────────────────────── */
+.card-final {
+  flex: 1; background: var(--rust); border-radius: 10px;
+  padding: 24px 20px; display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden; min-height: 160px;
+}
+.card-final::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 12px, rgba(0,0,0,0.06) 12px, rgba(0,0,0,0.06) 13px);
+}
+.card-final-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65); margin-bottom: 8px; position: relative;
+}
+.card-final-title {
+  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  color: #fff; line-height: 1.1; position: relative;
 }
 
-/* one unit = pill + optional arrow */
-.p-unit {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-  gap: 0;
+/* ── Inline arrows ───────────────────────────────────── */
+.arrow {
+  width: 40px; min-width: 40px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.p-unit.branch-unit {
-  flex-direction: row;
-  align-items: center;
-  gap: 0;
-}
-.p-unit.branch-unit .pill-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+.arrow svg { width: 36px; height: 14px; }
+.branch-arrow { width: 50px; min-width: 50px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-/* ─── PILL ──────────────────────────────────────────── */
-.pill-wrap {
-  flex: 1; min-width: 0;
-  /* animation */
-  opacity: 0; transform: translateY(10px);
-  transition: opacity .45s ease, transform .45s cubic-bezier(.34,1.56,.64,1);
+/* ── Legend ──────────────────────────────────────────── */
+.legend {
+  display: flex; gap: 24px; align-items: center;
+  padding: 24px 60px 48px; max-width: 1400px; margin: 0 auto;
+  border-top: 1px solid var(--border);
 }
-.pill-wrap.vis { opacity: 1; transform: translateY(0); }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
 
-.pill {
-  background: var(--rust);
-  color: #ffffff;
-  border-radius: var(--radius);
-  padding: 10px 14px;
-  font-size: 11.5px; font-weight: 700;
-  line-height: 1.35; text-align: center;
-  box-shadow: var(--shadow-pill);
-  cursor: pointer;
-  user-select: none;
-  position: relative;
-  transition: background .18s, transform .18s, box-shadow .18s;
-}
-.pill:hover {
-  background: var(--rust-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-pill-hover);
-}
-.pill.dark { background: var(--rust-dark); }
-.pill.big {
-  font-size: clamp(16px, 2vw, 24px);
-  font-weight: 800;
-  padding: 28px 18px;
-  border-radius: 9px;
-  background: var(--rust);
-  box-shadow: 0 4px 28px rgba(192,82,42,.35);
-  cursor: default;
-}
-.pill.big:hover { background: var(--rust-dark); transform: translateY(-2px); }
-
-/* click ripple */
-.pill::after {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  background: rgba(255,255,255,.18);
-  opacity: 0;
-  transition: opacity .15s;
-}
-.pill:active::after { opacity: 1; }
-
-/* ─── DETAIL PANEL (hidden by default) ──────────────── */
-.detail-panel {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: max-height .38s cubic-bezier(.4,0,.2,1),
-              opacity .3s ease .05s;
-  margin-top: 0;
-}
-.detail-panel.open {
-  max-height: 300px;
-  opacity: 1;
-  margin-top: 8px;
-}
-.detail-inner {
-  font-size: 11px; font-weight: 400;
-  color: var(--ink-mid); line-height: 1.75;
-  padding: 10px 12px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  border-top: 2px solid var(--rust);
-}
-.detail-inner ul { list-style: none; }
-.detail-inner li {
-  padding-left: 13px; position: relative;
-  margin-bottom: 3px;
-}
-.detail-inner li::before {
-  content: '▸';
-  position: absolute; left: 0;
-  color: var(--rust); font-size: 8px; top: 3px;
-}
-
-/* pill "has detail" indicator */
-.pill.has-detail::before {
-  content: '';
-  position: absolute;
-  bottom: 5px; right: 7px;
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.6);
-  transition: background .2s, transform .2s;
-}
-.pill.has-detail.open::before {
-  background: rgba(255,255,255,.95);
-  transform: scale(1.3);
-}
-
-/* ─── ARROW ──────────────────────────────────────────── */
-.p-arrow {
-  flex-shrink: 0;
-  width: 36px;
-  display: flex; align-items: center; justify-content: center;
-  padding-bottom: 0;
-  /* animation */
-  opacity: 0;
-  transition: opacity .3s ease;
-}
-.p-arrow.vis { opacity: 1; }
-.p-arrow svg {
-  width: 28px; overflow: visible;
-}
-.p-arrow.rev svg { transform: scaleX(-1); }
-
-/* arr-r2a3: align arrow with True Alert (top pill), not branch-unit center */
-#arr-r2a3 {
-  align-self: flex-start;
-  margin-top: 11px; /* half of pill height ~36px ÷ 2 - half arrow 7px */
-}
-
-/* Agregasi True Alert: bigger than regular pill */
-#pw-r2b4 .pill {
-  font-size: 15px;
-  font-weight: 800;
-  padding: 20px 16px;
-}
-
-/* ─── L-CONNECTOR: Agregasi → Bounding Box ───────────────────────────────────
-   Jalur: turun dari sisi kanan Agregasi, lalu belok kiri ke Bounding Box.
-   ::after  = border-right (vertikal) + border-bottom (horizontal) = bentuk L
-   ::before = kepala panah ke kiri di ujung lengan horizontal
-   Ubah --sudut untuk sudut tikungan (default 4px)
-──────────────────────────────────────────────────────────────────────── */
-:root { --sudut: 4px; }
-#row2 { overflow: visible; }
-#pw-r2b4 { position: relative; }
-#pw-r2b4::after {
-  content: '';
-  position: absolute;
-  right: 0;                          /* anchored to right edge of Agregasi */
-  top: 100%;
-  margin-top: 6px;
-  width: calc(100% + 36px);          /* Agregasi width + arrow = Bounding Box right edge */
-  height: 80px;                      /* row gap + padding to reach Row 3 */
-  border-right: 1.5px solid var(--rust);   /* vertical arm */
-  border-bottom: 1.5px solid var(--rust);  /* horizontal arm */
-  border-bottom-right-radius: var(--sudut);
-}
-#pw-r2b4::before {
-  content: '';
-  position: absolute;
-  right: calc(100% + 36px);          /* left end of horizontal arm */
-  top: calc(100% + 6px + 80px);
-  transform: translateY(-50%);
-  width: 0; height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-right: 7px solid var(--rust); /* ← left-pointing arrowhead */
-}
-
-/* ─── RESPONSIVE ─────────────────────────────────────── */
-@media (max-width: 840px) {
-  .p-row { grid-template-columns: 1fr; }
-  .p-label { border-right: none; border-bottom: 1px solid var(--border); padding: 16px 0 12px; }
-  .p-steps { flex-wrap: wrap; gap: 10px; padding: 16px 0; }
-  .p-arrow { display: none; }
-  .p-unit { flex: none; width: calc(50% - 5px); }
-  .scroll-prompt {
-    top: 10px;
-    width: calc(100% - 32px);
-    justify-content: center;
-    text-align: center;
-    padding: 9px 14px;
-  }
-}
+/* ── GSAP initial states ─────────────────────────────── */
+.a-card   { opacity: 0; }
+.a-arr    { opacity: 0; }
+.a-lane   { opacity: 0; }
 </style>
 </head>
 <body>
-<div id="progress"></div>
 
-<!-- ── HEADER ── -->
-<header class="site-header">
-  <div class="brand" id="brand">
-    <svg viewBox="0 0 24 24"><path d="M12 1L2 6.5v6C2 17.96 6.42 23.27 12 24.5c5.58-1.23 10-6.54 10-12V6.5Z"/></svg>
-    SIMONTINI
-  </div>
-  <h1 class="page-title" id="page-title">Tahapan dan pemrosesan data</h1>
-  <p class="page-desc" id="page-desc">
-    Alur kerja terintegrasi dari pemodelan <em>deep learning</em> hingga verifikasi lapangan
-    untuk pemetaan deforestasi skala besar secara otomatis.
-  </p>
-  <div class="hint" id="hint">
-    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/>
-    </svg>
-    Klik kotak oranye untuk melihat detail
+<header class="header">
+  <div class="header-inner">
+    <div>
+      <p class="eyebrow">Metodologi · STADI 2024</p>
+      <h1>Alur Deteksi<br><span>Deforestasi</span></h1>
+      <p class="subtitle">Scroll untuk melihat alur · Klik kotak untuk detail</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+      <span class="badge">Sentinel 2 × GLAD Alert</span>
+      <span class="badge">Deep Learning · UNET</span>
+    </div>
   </div>
 </header>
 
-<!-- ── PIPELINE ── -->
-<div id="pin-wrapper">
-<div class="scroll-prompt" id="scroll-prompt">
-  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 5v14M6 13l6 6 6-6"/>
-  </svg>
-  <span>Silakan scroll untuk melihat alur</span>
-</div>
-<main class="pipeline">
+<div class="diagram-wrap" id="dwrap">
 
-  <!-- ════ ROW 1: DEEP LEARNING MODELING ════ -->
-  <div class="p-row" id="row1">
-
-    <div class="p-label" id="lbl1">
-      <span class="p-label-num">01</span>
-      <span class="p-label-name">Deep Learning<br>Modeling</span>
+  <!-- ═══ ROW 1 · Deep Learning Modeling ═══ -->
+  <div class="row" id="row1">
+    <div class="lane-label a-lane" id="ll1">
+      <div class="lane-num">01</div>
+      <div class="lane-name">Deep Learning Modeling</div>
     </div>
+    <div class="steps">
 
-    <div class="p-steps">
-
-      <!-- Training dataset -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r1b1">
-          <div class="pill has-detail" data-detail="det-r1b1">Training dataset</div>
-          <div class="detail-panel" id="det-r1b1">
-            <div class="detail-inner">
-              Sentinel 2 × STADI 2024.<br>
-              Sample = {0, 1}<br>
-              0 = non deforestasi<br>
-              1 = deforestasi
-            </div>
-          </div>
+      <div class="step-unit">
+        <div class="card a-card" id="r1c1" onclick="toggle(this)">
+          <div class="card-title">Training Dataset</div>
+          <div class="card-desc">Sentinel 2 × STADI 2024.<br>Sampel berlabel {0, 1}.</div>
         </div>
-        <div class="p-arrow" id="arr-r1a1">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
+        <div class="arrow a-arr" id="r1a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <!-- Normalisasi Dataset -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r1b2">
-          <div class="pill has-detail" data-detail="det-r1b2">Normalisasi Dataset</div>
-          <div class="detail-panel" id="det-r1b2">
-            <div class="detail-inner">
-              <ul>
-                <li>Cropping, tiling, slicing, sampel labeling</li>
-                <li>Normalisasi citra</li>
-                <li>Standarisasi proyeksi</li>
-              </ul>
-            </div>
-          </div>
+      <div class="step-unit">
+        <div class="card a-card" id="r1c2" onclick="toggle(this)">
+          <div class="card-title">Normalisasi Dataset</div>
+          <div class="card-desc"><ul><li>Cropping, tiling, slicing</li><li>Normalisasi citra</li></ul></div>
         </div>
-        <div class="p-arrow" id="arr-r1a2">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
+        <div class="arrow a-arr" id="r1a2"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <!-- Arsitektur UNET -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r1b3">
-          <div class="pill has-detail" data-detail="det-r1b3">Arsitektur Deep Learning (UNET)</div>
-          <div class="detail-panel" id="det-r1b3">
-            <div class="detail-inner">
-              <ul>
-                <li>Augmentasi, rotasi, flip horizontal &amp; vertikal</li>
-                <li>Infrastruktur Encoder dan Decoder</li>
-                <li>Evaluasi model secara berkala</li>
-                <li>Confusion Matrix</li>
-              </ul>
-            </div>
-          </div>
+      <div class="step-unit">
+        <div class="card a-card" id="r1c3" onclick="toggle(this)">
+          <div class="card-title">Deep Learning — UNET</div>
+          <div class="card-desc"><ul><li>Augmentasi &amp; rotasi</li><li>Encoder &amp; Decoder</li><li>Confusion Matrix</li></ul></div>
         </div>
-        <div class="p-arrow" id="arr-r1a3">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
+        <div class="arrow a-arr" id="r1a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <!-- Output Model -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r1b4">
-          <div class="pill has-detail" data-detail="det-r1b4">Output Model</div>
-          <div class="detail-panel" id="det-r1b4">
-            <div class="detail-inner">
-              Deep learning model untuk pemetaan deforestasi skala besar.
-            </div>
-          </div>
+      <div class="step-unit" style="flex:0.8;">
+        <div class="card accent a-card" id="outmodel" onclick="toggle(this)">
+          <div class="card-title">Ouput Model</div>
+          <div class="card-desc">Model pemetaan deforestasi siap pakai untuk deteksi skala besar.</div>
         </div>
       </div>
 
     </div>
-  </div><!-- /row1 -->
-
-
-  <!-- ════ ROW 2: SCOPING AREA ════ -->
-  <div class="p-row" id="row2">
-
-    <div class="p-label" id="lbl2">
-      <span class="p-label-num">02</span>
-      <span class="p-label-name">Scoping Area<br>Deforestasi</span>
-    </div>
-
-    <div class="p-steps">
-
-      <!-- Penentuan wilayah -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r2b1">
-          <div class="pill has-detail" data-detail="det-r2b1">Penentuan wilayah dan periode</div>
-          <div class="detail-panel" id="det-r2b1">
-            <div class="detail-inner">
-              <ul>
-                <li>Hutan alam 2024</li>
-                <li>Alert bulanan (Januari – Desember)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="p-arrow" id="arr-r2a1">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Penapisan alert -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r2b2">
-          <div class="pill has-detail" data-detail="det-r2b2">Penapisan alert</div>
-          <div class="detail-panel" id="det-r2b2">
-            <div class="detail-inner">
-              GLAD bulanan confidence 3 ∩ tutupan hutan alam 2024.
-            </div>
-          </div>
-        </div>
-        <div class="p-arrow" id="arr-r2a2">
-          <svg viewBox="0 0 44 28" fill="none" aria-label="percabangan true false">
-            <line x1="0" y1="14" x2="16" y2="14" stroke="var(--rust)" stroke-width="1.5"/>
-            <line x1="16" y1="14" x2="30" y2="8" stroke="var(--rust)" stroke-width="1.5"/>
-            <line x1="16" y1="14" x2="30" y2="20" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="26,4 32,8 26,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-            <polyline points="26,16 32,20 26,24" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- True / False Alert (branch) -->
-      <div class="p-unit branch-unit">
-        <div class="pill-wrap" id="pw-r2b3">
-          <div class="pill" style="margin-bottom:6px;">True Alert</div>
-          <div class="pill dark">False Alert</div>
-        </div>
-        <div class="p-arrow" id="arr-r2a3">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Agregasi True Alert -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r2b4">
-          <div class="pill has-detail" data-detail="det-r2b4">Agregasi True Alert</div>
-          <div class="detail-panel" id="det-r2b4">
-            <div class="detail-inner">
-              <ul>
-                <li>Pengelompokan alert</li>
-                <li>Jarak maksimum alert 10.240 meter</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div><!-- /row2 -->
-
-
-  <!-- ════ ROW 3: DEFORESTASI INDIKATIF ════ -->
-  <div class="p-row" id="row3">
-
-    <div class="p-label" id="lbl3">
-      <span class="p-label-num">03</span>
-      <span class="p-label-name">Deforestasi<br>Indikatif</span>
-    </div>
-
-    <div class="p-steps">
-
-      <!-- Normalisasi Citra (kanan, muncul pertama karena arah ←) -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r3b1">
-          <div class="pill has-detail" data-detail="det-r3b1">Data deforestasi indikatif</div>
-          <div class="detail-panel" id="det-r3b1">
-            <div class="detail-inner">
-              Prediksi citra Sentinel terindikasi deforestasi dengan <em>deep learning</em>.
-            </div>
-          </div>
-        </div>
-        <div class="p-arrow rev" id="arr-r3a1">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Akuisisi citra -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r3b2">
-          <div class="pill has-detail" data-detail="det-r3b2">Akuisisi citra otomatis</div>
-          <div class="detail-panel" id="det-r3b2">
-            <div class="detail-inner">
-              Mendownload citra Sentinel 2 dalam bounding box berdasarkan bulan kejadian.
-            </div>
-          </div>
-        </div>
-        <div class="p-arrow rev" id="arr-r3a2">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Bounding Box -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r3b3">
-          <div class="pill has-detail" data-detail="det-r3b3">Bounding Box</div>
-          <div class="detail-panel" id="det-r3b3">
-            <div class="detail-inner">
-              Mendownload citra Sentinel 2 berdasarkan ID agregasi alert dengan radius 10.240 meter.
-            </div>
-          </div>
-        </div>
-        <div class="p-arrow rev" id="arr-r3a3">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Normalisasi Citra Sentinel 2 -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r3b4">
-          <div class="pill has-detail" data-detail="det-r3b4">Normalisasi Citra Sentinel 2</div>
-          <div class="detail-panel" id="det-r3b4">
-            <div class="detail-inner">
-              <ul>
-                <li>Spasial dan temporal filter</li>
-                <li>Cloud masking</li>
-                <li>Seleksi band</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div><!-- /row3 -->
-
-
-  <!-- ════ ROW 4: VERIFIKASI ════ -->
-  <div class="p-row" id="row4" style="border-bottom: 1px dashed var(--dot-color);">
-
-    <div class="p-label" id="lbl4">
-      <span class="p-label-num">04</span>
-      <span class="p-label-name">Verifikasi</span>
-    </div>
-
-    <div class="p-steps" style="align-items:center;">
-
-      <!-- Overlay -->
-      <div class="p-unit">
-        <div class="pill-wrap" id="pw-r4b1">
-          <div class="pill has-detail" data-detail="det-r4b1">Overlay</div>
-          <div class="detail-panel" id="det-r4b1">
-            <div class="detail-inner">
-              <ul>
-                <li>Penampalan terhadap tutupan hutan alam 2024</li>
-                <li>Minimum mapping unit 0.25 hektare</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="p-arrow" id="arr-r4a1">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- 3 verifikasi pills (branch) -->
-      <div class="p-unit branch-unit">
-        <div class="pill-wrap" id="pw-r4b2">
-          <div class="pill" style="margin-bottom:6px;">Inspeksi visual</div>
-          <div class="pill" style="margin-bottom:6px;">Penapisan temporal</div>
-          <div class="pill">Pengecekan lapangan</div>
-        </div>
-        <div class="p-arrow" id="arr-r4a2">
-          <svg viewBox="0 0 28 14" fill="none">
-            <line x1="0" y1="7" x2="22" y2="7" stroke="var(--rust)" stroke-width="1.5"/>
-            <polyline points="17,2 23,7 17,12" stroke="var(--rust)" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Data Deforestasi (big) -->
-      <div class="p-unit" style="flex: 1.6;">
-        <div class="pill-wrap" id="pw-r4b3">
-          <div class="pill big">Data Deforestasi</div>
-        </div>
-      </div>
-
-    </div>
-  </div><!-- /row4 -->
-
-</main>
-</div><!-- /pin-wrapper -->
-
-<!-- ── FOOTER ── -->
-<footer style="padding: 20px 6vw; border-top: 1px solid var(--border); max-width:1440px; margin:0 auto; display:flex; justify-content:flex-end;">
-  <div class="brand" style="opacity:1; transform:none; margin:0;">
-    <svg viewBox="0 0 24 24"><path d="M12 1L2 6.5v6C2 17.96 6.42 23.27 12 24.5c5.58-1.23 10-6.54 10-12V6.5Z"/></svg>
-    SIMONTINI
   </div>
-</footer>
+
+  <!-- ═══ ROW 2 · Scoping Area ═══ -->
+  <div class="row" id="row2">
+    <div class="lane-label a-lane" id="ll2">
+      <div class="lane-num">02</div>
+      <div class="lane-name">Scoping Area Deforestasi</div>
+    </div>
+    <div class="steps">
+
+      <div class="step-unit">
+        <div class="card a-card" id="r2c1" onclick="toggle(this)">
+          <div class="card-title">Penentuan Wilayah &amp; Periode</div>
+          <div class="card-desc"><ul><li>Hutan alam 2024</li><li>Alert Januari–Desember</li></ul></div>
+        </div>
+        <div class="arrow a-arr" id="r2a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+      </div>
+
+      <div class="step-unit">
+        <div class="card a-card" id="r2c2" onclick="toggle(this)">
+          <div class="card-title">Penapisan Alert</div>
+          <div class="card-desc">GLAD confidence level 3 ∩ tutupan hutan 2024.</div>
+        </div>
+        <div class="branch-arrow a-arr" id="r2a2">
+          <svg viewBox="0 0 50 90" fill="none" width="50" height="90">
+            <line x1="0" y1="45" x2="18" y2="45" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <line x1="18" y1="10" x2="18" y2="80" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <line x1="18" y1="10" x2="40" y2="10" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <line x1="18" y1="80" x2="40" y2="80" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <polyline points="34,5 41,10 34,15" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/>
+            <polyline points="34,75 41,80 34,85" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- True + False alert with aligned arrows -->
+      <div class="step-unit" style="align-self:stretch;align-items:stretch;">
+        <div style="display:flex;flex-direction:column;flex:1;gap:0;">
+          <div style="display:flex;align-items:center;flex:1;">
+            <div class="card green a-card" id="r2c3a" onclick="toggle(this)" style="flex:1;">
+              <div class="card-label green">True Alert</div>
+              <div class="card-title">True Alert</div>
+              <div class="card-desc">Alert yang teridentifikasi sebagai kejadian deforestasi nyata. Diproses lebih lanjut.</div>
+            </div>
+            <div class="arrow a-arr" id="r2a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+          </div>
+          <div style="display:flex;align-items:center;flex:1;margin-top:8px;">
+            <div class="card ghost a-card" id="r2c3b" onclick="toggle(this)" style="flex:1;">
+              <div class="card-label">False Alert</div>
+              <div class="card-title">False Alert</div>
+              <div class="card-desc">Positif palsu — tidak diproses lebih lanjut dalam alur ini.</div>
+            </div>
+            <div style="width:40px;min-width:40px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-unit" style="flex:0.8;">
+        <div class="card accent a-card" id="agreg" onclick="toggle(this)">
+          <div class="card-title">Agregasi True Alert</div>
+          <div class="card-desc"><ul><li>Pengelompokan alert</li><li>Jarak maks. 10.240 m</li></ul></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ ROW 3 · Deforestasi Indikatif (reversed) ═══ -->
+  <div class="row" id="row3">
+    <div class="lane-label a-lane" id="ll3">
+      <div class="lane-num">03</div>
+      <div class="lane-name">Deforestasi Indikatif</div>
+    </div>
+    <div class="steps rev">
+
+      <div class="step-unit" style="flex-direction:row-reverse;">
+        <div class="card accent a-card" id="normcit" onclick="toggle(this)">
+          
+          <div class="card-title">Normalisasi Citra Sentinel 2</div>
+          <div class="card-desc"><ul><li>Spasial &amp; temporal filter</li><li>Cloud masking</li><li>Seleksi band</li></ul></div>
+        </div>
+        <div class="arrow a-arr" id="r3a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+      </div>
+
+      <div class="step-unit" style="flex-direction:row-reverse;">
+        <div class="card a-card" id="bbox" onclick="toggle(this)">
+         
+          <div class="card-title">Bounding Box</div>
+          <div class="card-desc">Radius 10.240 m dari ID agregasi alert.</div>
+        </div>
+        <div class="arrow a-arr" id="r3a2"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+      </div>
+
+      <div class="step-unit" style="flex-direction:row-reverse;">
+        <div class="card a-card" id="r3c3" onclick="toggle(this)">
+         
+          <div class="card-title">Akuisisi Citra Otomatis</div>
+          <div class="card-desc">Download Sentinel 2 per bulan kejadian secara otomatis.</div>
+        </div>
+        <div class="arrow a-arr" id="r3a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+      </div>
+
+      <div class="step-unit" style="flex:0.8;flex-direction:row-reverse;">
+        <div class="card accent a-card" id="dataindikatif" onclick="toggle(this)">
+          <div class="card-title">Data Deforestasi Indikatif</div>
+          <div class="card-desc">Prediksi citra Sentinel via <em>deep learning</em> model yang sudah dilatih.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ ROW 4 · Verifikasi ═══ -->
+  <div class="row" id="row4">
+    <div class="lane-label a-lane" id="ll4">
+      <div class="lane-num">04</div>
+      <div class="lane-name">Verifikasi</div>
+    </div>
+    <div class="steps">
+
+      <!-- Overlay + 3-way branch -->
+      <div class="step-unit" style="flex:0.8;align-self:stretch;align-items:center;">
+        <div class="card a-card" id="r4c1" onclick="toggle(this)">
+          
+          <div class="card-title">Overlay &amp; Filter Area</div>
+          <div class="card-desc"><ul><li>Tutupan hutan 2024</li><li>Min. mapping unit 0.25 Ha</li></ul></div>
+        </div>
+        <div class="branch-arrow a-arr" id="r4a1">
+          <svg viewBox="0 0 50 130" fill="none" width="50" height="130">
+            <line x1="0" y1="65" x2="18" y2="65" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <line x1="18" y1="15" x2="18" y2="115" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <line x1="18" y1="15" x2="40" y2="15" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <line x1="18" y1="65" x2="40" y2="65" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <line x1="18" y1="115" x2="40" y2="115" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
+            <polyline points="34,10 41,15 34,20" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/>
+            <polyline points="34,60 41,65 34,70" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/>
+            <polyline points="34,110 41,115 34,120" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 3 verifikasi cards, each with its own arrow -->
+      <div class="step-unit" style="align-self:stretch;align-items:stretch;flex:1.5;">
+        <div style="display:flex;flex-direction:column;flex:1;gap:8px;padding:8px 0;">
+
+          <div style="display:flex;align-items:center;flex:1;">
+            <div class="card a-card" id="r4c2a" onclick="toggle(this)" style="flex:1;">
+              
+              <div class="card-title">Inspeksi Visual</div>
+              <div class="card-desc">Verifikasi melalui pemeriksaan visual langsung pada citra satelit.</div>
+            </div>
+            <div class="arrow a-arr" id="r4a2a"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+          </div>
+
+          <div style="display:flex;align-items:center;flex:1;">
+            <div class="card a-card" id="r4c2b" onclick="toggle(this)" style="flex:1;">
+            
+              <div class="card-title">Penapisan Temporal</div>
+              <div class="card-desc">Analisis multi-temporal untuk memastikan perubahan bersifat permanen.</div>
+            </div>
+            <div class="arrow a-arr" id="r4a2b"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+          </div>
+
+          <div style="display:flex;align-items:center;flex:1;">
+            <div class="card a-card" id="r4c2c" onclick="toggle(this)" style="flex:1;">
+              
+              <div class="card-title">Pengecekan Lapangan</div>
+              <div class="card-desc">Survey lapangan ke lokasi terindikasi untuk konfirmasi kondisi aktual.</div>
+            </div>
+            <div class="arrow a-arr" id="r4a2c"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Final card: three arrows merge in via SVG overlay -->
+      <div class="step-unit" style="flex:0.8;align-self:stretch;">
+        <div class="card-final a-card" id="card-final">
+         
+          <div class="card-final-title">Data<br>Deforestasi</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Legend -->
+<!-- <div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--rust);"></div>
+    <span>Kotak output kunci</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:rgba(46,139,90,0.6);"></div>
+    <span>True Alert (valid)</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:transparent;border:1px solid rgba(255,255,255,0.2);"></div>
+    <span>False Alert (discarded)</span>
+  </div>
+  <div style="margin-left:auto;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:8px;">
+    <svg width="28" height="8" viewBox="0 0 28 8" fill="none"><line x1="0" y1="4" x2="20" y2="4" stroke="#C75B2E" stroke-width="1.5"/><polyline points="15,1 21,4 15,7" stroke="#C75B2E" stroke-width="1.5" fill="none"/></svg>
+    Koneksi silang antar row
+  </div>
+</div> -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-gsap.registerPlugin(ScrollTrigger);
+/* ═══════════════════════════════════════════
+   TOGGLE
+═══════════════════════════════════════════ */
+function toggle(card) {
+  var desc = card.querySelector('.card-desc');
+  if (!desc) return;
+  var open = desc.classList.contains('open');
+  document.querySelectorAll('.card-desc.open').forEach(function(d){ d.classList.remove('open'); });
+  document.querySelectorAll('.card.active').forEach(function(c){ c.classList.remove('active'); });
+  if (!open) { desc.classList.add('open'); card.classList.add('active'); }
+}
 
-// Progress bar
-window.addEventListener('scroll', () => {
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  document.getElementById('progress').style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
-});
+/* ═══════════════════════════════════════════
+   CROSS-ROW SVG CONNECTORS
+═══════════════════════════════════════════ */
+function getR(el, base) {
+  var e = el.getBoundingClientRect(), b = base.getBoundingClientRect();
+  return {
+    top:    e.top    - b.top,
+    left:   e.left   - b.left,
+    right:  e.right  - b.left,
+    bottom: e.bottom - b.top,
+    cx: e.left - b.left + e.width  / 2,
+    cy: e.top  - b.top  + e.height / 2
+  };
+}
 
-// Header entrance
-gsap.from(['#brand', '#page-title', '#page-desc', '#hint'], {
-  opacity: 0, y: -16,
-  duration: 0.7,
-  stagger: 0.13,
-  ease: 'power3.out',
-  delay: 0.2
-});
+function mkLine(svg, x1, y1, x2, y2, withArrow) {
+  var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('fill', 'none');
+  p.setAttribute('stroke', '#C75B2E');
+  p.setAttribute('stroke-width', '1.5');
+  p.setAttribute('stroke-linecap', 'round');
+  p.setAttribute('stroke-linejoin', 'round');
+  p.setAttribute('opacity', '0.7');
+  p.setAttribute('d', 'M'+x1+' '+y1+' L'+x2+' '+y2);
+  if (withArrow) p.setAttribute('marker-end', 'url(#xarr)');
+  svg.appendChild(p);
+  return p;
+}
 
-// ── PIPELINE PINNED SCROLL ANIMATION ──
-// Semua pipeline elemen mulai dari opacity 0
-const r1 = ['#lbl1','#pw-r1b1','#arr-r1a1','#pw-r1b2','#arr-r1a2','#pw-r1b3','#arr-r1a3','#pw-r1b4'];
-const r2 = ['#lbl2','#pw-r2b1','#arr-r2a1','#pw-r2b2','#arr-r2a2','#pw-r2b3','#arr-r2a3','#pw-r2b4'];
-const r3 = ['#lbl3','#pw-r3b4','#arr-r3a3','#pw-r3b3','#arr-r3a2','#pw-r3b2','#arr-r3a1','#pw-r3b1'];
-const r4 = ['#lbl4','#pw-r4b1','#arr-r4a1','#pw-r4b2','#arr-r4a2','#pw-r4b3'];
-const scrollPrompt = document.getElementById('scroll-prompt');
+function mkBend(svg, x1, y1, xm, ym, x2, y2, withArrow) {
+  var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  p.setAttribute('fill', 'none');
+  p.setAttribute('stroke', '#C75B2E');
+  p.setAttribute('stroke-width', '1.5');
+  p.setAttribute('stroke-linecap', 'round');
+  p.setAttribute('stroke-linejoin', 'round');
+  p.setAttribute('opacity', '0.7');
+  p.setAttribute('d', 'M'+x1+' '+y1+' L'+xm+' '+y1+' L'+xm+' '+y2+' L'+x2+' '+y2);
+  if (withArrow) p.setAttribute('marker-end', 'url(#xarr)');
+  svg.appendChild(p);
+  return p;
+}
 
-gsap.set([...r1, ...r2, ...r3, ...r4], { opacity: 0, y: 22 });
+function mkLabel(svg, text, x, y) {
+  var tw = text.length * 5.6 + 10, th = 15;
+  var bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  bg.setAttribute('x', x-tw/2); bg.setAttribute('y', y-th/2);
+  bg.setAttribute('width', tw); bg.setAttribute('height', th);
+  bg.setAttribute('rx', '3'); bg.setAttribute('fill', '#0e0e0e'); bg.setAttribute('opacity', '0.92');
+  svg.appendChild(bg);
+  var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.textContent = text;
+  ['x','y','text-anchor','dominant-baseline','font-size','font-family','font-weight','fill','opacity']
+    .forEach(function(a,i){ t.setAttribute(a, [x,y,'middle','central','9.5','DM Sans,sans-serif','600','#C75B2E','0.9'][i]); });
+  svg.appendChild(t);
+}
 
-// Buat timeline master
-const tl = gsap.timeline();
+function drawConnectors() {
+  var wrap = document.getElementById('dwrap');
+  var old = document.getElementById('cross-svg');
+  if (old) old.remove();
 
-function addParallelRows(timeline, rowA, rowB, gap = 0.18) {
-  const maxSteps = Math.max(rowA.length, rowB.length);
-  for (let i = 0; i < maxSteps; i++) {
-    const targets = [rowA[i], rowB[i]].filter(Boolean);
-    if (!targets.length) continue;
-    timeline.to(targets, {
-      opacity: 1, y: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-    }, i === 0 ? '>' : `>-${0.6 - gap}`);
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('id', 'cross-svg');
+  svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:20;overflow:visible;';
+  svg.innerHTML = '<defs><marker id="xarr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 2L8 5L2 8" fill="none" stroke="#C75B2E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>';
+  wrap.appendChild(svg);
+
+  var agreg  = document.getElementById('agreg');
+  var bbox   = document.getElementById('bbox');
+  var outmod = document.getElementById('outmodel');
+  var ncit   = document.getElementById('normcit');
+
+  /* 1. Agregasi → Bounding Box (smooth S-curve row2 → row3) */
+  if (agreg && bbox) {
+    var A = getR(agreg, wrap), B = getR(bbox, wrap);
+    var gap = B.top - A.bottom;
+    var cp1x = A.cx, cp1y = A.bottom + gap * 0.5;
+    var cp2x = B.cx, cp2y = B.top  - gap * 0.5;
+    var curve = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    curve.setAttribute('fill', 'none');
+    curve.setAttribute('stroke', '#C75B2E');
+    curve.setAttribute('stroke-width', '1.5');
+    curve.setAttribute('stroke-linecap', 'round');
+    curve.setAttribute('opacity', '0.7');
+    curve.setAttribute('marker-end', 'url(#xarr)');
+    curve.setAttribute('d',
+      'M'+A.cx+' '+A.bottom+
+      ' C'+cp1x+' '+cp1y+','+cp2x+' '+cp2y+','+B.cx+' '+(B.top-2)
+    );
+    svg.appendChild(curve);
+    mkLabel(svg, 'Agreg → BBox', (A.cx + B.cx) / 2, A.bottom + gap / 2);
+  }
+
+  /* 2. Output Model → Normalisasi Citra (outer right loop row1 → row3) */
+  if (outmod && ncit) {
+    var OM = getR(outmod, wrap), NC = getR(ncit, wrap);
+    var far = Math.max(OM.right, NC.right) + 30;
+    // from OM right-center, out right, down, back left into NC right-center
+    var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('fill', 'none');
+    p.setAttribute('stroke', '#C75B2E');
+    p.setAttribute('stroke-width', '1.5');
+    p.setAttribute('stroke-linecap', 'round');
+    p.setAttribute('stroke-linejoin', 'round');
+    p.setAttribute('opacity', '0.7');
+    p.setAttribute('marker-end', 'url(#xarr)');
+    p.setAttribute('d', 'M'+OM.right+' '+OM.cy+' L'+far+' '+OM.cy+' L'+far+' '+NC.cy+' L'+(NC.right+2)+' '+NC.cy);
+    svg.appendChild(p);
+    mkLabel(svg, 'Model → Normalisasi', far, OM.cy + (NC.cy - OM.cy) / 2);
   }
 }
 
-// Row 1 dan 2 berjalan sinkron per langkah
-addParallelRows(tl, r1, r2);
 
-// Gap sebelum row 3 dan 4
-tl.to({}, { duration: 0.4 });
+/* ═══════════════════════════════════════════
+   GSAP SCROLL-PIN ANIMATION
+═══════════════════════════════════════════ */
+gsap.registerPlugin(ScrollTrigger);
 
-// Row 3 berjalan dulu sampai selesai
-r3.forEach((target, index) => {
-  tl.to(target, {
-    opacity: 1, y: 0,
-    duration: 0.6,
-    ease: 'power2.out',
-  }, index === 0 ? '>' : '>-0.42');
-});
+/* GSAP owns initial transform states */
+gsap.set('.a-card', { opacity: 0, y: 20 });
+gsap.set('.a-arr',  { opacity: 0 });
+gsap.set('.a-lane', { opacity: 0, x: -14 });
 
-// Lalu row 4 berjalan normal
-tl.to({}, { duration: 0.25 });
+window.addEventListener('load', function() {
 
-r4.forEach((target, index) => {
-  tl.to(target, {
-    opacity: 1, y: 0,
-    duration: 0.6,
-    ease: 'power2.out',
-  }, index === 0 ? '>' : '>-0.42');
-});
+  /* ── Master timeline ── */
+  var tl = gsap.timeline();
 
-// Pin pipeline dan scrub dengan scroll
-ScrollTrigger.create({
-  trigger: '#pin-wrapper',
-  start: 'top top',
-  end: () => '+=' + (tl.duration() * 960),
-  pin: true,
-  anticipatePin: 1,
-  scrub: 1.2,
-  animation: tl,
-  onUpdate: self => {
-    if (!scrollPrompt || scrollPrompt.dataset.hidden === 'true') return;
-    if (self.progress > 0.02) {
-      scrollPrompt.dataset.hidden = 'true';
-      gsap.to(scrollPrompt, {
-        opacity: 0,
-        y: -10,
-        duration: 0.35,
-        ease: 'power2.out',
-        onComplete: () => {
-          scrollPrompt.style.display = 'none';
-        }
-      });
+  /* Phase 1 – Rows 1 & 2, column by column */
+  tl.to('#ll1',     { opacity:1, x:0,  duration:0.7, ease:'expo.out' }, 0)
+    .to('#ll2',     { opacity:1, x:0,  duration:0.7, ease:'expo.out' }, 0.08)
+    /* col 1 */
+    .to('#r1c1',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 0.25)
+    .to('#r2c1',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 0.25)
+    .to('#r1a1',    { opacity:1,       duration:0.5, ease:'power3.out' }, 0.85)
+    .to('#r2a1',    { opacity:1,       duration:0.5, ease:'power3.out' }, 0.85)
+    /* col 2 */
+    .to('#r1c2',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 1.15)
+    .to('#r2c2',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 1.15)
+    .to('#r1a2',    { opacity:1,       duration:0.5, ease:'power3.out' }, 1.75)
+    .to('#r2a2',    { opacity:1,       duration:0.5, ease:'power3.out' }, 1.75)
+    /* col 3 */
+    .to('#r1c3',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 2.05)
+    .to('#r2c3a',   { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 2.05)
+    .to('#r2c3b',   { opacity:1, y:0,  duration:0.6, ease:'expo.out' }, 2.3)
+    .to('#r1a3',    { opacity:1,       duration:0.5, ease:'power3.out' }, 2.7)
+    .to('#r2a3',    { opacity:1,       duration:0.5, ease:'power3.out' }, 2.7)
+    /* outputs */
+    .to('#outmodel',{ opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 3.05)
+    .to('#agreg',   { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 3.05)
+
+  /* Phase 2 – Row 3 */
+    .to('#ll3',          { opacity:1, x:0, duration:0.7, ease:'expo.out' }, 4.5)
+    .to('#normcit',      { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 4.7)
+    .to('#r3a1',         { opacity:1,      duration:0.5, ease:'power3.out' }, 5.2)
+    .to('#bbox',         { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 5.4)
+    .to('#r3a2',         { opacity:1,      duration:0.5, ease:'power3.out' }, 5.95)
+    .to('#r3c3',         { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 6.15)
+    .to('#r3a3',         { opacity:1,      duration:0.5, ease:'power3.out' }, 6.7)
+    .to('#dataindikatif',{ opacity:1, y:0, duration:0.8, ease:'expo.out' }, 6.9)
+
+  /* Phase 3 – Row 4 */
+    .to('#ll4',       { opacity:1, x:0, duration:0.7, ease:'expo.out' }, 8.3)
+    .to('#r4c1',      { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 8.5)
+    .to('#r4a1',      { opacity:1,      duration:0.5, ease:'power3.out' }, 9.1)
+    .to('#r4c2a',     { opacity:1, y:0, duration:0.7, ease:'expo.out' }, 9.1)
+    .to('#r4c2b',     { opacity:1, y:0, duration:0.7, ease:'expo.out' }, 9.45)
+    .to('#r4c2c',     { opacity:1, y:0, duration:0.7, ease:'expo.out' }, 9.8)
+    .to('#r4a2a',     { opacity:1,      duration:0.4, ease:'power3.out' }, 9.6)
+    .to('#r4a2b',     { opacity:1,      duration:0.4, ease:'power3.out' }, 9.95)
+    .to('#r4a2c',     { opacity:1,      duration:0.4, ease:'power3.out' }, 10.3)
+    .to('#card-final',{ opacity:1, y:0, duration:0.9, ease:'expo.out' }, 10.3);
+
+  /* ── ScrollTrigger: pin dwrap, scrub through master timeline ── */
+  var connShown = false;
+  ScrollTrigger.create({
+    trigger: '#dwrap',
+    start: 'top top',
+    end: '+=' + Math.round(tl.totalDuration() * 540),
+    pin: true,
+    anticipatePin: 1,
+    scrub: 2,
+    animation: tl,
+    onUpdate: function(self) {
+      /* agreg ~3.05s, bbox ~5.4s out of 10.3s → show at ~0.52 */
+      if (self.progress >= 0.52 && !connShown) {
+        connShown = true;
+        drawConnectors();
+      } else if (self.progress < 0.52 && connShown) {
+        connShown = false;
+        var old = document.getElementById('cross-svg');
+        if (old) old.remove();
+      }
     }
-  },
-  // markers: true, // uncomment untuk debug
-});
+  });
 
-/* ────────────────────────────────────────────────────────
-   CLICK TO TOGGLE DETAIL
-   Klik pill yang punya data-detail → toggle panel bawahnya
-────────────────────────────────────────────────────────── */
-document.querySelectorAll('.pill.has-detail').forEach(pill => {
-  pill.addEventListener('click', () => {
-    const panelId = pill.dataset.detail;
-    const panel = document.getElementById(panelId);
-    if (!panel) return;
-    const isOpen = panel.classList.contains('open');
-    // tutup semua panel lain di row yang sama dulu (opsional: bisa remove ini untuk multi-open)
-    // panel.closest('.p-steps').querySelectorAll('.detail-panel.open').forEach(p => {
-    //   if (p !== panel) { p.classList.remove('open'); p.previousElementSibling?.classList.remove('open'); }
-    // });
-    panel.classList.toggle('open', !isOpen);
-    pill.classList.toggle('open', !isOpen);
+  window.addEventListener('resize', function() {
+    if (connShown) setTimeout(drawConnectors, 120);
   });
 });
 
-/* ── hover micro-lift on pills ── */
-document.querySelectorAll('.pill:not(.big)').forEach(p => {
-  p.addEventListener('mouseenter', () => {
-    if (!p.classList.contains('has-detail')) return;
-    p.style.boxShadow = 'var(--shadow-pill-hover)';
-  });
-  p.addEventListener('mouseleave', () => {
-    p.style.boxShadow = '';
-  });
-});
 </script>
 </body>
 </html>

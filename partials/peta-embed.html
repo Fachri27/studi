@@ -37,7 +37,7 @@
 
 /* STICKY */
 .simontini-peta #scene-wrapper { position:relative; height:700vh; }
-.simontini-peta #sticky-scene { position:sticky; top:0; height:100svh; min-height:100vh; overflow:hidden; background:#0b1008; }
+.simontini-peta #sticky-scene { position:sticky; top:52px; height:calc(100svh - 52px); min-height:calc(100vh - 52px); overflow:hidden; background:#0b1008; }
 
 /* HEADER */
 .simontini-peta #header {
@@ -55,12 +55,12 @@
 .simontini-peta #key-facts p { margin-bottom:4px; }
 
 /* MAP */
-.simontini-peta #map-container { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding-bottom:128px; z-index:1; }
-.simontini-peta #indonesia-map { width:100%; max-width:none; max-height:calc(100svh - 210px); object-fit:contain; pointer-events:none; user-select:none; filter:saturate(.65) brightness(1.05); }
+.simontini-peta #map-container { position:absolute; inset:0; padding-top:80px; padding-bottom:160px; display:flex; align-items:center; justify-content:center; z-index:1; }
+.simontini-peta #indonesia-map { width:100%; max-width:none; max-height:100%; object-fit:contain; pointer-events:none; user-select:none; filter:saturate(.65) brightness(1.05); }
 
 /* YEAR GHOST */
 .simontini-peta #year-ghost {
-  position:absolute; bottom:132px; right:40px; z-index:10; pointer-events:none;
+  position:absolute; bottom:160px; right:40px; z-index:10; pointer-events:none;
   font-family:'Poppins',sans-serif; font-size:clamp(5rem,12vw,10rem);
   font-weight:900; color:var(--cream); opacity:.1; line-height:1; letter-spacing:-.05em;
 }
@@ -143,18 +143,18 @@
 
 /* BUBBLES */
 .simontini-peta #bubbles {
-  position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
-  display:flex; gap:14px; z-index:30; pointer-events:none;
+  position:absolute; bottom:58px; left:50%; transform:translateX(-50%);
+  display:flex; gap:12px; z-index:30; pointer-events:none; align-items:center;
 }
 .simontini-peta .bub {
   background: transparent;
   border: 2px solid rgba(245,240,232,.25);
   color: rgba(245,240,232,.55);
   border-radius:50%;
-  width:96px; height:96px; display:flex; flex-direction:column;
+  width:88px; height:88px; display:flex; flex-direction:column;
   align-items:center; justify-content:center;
   opacity: 1;
-  transition: background .4s, border-color .4s, color .4s, transform .35s, box-shadow .4s;
+  transition: background .4s, border-color .4s, color .4s, transform .35s, box-shadow .4s, width .4s, height .4s;
   flex-shrink:0;
 }
 .simontini-peta .bub.on {
@@ -256,11 +256,11 @@
   }
 
   .simontini-peta #indonesia-map {
-    max-height: calc(100svh - 220px);
+    max-height: 100%;
   }
 
   .simontini-peta #year-ghost {
-    bottom: 132px;
+    bottom: 136px;
     right: 18px;
     font-size: clamp(3.8rem, 14vw, 7rem);
   }
@@ -296,7 +296,7 @@
   .simontini-peta #chart-maluku     { left: 56%; top: 49%; }
 
   .simontini-peta #bubbles {
-    bottom: 24px;
+    bottom: 44px;
     gap: 8px;
   }
 
@@ -761,6 +761,23 @@ function animateYearBars(yearIdx) {
 gsap.set(mapEl, { opacity:0 });
 gsap.set(qsa('.island-chart'), { opacity:0, scale:.75 });
 gsap.set(qsa('.bub'), { opacity:1 });
+
+// Proportional bubble sizing
+(function(){
+  const totals = [229982, 230760, 257385, 261574, 433751];
+  const minV = Math.min(...totals), maxV = Math.max(...totals);
+  const minS = 72, maxS = 118;
+  qsa('.bub').forEach((bub, i) => {
+    const t = (totals[i] - minV) / (maxV - minV);
+    const s = Math.round(minS + t * (maxS - minS));
+    bub.style.width = s + 'px';
+    bub.style.height = s + 'px';
+    const valEl = bub.querySelector('.b-val');
+    if (valEl) valEl.style.fontSize = (0.78 + t * 0.46) + 'rem';
+    const yrEl = bub.querySelector('.b-yr');
+    if (yrEl) yrEl.style.fontSize = (0.60 + t * 0.14) + 'rem';
+  });
+})();
 
 gsap.to(mapEl, { opacity:1, duration:1.2, ease:'power2.out', delay:.4 });
 

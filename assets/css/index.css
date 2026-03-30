@@ -108,7 +108,7 @@ body.is-preloading { overflow: hidden; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 5vw;
-  height: 52px;
+  height: 90px;
   background: rgba(245,240,232,.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -559,7 +559,7 @@ body.is-preloading { overflow: hidden; }
 .viz-block--full .viz-label,
 .viz-block--full .viz-caption {
   max-width: 900px;
-  margin-left: 350px;
+  margin-left: 410px;
   margin-right: auto;
   padding: 0 5vw;
   text-align: left;
@@ -845,7 +845,7 @@ footer {
 .footer-brand svg { width: 14px; height: 14px; fill: rgba(245,240,232,.35); }
 .footer-cite {
   font-family: 'Poppins', sans-serif;
-  font-size: .58rem; color: rgba(245,240,232,.2);
+  font-size: .58rem; 
   line-height: 1.7; max-width: 560px;
 }
 

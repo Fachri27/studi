@@ -195,103 +195,122 @@ html, body {
 
 /* ── DETAIL PANEL ── */
 #detail-panel {
-  width: 0;
-  overflow: hidden;
+  width: 280px;
   background: var(--panel-bg);
   border-left: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  transition: width .4s cubic-bezier(.4,0,.2,1);
   flex-shrink: 0;
 }
 
-#detail-panel.open {
-  width: 300px;
-}
-
 .panel-inner {
-  width: 300px;
-  padding: 36px 28px;
+  padding: 28px 22px;
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-y: auto;
 }
 
-.panel-close {
-  align-self: flex-end;
-  background: none;
-  border: none;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 1.1rem;
-  line-height: 1;
-  padding: 0;
-  transition: color .15s;
-  margin-bottom: 28px;
-}
-.panel-close:hover { color: var(--text); }
-
-.panel-year {
-  font-size: .65rem;
-  font-weight: 600;
-  letter-spacing: .2em;
+/* ── PANEL HEADER ── */
+.panel-header { margin-bottom: 18px; }
+.ph-title {
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 8px;
+  margin-bottom: 3px;
+}
+.ph-sub {
+  font-size: .55rem;
+  color: rgba(255,255,255,.2);
 }
 
-.panel-val {
-  font-size: 2.8rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--text);
-  margin-bottom: 4px;
-  opacity: 0;
-  transform: translateY(12px);
+/* ── PRESIDENT CARDS ── */
+.pres-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  border: 1px solid transparent;
+  opacity: .55;
+  transition: background .18s, opacity .18s, border-color .18s;
+}
+.pres-card:hover { background: rgba(255,255,255,.04); opacity: .8; }
+.pres-card.active {
+  background: rgba(224,112,96,.07);
+  border-color: rgba(224,112,96,.22);
+  opacity: 1;
 }
 
-.panel-unit {
-  font-size: .65rem;
-  color: var(--muted);
-  margin-bottom: 28px;
-  opacity: 0;
+.pres-avatar {
+  position: relative;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid rgba(224,112,96,.2);
+  background: rgba(255,255,255,.06);
+  transition: border-color .25s;
 }
-
-.panel-divider {
-  height: 1px;
-  background: var(--border);
-  margin-bottom: 24px;
-  opacity: 0;
+.pres-card.active .pres-avatar { border-color: var(--accent); }
+.pres-avatar img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top; z-index: 2;
 }
+.pres-initials {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 700;
+  color: var(--accent); z-index: 1;
+}
+.pres-info { flex: 1; min-width: 0; }
+.pres-name {
+  font-size: .82rem; font-weight: 700;
+  color: var(--text); line-height: 1.2;
+  margin-bottom: 2px; transition: color .2s;
+}
+.pres-card.active .pres-name { color: var(--accent); }
+.pres-period { font-size: .54rem; color: var(--muted); }
+.pres-stat { text-align: right; flex-shrink: 0; }
+.pres-total {
+  font-size: .7rem; font-weight: 700;
+  color: var(--text); white-space: nowrap;
+  transition: color .2s;
+}
+.pres-card.active .pres-total { color: var(--accent); }
+.pres-total-unit { font-size: .5rem; color: var(--muted); }
 
-/* PLACEHOLDER BLOCKS */
-.ph-label {
-  font-size: .6rem;
-  font-weight: 600;
-  letter-spacing: .12em;
+/* ── YEAR DISPLAY ── */
+.year-display {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  padding-bottom: 16px;
+}
+.yd-label {
+  font-size: .55rem; font-weight: 600;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-  opacity: 0;
+  color: var(--muted); margin-bottom: 4px;
 }
-
-.ph-block {
-  border-radius: 6px;
-  background: rgba(255,255,255,.05);
-  margin-bottom: 10px;
-  opacity: 0;
+.yd-val {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1; margin-bottom: 2px;
 }
-
-.ph-block.tall { height: 64px; }
-.ph-block.mid  { height: 44px; }
-.ph-block.short{ height: 32px; }
+.yd-unit { font-size: .56rem; color: var(--muted); }
 
 .panel-note {
-  margin-top: auto;
-  font-size: .62rem;
-  color: rgba(255,255,255,.15);
+  font-size: .55rem;
+  color: rgba(255,255,255,.12);
   line-height: 1.6;
-  opacity: 0;
+  padding-top: 14px;
 }
 
 /* ── SOURCE ── */
@@ -338,21 +357,20 @@ html, body {
   <!-- DETAIL PANEL -->
   <div id="detail-panel">
     <div class="panel-inner">
-      <button class="panel-close" id="panel-close">✕</button>
-      <div class="panel-year" id="panel-year">2016</div>
-      <div class="panel-val" id="panel-val">1.840.000</div>
-      <div class="panel-unit" id="panel-unit">hektare deforestasi</div>
-      <div class="panel-divider" id="panel-divider"></div>
+      <div class="panel-header">
+        <div class="ph-title">Era Kepemimpinan</div>
+        <div class="ph-sub">klik untuk sorot era</div>
+      </div>
 
-      <div class="ph-label" id="ph-label-1">Informasi Tambahan</div>
-      <div class="ph-block tall" id="ph-1"></div>
-      <div class="ph-block mid"  id="ph-2"></div>
+      <div id="pres-list"></div>
 
-      <div class="ph-label" id="ph-label-2" style="margin-top:18px">Konteks</div>
-      <div class="ph-block short" id="ph-3"></div>
-      <div class="ph-block mid"   id="ph-4"></div>
+      <div class="year-display">
+        <div class="yd-label" id="yd-year">Arahkan ke bar</div>
+        <div class="yd-val" id="yd-val">—</div>
+        <div class="yd-unit">ha deforestasi</div>
+      </div>
 
-      <div class="panel-note" id="panel-note">
+      <div class="panel-note">
         Data: University of Maryland Lossyear · Auriga STADI<br>
         simontini.id
       </div>
@@ -458,72 +476,117 @@ gsap.to(barEls.map(b => b.rect), {
   delay: .2,
 });
 
-/* ─── PANEL STATE ─── */
-let activeIndex = null;
-let panelOpen   = false;
+/* ─── PRESIDENTS ─── */
+const PRESIDENTS = [
+  { name:'Megawati', start:2001, end:2004, photo:'assets/images/presiden/megawati.jpg' },
+  { name:'Susilo Bambang Yudhoyono', start:2005, end:2014, photo:'assets/images/presiden/sby.jpg' },
+  { name:'Jokowi',   start:2015, end:2024, photo:'assets/images/presiden/jokowi.jpg'   },
+  { name:'Prabowo',  start:2025, end:2025, photo:'assets/images/presiden/prabowo.jpg'  },
+];
 
-const panel      = document.getElementById('detail-panel');
-const panelYear  = document.getElementById('panel-year');
-const panelVal   = document.getElementById('panel-val');
-const panelUnit  = document.getElementById('panel-unit');
-const panelDiv   = document.getElementById('panel-divider');
-const phItems    = ['#ph-label-1','#ph-1','#ph-2','#ph-label-2','#ph-3','#ph-4','#panel-note'].map(s => document.querySelector(s));
-const panelClose = document.getElementById('panel-close');
-
-function openPanel(i) {
-  const d = DATA[i];
-
-  // update active bar style
-  barEls.forEach((b, idx) => b.col.classList.toggle('active', idx === i));
-  activeIndex = i;
-
-  // update text
-  panelYear.textContent = d.year;
-  panelVal.textContent  = fmt(d.val);
-
-  // open panel if closed
-  if (!panelOpen) {
-    panelOpen = true;
-    panel.classList.add('open');
-  }
-
-  // animate content in
-  const tl = gsap.timeline();
-  tl.set([panelVal, panelUnit, panelDiv, ...phItems], { opacity: 0, y: 10 })
-    .to(panelVal,  { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .05)
-    .to(panelUnit, { opacity: 1, y: 0, duration: .3,  ease: 'power2.out' }, .1)
-    .to(panelDiv,  { opacity: 1, y: 0, duration: .3,  ease: 'power2.out' }, .15)
-    .to(phItems,   { opacity: 1, y: 0, duration: .4,  ease: 'power2.out', stagger: .06 }, .2);
+function getPresident(year) {
+  return PRESIDENTS.find(p => year >= p.start && year <= p.end) || null;
 }
 
-function closePanel() {
-  panelOpen = false;
-  panel.classList.remove('open');
-  barEls.forEach(b => b.col.classList.remove('active'));
-  activeIndex = null;
-  gsap.to([panelVal, panelUnit, panelDiv, ...phItems], { opacity: 0, duration: .2 });
+function calcTotal(p) {
+  return DATA.filter(d => d.year >= p.start && d.year <= p.end).reduce((s, d) => s + d.val, 0);
 }
 
-panelClose.addEventListener('click', closePanel);
+function fmtTotal(v) {
+  return (v / 1000000).toFixed(2).replace('.', ',') + ' jt';
+}
 
-/* keyboard ESC */
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closePanel();
+/* ─── BUILD PRESIDENT CARDS ─── */
+const presList = document.getElementById('pres-list');
+const cardEls  = [];
+
+PRESIDENTS.forEach(p => {
+  const total = calcTotal(p);
+  const card  = document.createElement('div');
+  card.className = 'pres-card';
+  card.innerHTML = `
+    <div class="pres-avatar">
+      <img src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">
+      <span class="pres-initials">${p.name.slice(0,3).toUpperCase()}</span>
+    </div>
+    <div class="pres-info">
+      <div class="pres-name">${p.name}</div>
+      <div class="pres-period">${p.start === p.end ? p.start : p.start + '\u2013' + p.end}</div>
+    </div>
+    <div class="pres-stat">
+      <div class="pres-total">${fmtTotal(total)}</div>
+      <div class="pres-total-unit">ha hilang</div>
+    </div>`;
+  presList.appendChild(card);
+  cardEls.push(card);
 });
 
-/* ─── HOVER SCALE PULSE + PANEL ─── */
+/* ─── ERA STATE ─── */
+let activeEra = null;
+
+function setEra(name) {
+  activeEra = name;
+  barEls.forEach(({ col, rect }, i) => {
+    const p     = getPresident(DATA[i].year);
+    const match = p && p.name === name;
+    gsap.to(col, { opacity: match ? 1 : 0.12, duration: .3, ease: 'power2.out' });
+    rect.style.background = match ? 'var(--bar-active)' : '';
+  });
+  cardEls.forEach((c, i) => c.classList.toggle('active', PRESIDENTS[i].name === name));
+}
+
+function clearEra() {
+  activeEra = null;
+  barEls.forEach(({ col, rect }) => {
+    gsap.to(col, { opacity: 1, duration: .3, ease: 'power2.out' });
+    rect.style.background = '';
+  });
+  cardEls.forEach(c => c.classList.remove('active'));
+}
+
+cardEls.forEach((card, i) => {
+  card.addEventListener('click', () => {
+    if (activeEra === PRESIDENTS[i].name) clearEra();
+    else setEra(PRESIDENTS[i].name);
+  });
+});
+
+/* ─── YEAR DISPLAY ─── */
+const ydYear = document.getElementById('yd-year');
+const ydVal  = document.getElementById('yd-val');
+
+function updateYearDisplay(d) {
+  ydYear.textContent = d ? d.year : 'Arahkan ke bar';
+  ydVal.textContent  = d ? d.val.toLocaleString('id-ID') : '\u2014';
+}
+
+/* ─── HOVER SCALE PULSE ─── */
 barEls.forEach(({ col, rect }, i) => {
   col.addEventListener('mouseenter', () => {
     gsap.to(rect, { scaleY: 1.025, transformOrigin: 'bottom center', duration: .18, ease: 'power1.out' });
-    openPanel(i);
+    updateYearDisplay(DATA[i]);
+    if (!activeEra) {
+      const hovPres = getPresident(DATA[i].year);
+      cardEls.forEach((c, ci) => {
+        c.style.opacity = hovPres && PRESIDENTS[ci].name === hovPres.name ? '1' : '0.3';
+      });
+    }
   });
   col.addEventListener('mouseleave', () => {
     gsap.to(rect, { scaleY: 1, duration: .22, ease: 'power1.out' });
+    updateYearDisplay(null);
+    if (!activeEra) cardEls.forEach(c => { c.style.opacity = ''; });
+  });
+  col.addEventListener('click', () => {
+    const pres = getPresident(DATA[i].year);
+    if (!pres) return;
+    if (activeEra === pres.name) clearEra(); else setEra(pres.name);
   });
 });
 
-/* close panel when mouse leaves chart entirely */
-document.getElementById('app').addEventListener('mouseleave', closePanel);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') clearEra();
+});
 </script>
 </body>
 </html>
