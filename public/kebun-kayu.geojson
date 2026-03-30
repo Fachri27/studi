@@ -1,0 +1,17 @@
+{
+  "type": "FeatureCollection",
+  "name": "POINT SEPULUH TERATAS DEFORESTASI DI KONSESI KEBUN KAYU",
+  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+  "features": [
+    { "type": "Feature", "properties": { "rank": 1, "type": "PBPH", "namobj": "PT TANJUNG REDEB HUTANI", "no_sk": "SK.685/Menlhk/Setjen/HPL.0/9/2021", "tgl_sk": "2021-09-10 00:00:00", "sk_awal": "HHK-HT", "value": 1408, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 117.55112979226557, 2.126959285437297 ] } },
+    { "type": "Feature", "properties": { "rank": 2, "type": "PBPH", "namobj": "PT FINNANTARA INTIGA", "no_sk": "SK.1041/Menlhk/Setjen/HPL.0/11/2021", "tgl_sk": "2021-11-15 00:00:00", "sk_awal": "HHK-HT", "value": 1341, "dir": "left" }, "geometry": { "type": "Point", "coordinates": [ 110.992844937424763, 0.397174210774834 ] } },
+    { "type": "Feature", "properties": { "rank": 3, "type": "PBPH", "namobj": "PT MAHAKARYA PERDANA GEMILANG UNIT II", "no_sk": "81200102815620003", "tgl_sk": "2022-10-26 00:00:00", "sk_awal": "HHK-HT", "value": 1323, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 116.367172445672026, 0.407421960214845 ] } },
+    { "type": "Feature", "properties": { "rank": 4, "type": "PBPH", "namobj": "PT DIVA PERDANA PESONA", "no_sk": "SK.638/Menlhk/Setjen/HPL.3/9/2021", "tgl_sk": "2021-09-08 00:00:00", "sk_awal": "HHK-HT", "value": 1296, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 117.174814762389829, 0.566679872006894 ] } },
+    { "type": "Feature", "properties": { "rank": 5, "type": "PBPH", "namobj": "PT BUMI HIJAU PRIMA", "no_sk": "SK.1049/Menlhk/Setjen/HPL.0/11/2021", "tgl_sk": "2021-11-15 00:00:00", "sk_awal": "HHK-HT", "value": 1294, "dir": "left" }, "geometry": { "type": "Point", "coordinates": [ 114.138747007539251, -1.335276267511383 ] } },
+    { "type": "Feature", "properties": { "rank": 6, "type": "PBPH", "namobj": "PT GRACE PUTRI PERDANA", "no_sk": "SK 740/MENLHK/SETJEN/HPL 3/9/2021", "tgl_sk": "2021-09-13 00:00:00", "sk_awal": "HHK-HT", "value": 1170, "dir": "left" }, "geometry": { "type": "Point", "coordinates": [ 111.153569955554644, -2.009800604760271 ] } },
+    { "type": "Feature", "properties": { "rank": 7, "type": "PBPH", "namobj": "PT HUTAN BERAU LESTARI", "no_sk": "SK.771/Menlhk/Setjen/HPL.3/9/2021", "tgl_sk": "2021-09-15 00:00:00", "sk_awal": "HHK-HT", "value": 1096, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 117.594275093006445, 1.853305859481002 ] } },
+    { "type": "Feature", "properties": { "rank": 8, "type": "PBPH", "namobj": "PT SENDAWAR ADHI KARYA", "no_sk": "SK.759/MENLHK/SETJEN/HPL.3/9/2021", "tgl_sk": "2021-09-13 00:00:00", "sk_awal": "HHK-HT", "value": 1018, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 115.929349893182021, 0.026386043655114 ] } },
+    { "type": "Feature", "properties": { "rank": 9, "type": "PBPH", "namobj": "PT SWADAYA PERKASA", "no_sk": "SK.765/Menlhk/Setjen/HPL.3/9/2021", "tgl_sk": "2021-09-13 00:00:00", "sk_awal": "HHK-HT", "value": 661, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 118.240850579581576, 1.340801486700338 ] } },
+    { "type": "Feature", "properties": { "rank": 10, "type": "PBPH", "namobj": "PT SEKATO PRATAMA MAKMUR", "no_sk": "SK.726/MENLHK/SETJEN/HPL.0/9/2021", "tgl_sk": "2021-09-13 00:00:00", "sk_awal": "HHK-HT", "value": 652, "dir": "bottom" }, "geometry": { "type": "Point", "coordinates": [ 101.806156676794458, 1.374270568895824 ] } }
+  ]
+}

@@ -1,0 +1,129 @@
+<!--
+  Single, global grid-based flowchart for all steps, labels, and arrows.
+  This structure is designed to match the reference design with pixel-perfect alignment.
+-->
+<div class="flowchart-grid">
+  <!-- Row 1: Deep Learning Modeling -->
+  <div class="label-grid" style="grid-row:1;grid-column:1;">DEEP LEARNING<br>MODELING</div>
+  <div class="box-grid" style="grid-row:1;grid-column:2;">
+    <div class="pill">Training dataset</div>
+    <div class="desc-grid">Sentinel 2 x STADI 2024.<br>Sample = {0, 1}<br>0 = non deforestasi<br>1 = deforestasi</div>
+  </div>
+  <div class="arrow-grid" style="grid-row:1;grid-column:3;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:1;grid-column:4;">
+    <div class="pill">Normalisasi Dataset</div>
+    <div class="desc-grid"><ul><li>Cropping, tiling, slicing, sampel labeling.</li><li>Normalisasi citra</li><li>Standarisasi proyeksi.</li></ul></div>
+  </div>
+  <div class="arrow-grid" style="grid-row:1;grid-column:5;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:1;grid-column:6;">
+    <div class="pill">Arsitektur Deep Learning (UNET)</div>
+    <div class="desc-grid"><ul><li>Augmentasi, rotasi, flip horizontal dan vertikal.</li><li>Infrastruktur Encoder dan Decoder.</li><li>Evaluasi model secara berkala.</li><li>Confusion Matrix.</li></ul></div>
+  </div>
+  <div class="arrow-grid" style="grid-row:1;grid-column:7;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:1;grid-column:8;">
+    <div class="pill">Output Model</div>
+    <div class="desc-grid">Deep learning model untuk pemetaan deforestasi skala besar.</div>
+  </div>
+
+  <!-- Row 2: Scoping Area Deforestasi -->
+  <div class="label-grid" style="grid-row:2;grid-column:1;">SCOPING AREA<br>DEFORESTASI</div>
+  <div class="box-grid" style="grid-row:2;grid-column:2;">
+    <div class="pill">Penentuan wilayah dan periode</div>
+    <div class="desc-grid"><ul><li>Hutan alam 2024;</li><li>Alert bulanan (Januari – Desember)</li></ul></div>
+  </div>
+  <div class="arrow-grid" style="grid-row:2;grid-column:3;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:2;grid-column:4;">
+    <div class="pill">Penapisan alert</div>
+    <div class="desc-grid">GLAD bulanan confidence 3 ∩ tutupan hutan alam 2024.</div>
+  </div>
+  <div class="arrow-grid" style="grid-row:2;grid-column:5;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <!-- True/False Alert branching -->
+  <div class="box-grid" style="grid-row:1;grid-column:6;">
+    <div class="pill">True Alert</div>
+  </div>
+  <div class="box-grid" style="grid-row:3;grid-column:6;">
+    <div class="pill dk">False Alert</div>
+  </div>
+  <div class="arrow-branch-grid" style="grid-row:2;grid-column:6;">
+    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+      <!-- True Alert horizontal -->
+      <polyline points="0,20 40,20 60,60 120,60" stroke="#C0522A" stroke-width="3" fill="none"/>
+      <!-- False Alert horizontal -->
+      <polyline points="0,100 40,100 60,60 120,60" stroke="#C0522A" stroke-width="3" fill="none"/>
+      <!-- Arrowhead -->
+      <polygon points="120,56 120,64 128,60" fill="#C0522A"/>
+    </svg>
+  </div>
+  <div class="box-grid" style="grid-row:2;grid-column:7;">
+    <div class="pill">Agregasi True Alert</div>
+    <div class="desc-grid"><ul><li>Pengelompokan alert.</li><li>Jarak maksimum alert 10.240 meter.</li></ul></div>
+  </div>
+
+  <!-- Row 3: Deforestasi Indikatif (example, can be extended) -->
+  <div class="label-grid" style="grid-row:3;grid-column:1;">DEFORESTASI<br>INDIKATIF</div>
+  <div class="box-grid" style="grid-row:3;grid-column:2;">
+    <div class="pill">Data deforestasi indikatif</div>
+    <div class="desc-grid">Prediksi citra Sentinel terindikasi deforestasi dengan <em>deep learning</em>.</div>
+  </div>
+  <div class="arrow-grid" style="grid-row:3;grid-column:3;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:3;grid-column:4;">
+    <div class="pill">Akuisisi citra otomatis</div>
+    <div class="desc-grid">Mendownload citra Sentinel 2 dalam bounding box berdasarkan bulan kejadian.</div>
+  </div>
+  <div class="arrow-grid" style="grid-row:3;grid-column:5;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:3;grid-column:6;">
+    <div class="pill">Bounding Box</div>
+    <div class="desc-grid">Mendownload citra Sentinel 2 berdasarkan ID aggregasi alert dengan radius 10.240 meter.</div>
+  </div>
+  <div class="arrow-grid" style="grid-row:3;grid-column:7;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:3;grid-column:8;">
+    <div class="pill">Normalisasi Citra Sentinel 2</div>
+    <div class="desc-grid"><ul><li>Spasial dan temporal filter</li><li>Cloud masking</li><li>Seleksi band</li></ul></div>
+  </div>
+
+  <!-- Row 4: Verifikasi (example, can be extended) -->
+  <div class="label-grid" style="grid-row:4;grid-column:1;">VERIFIKASI</div>
+  <div class="box-grid" style="grid-row:4;grid-column:2;">
+    <div class="pill">Overlay</div>
+    <div class="desc-grid"><ul><li>Penampalan terhadap tutupan hutan alam 2024.</li><li>Minimum mapping unit 0.25 hektare.</li></ul></div>
+  </div>
+  <div class="arrow-grid" style="grid-row:4;grid-column:3;">
+    <svg width="54" height="24" viewBox="0 0 54 24"><polyline points="0,12 44,12" stroke="#C0522A" stroke-width="3"/><polygon points="44,8 44,16 54,12" fill="#C0522A"/></svg>
+  </div>
+  <div class="box-grid" style="grid-row:4;grid-column:4;">
+    <div class="pill">Inspeksi visual</div>
+    <div class="desc-grid">Inspeksi visual, penapisan temporal, pengecekan lapangan.</div>
+  </div>
+  <div class="arrow-branch-grid" style="grid-row:4;grid-column:5;">
+    <svg width="180" height="40" viewBox="0 0 180 40">
+      <!-- Inspeksi visual branch -->
+      <polyline points="10,10 60,10 60,30 170,30" stroke="#C0522A" stroke-width="3" fill="none"/>
+      <polygon points="170,26 170,34 180,30" fill="#C0522A"/>
+      <!-- Penapisan temporal branch -->
+      <polyline points="10,20 60,20 60,30 170,30" stroke="#C0522A" stroke-width="3" fill="none"/>
+      <polygon points="170,26 170,34 180,30" fill="#C0522A"/>
+      <!-- Pengecekan lapangan branch -->
+      <polyline points="10,30 60,30 60,30 170,30" stroke="#C0522A" stroke-width="3" fill="none"/>
+      <polygon points="170,26 170,34 180,30" fill="#C0522A"/>
+    </svg>
+  </div>
+  <div class="box-grid" style="grid-row:4;grid-column:6;grid-column-end:span 3;">
+    <div class="pill big">Data Deforestasi</div>
+  </div>
+</div>

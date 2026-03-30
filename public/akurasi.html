@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uji Akurasi Deforestasi 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="m-0 block bg-[#f5f0e8] px-[10px] pb-0 pt-1 font-['Poppins'] text-[#1a1a1a] overflow-hidden overscroll-none">
+
+<div class="mx-auto w-full max-w-[760px] translate-y-6 overflow-hidden rounded-none bg-white opacity-0 shadow-[0_4px_32px_rgba(26,26,26,.1),0_1px_4px_rgba(26,26,26,.06)]" id="card">
+  <div class="flex items-center justify-between gap-3 border-b border-[#ddd5c8] px-[22px] pb-[14px] pt-[18px]">
+    <div class="text-[.8rem] font-semibold tracking-[-.01em] text-[#1a1a1a]" id="card-title">Hasil uji akurasi terhadap data deforestasi 2025</div>
+  </div>
+
+  <table class="w-full table-fixed border-collapse">
+    <thead>
+      <tr class="group-row">
+        <th colspan="3" id="th-group-area" class="border-r border-white/15 bg-[#8b2a1a] px-[14px] py-[9px] text-left text-[.65rem] font-semibold uppercase tracking-[.06em] text-white">Area deforestasi</th>
+        <th colspan="3" class="group-uji border-l border-white/15 bg-[#8b2a1a] px-[14px] py-[9px] text-center text-[.65rem] font-semibold uppercase tracking-[.06em] text-white" id="th-group-test">Uji akurasi</th>
+      </tr>
+      <tr class="col-row">
+        <th id="th-strata" class="border-r border-white/10 bg-[#a33520] px-3 py-2 text-left text-[.65rem] font-semibold text-white/90">Strata (ha)</th>
+        <th id="th-area" class="border-r border-white/10 bg-[#a33520] px-3 py-2 text-right text-[.65rem] font-semibold text-white/90">Luas (ha)</th>
+        <th id="th-polygons" class="border-r border-white/10 bg-[#a33520] px-3 py-2 text-right text-[.65rem] font-semibold text-white/90">Poligon</th>
+        <th class="col-sep border-l-2 border-white/20 border-r border-white/10 bg-[#a33520] px-3 py-2 text-right text-[.65rem] font-semibold text-white/90" id="th-sample">Sampel poligon</th>
+        <th id="th-true" class="border-r border-white/10 bg-[#a33520] px-3 py-2 text-right text-[.65rem] font-semibold text-white/90">TRUE</th>
+        <th id="th-accuracy" class="bg-[#a33520] px-3 py-2 text-right text-[.65rem] font-semibold text-white/90">Akurasi</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+  </table>
+
+  <div class="border-t border-[#ddd5c8] px-[22px] py-[10px] text-[.58rem] leading-[1.6] text-[#7a6e60]" id="card-footer">
+    Sumber: Auriga Nusantara · STADI (Status Deforestasi Indonesia) 2025 · simontini.id
+  </div>
+</div>
+
+<!-- Tooltip -->
+<div class="pointer-events-none fixed z-[100] whitespace-nowrap rounded-md bg-[#1a1a1a] px-3 py-1.5 text-[.65rem] font-medium text-white opacity-0 shadow-[0_4px_16px_rgba(0,0,0,.2)]" id="tooltip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const ROWS = [
+  { strata: '<0,5',   luas: '59.678',  poligon: '341.551', sampel: 266, trueVal: 227, akurasi: 85  },
+  { strata: '0,5 – 1', luas: '58.262', poligon: '84.577',  sampel: 66,  trueVal: 61,  akurasi: 92  },
+  { strata: '1 – 5',  luas: '149.404', poligon: '78.193',  sampel: 61,  trueVal: 59,  akurasi: 97  },
+  { strata: '5 – 10', luas: '44.662',  poligon: '6.543',   sampel: 6,   trueVal: 6,   akurasi: 100 },
+  { strata: '10 – 50',luas: '69.240',  poligon: '3.699',   sampel: 3,   trueVal: 3,   akurasi: 100 },
+  { strata: '> 50',   luas: '53.012',  poligon: '445',      sampel: 1,   trueVal: 1,   akurasi: 100 },
+];
+
+const TOTAL = {
+  strata: 'Total', luas: '434.258', poligon: '515.008', sampel: 403, trueVal: 357, akurasi: 89
+};
+
+const I18N = {
+  id: {
+    title: 'Hasil uji akurasi terhadap data deforestasi 2025',
+    groupArea: 'Area deforestasi',
+    groupTest: 'Uji akurasi',
+    strata: 'Strata (ha)',
+    area: 'Luas (ha)',
+    polygons: 'Poligon',
+    sample: 'Sampel poligon',
+    trueLabel: 'TRUE',
+    accuracy: 'Akurasi',
+    total: 'Total',
+    footer: 'Sumber: Auriga Nusantara · STADI (Status Deforestasi Indonesia) 2025 · simontini.id',
+    tooltip: (r, ratio) => `${r.trueVal} dari ${r.sampel} sampel terverifikasi (${ratio}%)`
+  },
+  en: {
+    title: 'Accuracy test results for 2025 deforestation data',
+    groupArea: 'Deforestation area',
+    groupTest: 'Accuracy test',
+    strata: 'Strata (ha)',
+    area: 'Area (ha)',
+    polygons: 'Polygons',
+    sample: 'Sample polygons',
+    trueLabel: 'TRUE',
+    accuracy: 'Accuracy',
+    total: 'Total',
+    footer: 'Source: Auriga Nusantara · STADI (Indonesia Deforestation Status) 2025 · simontini.id',
+    tooltip: (r, ratio) => `${r.trueVal} of ${r.sampel} samples verified (${ratio}%)`
+  }
+};
+
+let currentLang = localStorage.getItem('akurasi_lang') || 'id';
+
+const tbody = document.getElementById('tbody');
+const tooltip = document.getElementById('tooltip');
+
+function makeAccCell(val, isTotal) {
+  const is100 = val === 100;
+  const fillColor = is100 ? 'bg-[#2a7a4a]' : 'bg-[#8b2a1a]';
+  const txt = isTotal
+    ? `<span class="inline-flex min-w-[64px] items-center justify-center rounded-full border-[1.5px] border-[#2a7a4a] bg-[rgba(42,122,74,.1)] px-3 py-[2px] text-[.78rem] font-bold text-[#2a7a4a]">${val}%</span>`
+    : `<span>${val}%</span>`;
+  return `<div class="flex items-center justify-end gap-[6px]">
+    <div class="h-1 w-[42px] shrink-0 overflow-hidden rounded-[2px] bg-[#ddd5c8]"><div class="acc-bar-fill ${fillColor} h-full w-0 rounded-[2px]" data-pct="${val}"></div></div>
+    ${txt}
+  </div>`;
+}
+
+// Body rows
+ROWS.forEach((r, idx) => {
+  const tr = document.createElement('tr');
+  tr.className = `cursor-default border-b border-[#ddd5c8] opacity-0 translate-x-[-8px] transition-colors hover:bg-[#fdf6ed] ${idx % 2 ? 'bg-[#f9f5ef]' : ''}`;
+  tr.innerHTML = `
+    <td class="border-r border-[#ddd5c8] px-3 py-[9px] text-left text-[.71rem] font-semibold text-[#7a6e60]">${r.strata}</td>
+    <td class="border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] font-bold text-[#1a1a1a]">${r.luas}</td>
+    <td class="border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] font-bold text-[#1a1a1a]">${r.poligon}</td>
+    <td class="col-sep-body border-l-2 border-l-[#ddd5c8] border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] text-[#1a1a1a]">${r.sampel}</td>
+    <td class="border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] font-bold text-[#1a1a1a]">${r.trueVal}</td>
+    <td class="px-3 py-[9px] text-right text-[.71rem] text-[#1a1a1a]">${makeAccCell(r.akurasi, false)}</td>
+  `;
+  // tooltip on hover
+  tr.addEventListener('mousemove', e => showTip(e, r));
+  tr.addEventListener('mouseleave', hideTip);
+  tbody.appendChild(tr);
+});
+
+// Total row
+const totalTr = document.createElement('tr');
+totalTr.className = 'border-t-2 border-[#8b2a1a] bg-[#fdf6f4] font-semibold';
+totalTr.innerHTML = `
+  <td id="total-label" class="border-r border-[#ddd5c8] px-3 py-[9px] text-left text-[.71rem] font-bold text-[#8b2a1a]">Total</td>
+  <td class="border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] text-[#1a1a1a]"><span class="inline-flex min-w-[64px] items-center justify-center rounded-full border-[1.5px] border-[#2a7a4a] bg-[rgba(42,122,74,.1)] px-3 py-[2px] text-[.78rem] font-bold text-[#2a7a4a]">${TOTAL.luas}</span></td>
+  <td class="border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] text-[#1a1a1a]">${TOTAL.poligon}</td>
+  <td class="col-sep-body border-l-2 border-l-[#ddd5c8] border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] text-[#1a1a1a]">${TOTAL.sampel}</td>
+  <td class="border-r border-[#ddd5c8] px-3 py-[9px] text-right text-[.71rem] font-bold text-[#1a1a1a]">${TOTAL.trueVal}</td>
+  <td class="px-3 py-[9px] text-right text-[.71rem] text-[#1a1a1a]">${makeAccCell(TOTAL.akurasi, true)}</td>
+`;
+tbody.appendChild(totalTr);
+
+function applyLanguage(lang) {
+  const t = I18N[lang] || I18N.id;
+  currentLang = lang;
+  localStorage.setItem('akurasi_lang', lang);
+
+  document.getElementById('card-title').textContent = t.title;
+  document.getElementById('th-group-area').textContent = t.groupArea;
+  document.getElementById('th-group-test').textContent = t.groupTest;
+  document.getElementById('th-strata').textContent = t.strata;
+  document.getElementById('th-area').textContent = t.area;
+  document.getElementById('th-polygons').textContent = t.polygons;
+  document.getElementById('th-sample').textContent = t.sample;
+  document.getElementById('th-true').textContent = t.trueLabel;
+  document.getElementById('th-accuracy').textContent = t.accuracy;
+  document.getElementById('total-label').textContent = t.total;
+  document.getElementById('card-footer').textContent = t.footer;
+}
+applyLanguage(currentLang);
+
+window.addEventListener('message', (event) => {
+  const data = event.data || {};
+  if (data.type !== 'set-language') return;
+  if (!I18N[data.lang]) return;
+  applyLanguage(data.lang);
+});
+
+/* ─── TOOLTIP ─── */
+function showTip(e, r) {
+  const ratio = (r.trueVal / r.sampel * 100).toFixed(1);
+  tooltip.textContent = I18N[currentLang].tooltip(r, ratio);
+  tooltip.style.opacity = 1;
+  moveTip(e);
+}
+function moveTip(e) {
+  const x = e.clientX;
+  const y = e.clientY;
+  tooltip.style.left = (x - tooltip.offsetWidth / 2) + 'px';
+  tooltip.style.top  = (y - 40) + 'px';
+}
+function hideTip() { tooltip.style.opacity = 0; }
+document.addEventListener('mousemove', e => {
+  if (tooltip.style.opacity > 0) moveTip(e);
+});
+
+/* ─── GSAP ANIMATIONS ─── */
+// Card entrance
+gsap.to('#card', {
+  opacity: 1, y: 0,
+  duration: .6, ease: 'power3.out', delay: .1
+});
+
+// Rows stagger
+const rows = tbody.querySelectorAll('tr');
+gsap.to(rows, {
+  opacity: 1, x: 0,
+  duration: .45, ease: 'power2.out',
+  stagger: .06, delay: .35
+});
+
+// Accuracy bars after rows appear
+setTimeout(() => {
+  document.querySelectorAll('.acc-bar-fill').forEach(bar => {
+    const pct = parseFloat(bar.dataset.pct);
+    gsap.to(bar, {
+      width: pct + '%',
+      duration: .7,
+      ease: 'power2.out',
+      delay: Math.random() * .15
+    });
+  });
+}, 700);
+</script>
+</body>
+</html>

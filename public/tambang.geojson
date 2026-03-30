@@ -1,0 +1,17 @@
+{
+  "type": "FeatureCollection",
+  "name": "POINT SEPULUH TERATAS DEFORESTASI DI KONSESI TAMBANG 2025",
+  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+  "features": [
+    { "type": "Feature", "properties": { "rank": 1, "type": "IUP", "namobj": "BERAU COAL", "komoditas": "BATUBARA", "value": 1473, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 117.395321188956885, 2.138922060693282 ] } },
+    { "type": "Feature", "properties": { "rank": 2, "type": "IUP", "namobj": "SULAWESI CAHAYA MINERAL", "komoditas": "NIKEL", "value": 1085, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 121.809448329238492, -3.003818526025582 ] } },
+    { "type": "Feature", "properties": { "rank": 3, "type": "IUP", "namobj": "MARUWAI COAL", "komoditas": "BATUBARA", "value": 919, "dir": "top" }, "geometry": { "type": "Point", "coordinates": [ 114.919059555847099, -0.090328260786384 ] } },
+    { "type": "Feature", "properties": { "rank": 4, "type": "IUP", "namobj": "WEDA BAY NICKEL", "komoditas": "NIKEL DMP", "value": 902, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 128.004841288293079, 0.627934768307973 ] } },
+    { "type": "Feature", "properties": { "rank": 5, "type": "IUP", "namobj": "VALE INDONESIA TBK", "komoditas": "NIKEL", "value": 842, "dir": "left" }, "geometry": { "type": "Point", "coordinates": [ 121.488538466272828, -2.634066859436454 ] } },
+    { "type": "Feature", "properties": { "rank": 6, "type": "IUP", "namobj": "AGINCOURT RESOURCES", "komoditas": "EMAS DMP", "value": 839, "dir": "left" }, "geometry": { "type": "Point", "coordinates": [ 99.149585821220384, 1.370910557959839 ] } },
+    { "type": "Feature", "properties": { "rank": 7, "type": "IUP", "namobj": "LAHAI COAL", "komoditas": "BATUBARA", "value": 770, "dir": "left" }, "geometry": { "type": "Point", "coordinates": [ 115.026603507062106, -0.207788395378338 ] } },
+    { "type": "Feature", "properties": { "rank": 8, "type": "IUP", "namobj": "BLOK WARINGIN AGUNG", "komoditas": "EMAS", "value": 763, "dir": "right" }, "geometry": { "type": "Point", "coordinates": [ 112.517178689769239, -1.541190947688207 ] } },
+    { "type": "Feature", "properties": { "rank": 9, "type": "IUP", "namobj": "SUPRABARI MAPANINDO MINERAL", "komoditas": "BATUBARA", "value": 673, "dir": "left" }, "geometry": { "type": "Point", "coordinates": [ 114.625074268594773, -1.039139704484105 ] } },
+    { "type": "Feature", "properties": { "rank": 10, "type": "IUP", "namobj": "BINTANG DELAPAN MINERAL", "komoditas": "NIKEL", "value": 658, "dir": "bottom" }, "geometry": { "type": "Point", "coordinates": [ 121.980032209226394, -2.843717003693491 ] } }
+  ]
+}
