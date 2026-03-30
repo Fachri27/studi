@@ -43,6 +43,7 @@ body {
   background: var(--bg);
   box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
   border-bottom: 2px solid #191919;
+
 }
 .header::before {
   content: '';
@@ -67,18 +68,18 @@ h1 {
   font-size: 42px; font-weight: 800;
   color: var(--text); line-height: 1.05; letter-spacing: -0.02em;
 }
-h1 span { color: var(--rust); }
+h1 span { color: #bc4a3c; }
 .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 10px; font-weight: 300; }
 .badge {
   font-size: 11px; font-weight: 500;
-  color: var(--rust); background: var(--rust-pale);
+  color: #bc4a3c; background: var(--rust-pale);
   border: 1px solid rgba(199,91,46,0.25);
   border-radius: 999px; padding: 6px 14px; letter-spacing: 0.04em;
 }
 
 /* ── Diagram ─────────────────────────────────────────── */
 .diagram-wrap {
-  padding: 120px 60px 80px;
+  padding: 40px 60px 80px;
   max-width: 1400px; margin: 0 auto;
   position: relative;
 }
@@ -88,7 +89,7 @@ h1 span { color: var(--rust); }
   display: flex; align-items: stretch;
   border-top: 1px solid var(--border);
   position: relative;
-  margin-top: 60px;
+  margin-top: 50px;
 }
 
 /* ── Lane label ──────────────────────────────────────── */
@@ -100,7 +101,7 @@ h1 span { color: var(--rust); }
 }
 .lane-num {
   font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 700;
-  color: var(--rust); letter-spacing: 0.12em; margin-bottom: 6px;
+  color: var(#bc4a3c); letter-spacing: 0.12em; margin-bottom: 6px;
 }
 .lane-name {
   font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700;
@@ -207,12 +208,8 @@ h1 span { color: var(--rust); }
   <div class="header-inner">
     <div>
       <p class="eyebrow">Metodologi · STADI 2024</p>
-      <h1>Alur Deteksi<br><span>Deforestasi</span></h1>
+      <h1>Alur Deteksi <span>Deforestasi</span></h1>
       <p class="subtitle">Scroll untuk melihat alur · Klik kotak untuk detail</p>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
-      <span class="badge">Sentinel 2 × GLAD Alert</span>
-      <span class="badge">Deep Learning · UNET</span>
     </div>
   </div>
 </header>
@@ -610,7 +607,7 @@ if (dataindikatif && r4c1) {
   curve2.setAttribute('marker-end', 'url(#xarr)');
   curve2.setAttribute('d',
     'M'+DI.cx+' '+DI.bottom+
-    ' C'+cp1x2+' '+cp1y2+','+cp2x2+' '+cp2y2+','+OV.cx+' '+(OV.top-2)
+    ' C'+cp1x3+' '+cp1y2+','+cp2x2+' '+cp2y2+','+OV.cx+' '+(OV.cy - 50)
   );
   svg.appendChild(curve2);
   mkLabel(svg, (DI.cx + OV.cx) / 2, DI.bottom + gap2 / 2);
@@ -682,12 +679,12 @@ window.addEventListener('load', function() {
   var connShown = false;
   ScrollTrigger.create({
     trigger: '#dwrap',
-    start: 'top top',
-    end: '+=' + Math.round(tl.totalDuration() * 540),
-    pin: true,
-    anticipatePin: 1,
-    scrub: 2,
-    animation: tl,
+  start: 'top 110px', // ← sesuaikan dengan tinggi header sticky
+  end: '+=' + Math.round(tl.totalDuration() * 540),
+  pin: true,
+  anticipatePin: 1,
+  scrub: 2,
+  animation: tl,
     onUpdate: function(self) {
       /* agreg ~3.05s, bbox ~5.4s out of 10.3s → show at ~0.52 */
       if (self.progress >= 0.52 && !connShown) {
