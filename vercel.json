@@ -1,3 +1,3 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:76127619b4c234d478ff4588c69187465738488b3957dcc4c13f457f16e1e983
-size 104
+{
+  "outputDirectory": "public"
+}
