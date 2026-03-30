@@ -718,6 +718,8 @@ const map = L.map(getById('map'), {
   zoomControl: true,
   attributionControl: false,
   gestureHandling: true,
+  scrollWheelZoom: false,
+  doubleClickZoom: false,
   minZoom: 4,
   maxZoom: 9
 }).setView([-2.3, 118], 5);

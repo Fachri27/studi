@@ -35,6 +35,9 @@ html, body {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* ── CHART AREA ── */
@@ -478,10 +481,10 @@ gsap.to(barEls.map(b => b.rect), {
 
 /* ─── PRESIDENTS ─── */
 const PRESIDENTS = [
-  { name:'Megawati', start:2001, end:2004, photo:'assets/images/presiden/megawati.jpg' },
+  { name:'Megawati', start:2001, end:2004, photo:'assets/images/presiden/meg.jpeg' },
   { name:'Susilo Bambang Yudhoyono', start:2005, end:2014, photo:'assets/images/presiden/sby.jpg' },
-  { name:'Jokowi',   start:2015, end:2024, photo:'assets/images/presiden/jokowi.jpg'   },
-  { name:'Prabowo',  start:2025, end:2025, photo:'assets/images/presiden/prabowo.jpg'  },
+  { name:'Jokowi',   start:2015, end:2024, photo:'assets/images/presiden/jok.jpeg'   },
+  { name:'Prabowo',  start:2025, end:2025, photo:'assets/images/presiden/pra.jpeg'  },
 ];
 
 function getPresident(year) {
