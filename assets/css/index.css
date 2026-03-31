@@ -226,7 +226,7 @@ body.is-preloading { overflow: hidden; }
 }
 .hero-stat .hs-unit {
   font-family: 'Poppins', sans-serif;
-  font-size: .70rem; letter-spacing: .1em;
+  font-size: 18px; letter-spacing: .1em;
   color: rgba(245,240,232,.45);
   text-transform: uppercase;
 }
@@ -383,7 +383,7 @@ body.is-preloading { overflow: hidden; }
 .pull-quote cite {
   display: block; margin-top: 14px; padding-left: 32px;
   font-family: 'Poppins', sans-serif;
-  font-size: .6rem; letter-spacing: .1em;
+  font-size: 14px; letter-spacing: .1em;
   color: rgba(245,240,232,.4);
   font-style: normal;
 }
@@ -798,11 +798,11 @@ body.is-preloading { overflow: hidden; }
 .ab-group { flex: 1; min-width: 160px; }
 .ab-label {
   font-family: 'Poppins', sans-serif;
-  font-size: .55rem; letter-spacing: .15em; text-transform: uppercase;
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 8px;
 }
 .ab-names {
-  font-size: .78rem; line-height: 1.75; color: var(--ink-mid);
+  font-size: 10px; line-height: 1.75; color: var(--ink-mid);
 }
 
 .film-credit-block {

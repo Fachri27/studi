@@ -155,7 +155,7 @@ function transformIncludeToIframe() {
       </div>` : '';
 
     const captionStyle = cfg.darkBar
-      ? 'padding:10px 16px 14px;font-size:.72rem;line-height:1.7;color:rgba(255,255,255,.45);text-align:left;'
+      ? 'padding:10px 16px 14px;font-size:.72rem;line-height:1.6;color:rgba(255,255,255,.45);text-align:left;'
       : '';
 
     host.innerHTML = `
@@ -165,7 +165,7 @@ function transformIncludeToIframe() {
           <iframe src="${cfg.src}" title="${cfg.src.replace('.html','')}" loading="lazy" style="display:block;width:100%;border:0;height:${cfg.height};"></iframe>
         </div>
       </div>
-      <div class="viz-caption embed-caption"${captionStyle ? ` style="${captionStyle}"` : ''}>${cfg.caption}</div>
+      <div class="viz-caption">${cfg.caption}</div>
     `;
   });
 }
