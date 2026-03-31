@@ -518,7 +518,17 @@ phases.forEach(ph => {
         gsap.set('.island-chart', { opacity:1, scale:1, y:0 });
         animateYearBars(ph.yi);
       }
-      if (ph.yi === 4) gsap.to('#indonesia-map', { opacity:1.0, duration:.4, yoyo:true, repeat:1 });
+      if (ph.yi === 4) {
+        gsap.to('#indonesia-map', { opacity:1.0, duration:.4, yoyo:true, repeat:1 });
+        // Kirim pesan ke parent (index.html) untuk unlock scroll setelah animasi 2025 selesai
+        setTimeout(function() {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'peta-animasi-selesai' }, '*');
+          } else {
+            window.dispatchEvent(new Event('peta-animasi-selesai'));
+          }
+        }, 1200); // delay sesuai durasi animasi bar terakhir
+      }
     },
     onLeaveBack() {
       const prev = ph.yi - 1;

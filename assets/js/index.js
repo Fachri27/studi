@@ -1,3 +1,52 @@
+// --- Scroll Snap & Lock untuk Peta ---
+(() => {
+  const petaSection = document.getElementById('peta-lock');
+  if (!petaSection) return;
+  let petaLocked = false;
+  let petaSnapped = false;
+  // Snap ke peta saat mulai masuk viewport (misal 60% visible)
+  const snapObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.6 && !petaSnapped && !petaLocked) {
+        petaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        petaSnapped = true;
+      }
+      // Reset snap jika sudah keluar jauh dari viewport
+      if (!entry.isIntersecting && petaSnapped && !petaLocked) {
+        petaSnapped = false;
+      }
+    });
+  }, { threshold: [0, 0.6, 1] });
+  snapObserver.observe(petaSection);
+
+  // Lock scroll saat benar-benar full satu layar
+  const lockObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.99 && !petaLocked) {
+        document.body.style.overflow = 'hidden';
+        petaLocked = true;
+        window.dispatchEvent(new Event('peta-animasi-mulai'));
+      }
+    });
+  }, { threshold: Array.from({length: 101}, (_, i) => i / 100) });
+  lockObserver.observe(petaSection);
+
+  // Listen event dari peta untuk unlock scroll
+  window.addEventListener('peta-animasi-selesai', () => {
+    if (petaLocked) {
+      document.body.style.overflow = '';
+      petaLocked = false;
+      // Reset snap agar bisa snap lagi jika user scroll ke atas
+      petaSnapped = false;
+    }
+  });
+  // Listener postMessage dari iframe peta
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'peta-animasi-selesai') {
+      window.dispatchEvent(new Event('peta-animasi-selesai'));
+    }
+  });
+})();
 const siteLoader = document.getElementById('site-loader');
 
 function hideSiteLoader() {
@@ -381,6 +430,38 @@ function slideProvinceTables(dir = 1) {
   const amount = Math.round(provinceTables.clientWidth * 0.92) * dir;
   provinceTables.scrollBy({ left: amount, behavior: 'smooth' });
 }
+
+// document.querySelectorAll('iframe').forEach(el => {
+//   console.log(el.src, el.parentElement.className, el.parentElement.parentElement.className);
+// });
+
+
+(function () {
+  let locked = false;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !locked) {
+        const rect = entry.target.getBoundingClientRect();
+        if (rect.top > 50) {
+          locked = true;
+          const top = rect.top + window.scrollY - 60;
+          window.scrollTo({ top, behavior: 'smooth' });
+          setTimeout(() => { locked = false; }, 1000);
+        }
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.viz-frame').length
+
+  // ← selector yang benar
+  document.querySelectorAll('.viz-frame')
+    .forEach(el => observer.observe(el));
+
+  // verifikasi
+  console.log('viz-frame blocks found:', document.querySelectorAll('.viz-frame').length);
+})();
 
 provPrev?.addEventListener('click', () => slideProvinceTables(-1));
 provNext?.addEventListener('click', () => slideProvinceTables(1));

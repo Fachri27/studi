@@ -111,7 +111,18 @@ regulasi yang melindungi seluruh hutan alam tersisa
   </p>
 
   <!-- Include-ready block (Laravel target: @include('partials.chart-deforestasi')) -->
-  <div class="viz-block viz-block--slightly-wide" data-include-html="partials/chart-deforestasi.html"></div>
+  <!-- <div class="viz-block viz-block--slightly-wide" data-include-html="partials/chart-deforestasi.html"></div> -->
+   <div class="viz-block viz-block--full mt-2 mb-2">
+    <div class="viz-frame viz-frame--padded">
+      <div class="mx-auto w-full overflow-x-auto overflow-y-hidden rounded-none bg-white shadow-[0_4px_28px_rgba(26,26,26,.08)] md:overflow-x-visible" style="max-width:980px;">
+
+        <div style="background:#1a1f1e; border-radius:4px; overflow:hidden;">
+  <iframe src="chart-deforestasi.html" title="Grafik Deforestasi Indonesia" loading="lazy" style="display:block; width:100%; border:0; height:460px;"></iframe>
+</div>
+      </div>
+    </div>
+  </div>
+  
 
   <!-- <div class="stat-grid">
     <div class="stat-cell red">
@@ -218,7 +229,27 @@ regulasi yang melindungi seluruh hutan alam tersisa
   </div>
 
   <!-- Include-ready block (Laravel target: @include('partials.alur-embed')) -->
-  <div class="viz-block viz-block--full" data-include-html="partials/alur-embed.html"></div>
+  <!-- <div class="viz-block viz-block--full" data-include-html="partials/alur-embed.html"></div> -->
+   <div class="viz-block viz-block--full">
+    <div style="background:#0d0d0d; margin-bottom:0;">
+  <div style="background:#0d0d0d; border-radius:0;">
+    <div class="embed-bar" style="background:#161616; border-bottom-color:rgba(255,255,255,.08);">
+      <span class="embed-bar-title" style="color:rgba(255,255,255,.45);">Tahapan &amp; Pemrosesan Data SIMONTINI</span>
+      <a href="alur.html" target="_blank" class="viz-expand" style="color:#C0522A;">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline>
+          <line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+        Buka penuh
+      </a>
+    </div>
+    <iframe src="alur.html" title="Alur Pemrosesan Data" loading="lazy" style="display:block; width:100%; border:0; height:100vh;"></iframe>
+    <div style="padding:10px 16px 14px; font-size:.72rem; line-height:1.7; color:rgba(255,255,255,.45); text-align:center;">
+      Diagram interaktif alur kerja SIMONTINI dari pemodelan deep learning hingga verifikasi lapangan. Klik kotak oranye untuk melihat detail setiap tahapan.
+    </div>
+  </div>
+</div>
+   </div>
 </div>
 </section>
 
@@ -479,7 +510,25 @@ regulasi yang melindungi seluruh hutan alam tersisa
   </p> -->
 
   <!-- Include-ready block (Laravel target: @include('partials.peta-embed')) -->
-  <div class="viz-block viz-block--full" data-include-html="partials/peta-embed.html"></div><br><br><br>
+  <!-- <div class="viz-block viz-block--full" data-include-html="partials/peta-embed.html"></div><br><br><br> -->
+   <div class="viz-block viz-block--full">
+    <div style="background:#0d0d0d;">
+  <div class="embed-bar" style="background:#161616; border-bottom-color:rgba(255,255,255,.08);">
+    <span class="embed-bar-title" style="color:rgba(255,255,255,.45);">Deforestasi melonjak pada 2025</span>
+    <a href="peta.html" target="_blank" class="viz-expand" style="color:#C0522A;">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+      Buka penuh
+    </a>
+  </div>
+  <iframe src="peta.html" title="Peta Deforestasi Indonesia" loading="lazy" style="display:block; width:100%; border:0; height:100vh;"></iframe>
+  <div style="padding:10px 16px 14px; font-size:.72rem; line-height:1.7; color:rgba(255,255,255,.45); text-align:center;">
+    Peta interaktif deforestasi per pulau besar Indonesia 2019–2025. Gulir untuk melihat perubahan deforestasi tiap tahun.
+  </div>
+</div>
+   </div><br><br>
 
     <p class="body-text">
     Deforestasi terjadi di seluruh provinsi Indonesia, kecuali DKI Jakarta dan Daerah Istimewa Yogyakarta. Bila 10 provinsi teratas deforestasi pada 2024 secara berurut adalah (1) Kalimantan Timur, (2) Kalimantan Barat, (3) Kalimantan Tengah, (4) Riau, (5) Sumatera Selatan, (6) Jambi, (7) Aceh, (8) Kalimantan Utara, (9) Bangka Belitung, dan (10) Sumatera Utara; pada 2025 urutannya menjadi (1) Kalimantan Tengah, (2) Kalimantan Timur, (3) Aceh, (4) Kalimantan Barat, (5) Papua Tengah, (6) Sumatera Barat, (7) Sumatera Utara, (8) Kalimantan Utara, (9) Riau, dan (10) Papua Pegunungan.
@@ -583,7 +632,23 @@ regulasi yang melindungi seluruh hutan alam tersisa
     </p>
 
   <!-- Include-ready block (Laravel target: @include('partials.tematik-embed')) -->
-  <div class="viz-block viz-block--full" data-include-html="partials/tematik-embed.html"></div>
+  <!-- <div class="viz-block viz-block--full" data-include-html="partials/tematik-embed.html"></div> -->
+   <div class="viz-block viz-block--full">
+    <div class="viz-frame">
+  <div class="embed-bar">
+    <span class="embed-bar-title">Peta Tematik Deforestasi 2025</span>
+    <a href="tematik.html" target="_blank" class="viz-expand">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+      Buka penuh
+    </a>
+  </div>
+  <iframe src="tematik.html" title="Peta Tematik Deforestasi Indonesia" loading="lazy"></iframe>
+</div>
+
+   </div>
 
 
   <!-- <h3 class="chapter-title" style="margin-bottom:20px;">Peringkat provinsi deforestasi, 2025 vs 2024</h3>
@@ -676,7 +741,23 @@ regulasi yang melindungi seluruh hutan alam tersisa
   </p>
 
   <!-- Include-ready block (Laravel target: @include('partials.konsesi-embed')) -->
-  <div class="viz-block viz-block--full" data-include-html="partials/konsesi-embed.html"></div>
+  <!-- <div class="viz-block viz-block--full" data-include-html="partials/konsesi-embed.html"></div> -->
+   <div class="viz-block viz-block--full">
+    <div class="viz-frame">
+  <div class="embed-bar">
+    <span class="embed-bar-title">Deforestasi dalam Konsesi — Sepuluh Teratas per Kategori</span>
+    <a href="konsesi.html" target="_blank" class="viz-expand">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline>
+        <line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>
+      </svg>
+      Buka penuh
+    </a>
+  </div>
+  <iframe src="konsesi.html" title="Deforestasi dalam Konsesi" loading="lazy"></iframe>
+</div>
+
+   </div>
 
   <!-- <hr class="divider"> -->
 
@@ -940,6 +1021,35 @@ Auriga Nusantara. 2025 </em><br>.</div>
 </footer> -->
 
 <script src="assets/js/index.js?v=20260329"></script>
+<script>
+  
+  (function () {
+  let locked = false;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !locked) {
+        const rect = entry.target.getBoundingClientRect();
+        
+        // Hanya snap kalau masuk dari bawah (belum fully visible)
+        if (rect.top > 50) {
+          locked = true;
+          
+          const top = entry.target.getBoundingClientRect().top + window.scrollY - 60;
+          window.scrollTo({ top, behavior: 'smooth' });
+
+          setTimeout(() => { locked = false; }, 1000);
+        }
+      }
+    });
+  }, {
+    threshold: 0.1  // trigger saat 10% blok masuk viewport
+  });
+
+  document.querySelectorAll('.viz-block--full, .viz-block--slightly-wide')
+    .forEach(el => observer.observe(el));
+})();
+</script>
 
 </body>
 </html>
