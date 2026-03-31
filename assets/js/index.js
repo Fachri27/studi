@@ -133,7 +133,7 @@ function transformIncludeToIframe() {
       height: '100vh',
       darkBar: true,
       barTitle: 'Deforestasi dalam Konsesi \u2014 Sepuluh Teratas per Kategori',
-      caption: 'Peta interaktif 10 konsesi teratas deforestasi per kategori. Pilih kategori di sidebar untuk beralih antar kebun kayu, logging, sawit, dan tambang.'
+      caption: ''
     }
   };
 
