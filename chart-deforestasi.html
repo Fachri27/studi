@@ -5,375 +5,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Deforestasi Indonesia, 2001–2025</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { poppins: ['Poppins', 'sans-serif'] }
+      }
+    }
+  }
+</script>
+<style type="text/tailwindcss">
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --bg:        #1a1f1e;
-  --surface:   #222928;
-  --bar:       #bc4a3c;
-  --bar-hover: #d4574a;
-  --bar-active:#e07060;
-  --text:      #e8f0ee;
-  --muted:     #7a9e97;
-  --border:    rgba(255,255,255,.07);
-  --panel-bg:  #1a2826;
-  --accent:    #e07060;
-  --x-axis-h: 78px;
-}
-
-html, body {
-  height: 100%;
-  background: var(--bg);
-  font-family: 'Poppins', sans-serif;
-  color: var(--text);
-  overflow: hidden;
-}
-
-/* ── LAYOUT ── */
-#app {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-  max-width: 980px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-/* ── CHART AREA ── */
-#chart-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 40px 44px 32px;
-  min-width: 0;
-  transition: padding-right .4s cubic-bezier(.4,0,.2,1);
-}
-
-/* ── TITLE ── */
-.chart-header {
-  margin-bottom: 32px;
-}
-.chart-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -.01em;
-  margin-bottom: 4px;
-}
-.chart-sub {
-  font-size: .7rem;
-  color: var(--muted);
-  font-weight: 400;
-}
-
-/* ── CHART BODY ── */
-#chart-body {
-  flex: 1;
-  display: flex;
-  gap: 0;
-  min-height: 0;
-  position: relative;
-}
-
-/* ── Y AXIS ── */
-#y-axis {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-between;
-  padding-bottom: var(--x-axis-h);
-  width: 72px;
-  flex-shrink: 0;
-}
-.y-tick {
-  font-size: .6rem;
-  color: var(--muted);
-  text-align: right;
-  padding-right: 12px;
-  font-weight: 400;
-  white-space: nowrap;
-}
-
-/* ── BARS CONTAINER ── */
-#bars-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  position: relative;
-}
-
-/* ── GRID LINES ── */
-#grid-lines {
-  flex: 1;
-  position: relative;
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-between;
-}
-.grid-line {
-  width: 100%;
-  height: 1px;
-  background: var(--border);
-  position: absolute;
-  left: 0;
-}
-
-/* ── BARS SVG ── */
-#bars-svg-wrap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: var(--x-axis-h);
-  display: grid;
-  align-items: flex-end;
-  column-gap: 3px;
-  padding: 0 2px;
-}
-
-.bar-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  height: 100%;
-  cursor: pointer;
-  position: relative;
-  gap: 0;
-}
-
-.bar-rect {
-  width: 100%;
-  border-radius: 3px 3px 0 0;
-  background: var(--bar);
-  transform-origin: bottom center;
-  transform: scaleY(0);
-  transition: background .15s;
-  position: relative;
-}
-
-.bar-col:hover .bar-rect {
-  background: var(--bar-hover);
-}
-
-.bar-col.active .bar-rect {
-  background: var(--bar-active);
-}
-
-/* ── X AXIS ── */
-#x-axis {
-  display: grid;
-  column-gap: 3px;
-  padding: 0 2px;
-  margin-top: 0;
-  height: var(--x-axis-h);
-  align-items: start;
-}
-.x-label {
-  flex: 1;
-  font-size: .52rem;
-  color: var(--muted);
-  text-align: center;
-  font-weight: 400;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  padding-top: 4px;
-}
-.x-label.highlight { color: var(--accent); font-weight: 600; }
-
-/* ── Y LABEL ── */
-.y-axis-label {
-  font-size: .6rem;
-  color: var(--muted);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  white-space: nowrap;
-  align-self: center;
-  padding-right: 8px;
-  letter-spacing: .05em;
-  flex-shrink: 0;
-}
-
-/* ── DETAIL PANEL ── */
-#detail-panel {
-  width: 280px;
-  background: var(--panel-bg);
-  border-left: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-}
-
-.panel-inner {
-  padding: 28px 22px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
-}
-
-/* ── PANEL HEADER ── */
-.panel-header { margin-bottom: 18px; }
-.ph-title {
-  font-size: .6rem;
-  font-weight: 700;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 3px;
-}
-.ph-sub {
-  font-size: .55rem;
-  color: rgba(255,255,255,.2);
-}
-
-/* ── PRESIDENT CARDS ── */
-.pres-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 9px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 5px;
-  border: 1px solid transparent;
-  opacity: .55;
-  transition: background .18s, opacity .18s, border-color .18s;
-}
-.pres-card:hover { background: rgba(255,255,255,.04); opacity: .8; }
-.pres-card.active {
-  background: rgba(224,112,96,.07);
-  border-color: rgba(224,112,96,.22);
-  opacity: 1;
-}
-
-.pres-avatar {
-  position: relative;
-  width: 46px; height: 46px;
-  border-radius: 50%;
-  overflow: hidden;
-  flex-shrink: 0;
-  border: 2px solid rgba(224,112,96,.2);
-  background: rgba(255,255,255,.06);
-  transition: border-color .25s;
-}
-.pres-card.active .pres-avatar { border-color: var(--accent); }
-.pres-avatar img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: top; z-index: 2;
-}
-.pres-initials {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .72rem; font-weight: 700;
-  color: var(--accent); z-index: 1;
-}
-.pres-info { flex: 1; min-width: 0; }
-.pres-name {
-  font-size: .82rem; font-weight: 700;
-  color: var(--text); line-height: 1.2;
-  margin-bottom: 2px; transition: color .2s;
-}
-.pres-card.active .pres-name { color: var(--accent); }
-.pres-period { font-size: .54rem; color: var(--muted); }
-.pres-stat { text-align: right; flex-shrink: 0; }
-.pres-total {
-  font-size: .7rem; font-weight: 700;
-  color: var(--text); white-space: nowrap;
-  transition: color .2s;
-}
-.pres-card.active .pres-total { color: var(--accent); }
-.pres-total-unit { font-size: .5rem; color: var(--muted); }
-
-/* ── YEAR DISPLAY ── */
-.year-display {
-  margin-top: auto;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-  padding-bottom: 16px;
-}
-.yd-label {
-  font-size: .55rem; font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--muted); margin-bottom: 4px;
-}
-.yd-val {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1; margin-bottom: 2px;
-}
-.yd-unit { font-size: .56rem; color: var(--muted); }
-
-.panel-note {
-  font-size: .55rem;
-  color: rgba(255,255,255,.12);
-  line-height: 1.6;
-  padding-top: 14px;
-}
-
-/* ── SOURCE ── */
-#source-bar {
-  padding: 10px 44px;
-  font-size: .55rem;
-  color: rgba(255,255,255,.2);
-  line-height: 1.6;
-  border-top: 1px solid var(--border);
-}
+  /* ── DYNAMIC ELEMENT CLASSES (via @apply) ── */
+  .y-tick {
+    @apply text-[0.6rem] text-[#7a9e97] text-right pr-3 font-normal whitespace-nowrap;
+  }
+  .grid-line {
+    @apply w-full h-px bg-[rgba(255,255,255,0.07)] absolute left-0;
+  }
+  .bar-col {
+    @apply flex flex-col items-center justify-end h-full cursor-pointer relative;
+  }
+  .bar-rect {
+    @apply w-full relative bg-[#bc4a3c];
+    border-radius: 3px 3px 0 0;
+    transform-origin: bottom center;
+    transform: scaleY(0);
+    transition: background .15s;
+  }
+  .bar-col:hover .bar-rect { background: #d4574a; }
+  .bar-col.active .bar-rect { background: #e07060; }
+  .x-label {
+    @apply text-[0.52rem] text-[#7a9e97] text-center font-normal pt-1;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .x-label.highlight { @apply text-[#e07060] font-semibold; }
+  .pres-card {
+    @apply flex items-center gap-3 py-[9px] px-[10px] rounded-lg cursor-pointer mb-[5px] border border-transparent;
+    opacity: .55;
+    transition: background .18s, opacity .18s, border-color .18s;
+  }
+  .pres-card:hover { background: rgba(255,255,255,.04); opacity: .8; }
+  .pres-card.active {
+    background: rgba(224,112,96,.07);
+    border-color: rgba(224,112,96,.22);
+    opacity: 1;
+  }
+  .pres-avatar {
+    @apply relative w-[46px] h-[46px] rounded-full overflow-hidden shrink-0 border-2 border-[rgba(224,112,96,0.2)] bg-[rgba(255,255,255,0.06)];
+    transition: border-color .25s;
+  }
+  .pres-avatar img {
+    @apply absolute inset-0 w-full h-full object-cover object-top z-[2];
+  }
+  .pres-card.active .pres-avatar { border-color: #e07060; }
+  .pres-initials {
+    @apply absolute inset-0 flex items-center justify-center text-[0.72rem] font-bold text-[#e07060] z-[1];
+  }
+  .pres-info { @apply flex-1 min-w-0; }
+  .pres-name {
+    @apply text-[0.82rem] font-bold text-[#e8f0ee] leading-tight mb-0.5;
+    transition: color .2s;
+  }
+  .pres-card.active .pres-name { color: #e07060; }
+  .pres-period { @apply text-[0.54rem] text-[#7a9e97]; }
+  .pres-stat { @apply text-right shrink-0; }
+  .pres-total {
+    @apply text-[0.7rem] font-bold text-[#e8f0ee] whitespace-nowrap;
+    transition: color .2s;
+  }
+  .pres-card.active .pres-total { color: #e07060; }
+  .pres-total-unit { @apply text-[0.5rem] text-[#7a9e97]; }
 </style>
 </head>
-<body>
+<body class="h-full bg-[#1a1f1e] font-poppins text-[#e8f0ee] overflow-hidden">
 
-<div id="app">
+<div id="app" class="flex h-screen overflow-hidden max-w-[980px] mx-auto w-full">
 
   <!-- CHART -->
-  <div id="chart-area">
-    <div class="chart-header">
-      <div class="chart-title">Deforestasi Indonesia, 2001–2025</div>
-      <div class="chart-sub">Luas hutan yang hilang per tahun · hektare</div>
+  <div id="chart-area" class="flex-1 flex flex-col pt-[40px] px-[44px] pb-[32px] min-w-0">
+    <div class="mb-8">
+      <div class="text-xl font-bold text-[#e8f0ee] tracking-tight mb-1">Deforestasi Indonesia, 2001–2025</div>
+      <div class="text-[0.7rem] text-[#7a9e97]">Luas hutan yang hilang per tahun · hektare</div>
     </div>
 
-    <div id="chart-body">
+    <div id="chart-body" class="flex-1 flex min-h-0 relative">
       <!-- Y label -->
-      <div class="y-axis-label">Deforestasi (ha)</div>
+      <div class="text-[0.6rem] text-[#7a9e97] [writing-mode:vertical-rl] rotate-180 whitespace-nowrap self-center pr-2 tracking-[.05em] shrink-0">Deforestasi (ha)</div>
 
       <!-- Y axis ticks -->
-      <div id="y-axis"></div>
+      <div id="y-axis" class="flex flex-col-reverse justify-between pb-[78px] w-[72px] shrink-0"></div>
 
       <!-- Bars + grid -->
-      <div id="bars-wrap">
-        <div id="grid-lines" style="flex:1; position:relative;">
+      <div id="bars-wrap" class="flex-1 flex flex-col min-w-0 relative">
+        <div id="grid-lines" class="flex-1 relative">
           <!-- injected -->
         </div>
-        <div id="bars-svg-wrap">
+        <div id="bars-svg-wrap" class="absolute top-0 left-0 right-0 bottom-[78px] grid items-end gap-x-[3px] px-0.5">
           <!-- injected -->
         </div>
-        <div id="x-axis"></div>
+        <div id="x-axis" class="grid gap-x-[3px] px-0.5 h-[78px] items-start"></div>
       </div>
     </div>
   </div>
 
   <!-- DETAIL PANEL -->
-  <div id="detail-panel">
-    <div class="panel-inner">
-      <div class="panel-header">
-        <div class="ph-title">Era Kepemimpinan</div>
-        <div class="ph-sub">klik untuk sorot era</div>
+  <div id="detail-panel" class="w-[280px] bg-[#1a2826] border-l border-[rgba(255,255,255,0.07)] flex flex-col shrink-0">
+    <div class="py-[28px] px-[22px] flex flex-col h-full overflow-hidden">
+      <div class="mb-[18px]">
+        <div class="text-[0.6rem] font-bold tracking-[.16em] uppercase text-[#e07060] mb-[3px]">Era Kepemimpinan</div>
+        <div class="text-[0.55rem] text-[rgba(255,255,255,0.2)]">klik untuk sorot era</div>
       </div>
 
       <div id="pres-list"></div>
 
-      <div class="year-display">
-        <div class="yd-label" id="yd-year">Arahkan ke bar</div>
-        <div class="yd-val" id="yd-val">—</div>
-        <div class="yd-unit">ha deforestasi</div>
+      <div class="mt-auto pt-[18px] border-t border-[rgba(255,255,255,0.07)] pb-4">
+        <div class="text-[0.55rem] font-semibold tracking-[.14em] uppercase text-[#7a9e97] mb-1" id="yd-year">Arahkan ke bar</div>
+        <div class="text-[2.2rem] font-bold text-[#e8f0ee] leading-none mb-0.5" id="yd-val">—</div>
+        <div class="text-[0.56rem] text-[#7a9e97]">ha deforestasi</div>
       </div>
 
-      <div class="panel-note">
+      <div class="text-[0.55rem] text-[rgba(255,255,255,0.12)] leading-relaxed pt-[14px]">
         Data: University of Maryland Lossyear · Auriga STADI<br>
         simontini.id
       </div>
@@ -533,7 +288,7 @@ function setEra(name) {
     const p     = getPresident(DATA[i].year);
     const match = p && p.name === name;
     gsap.to(col, { opacity: match ? 1 : 0.12, duration: .3, ease: 'power2.out' });
-    rect.style.background = match ? 'var(--bar-active)' : '';
+    rect.style.background = match ? '#e07060' : '';
   });
   cardEls.forEach((c, i) => c.classList.toggle('active', PRESIDENTS[i].name === name));
 }

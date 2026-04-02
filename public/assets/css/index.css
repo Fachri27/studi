@@ -888,8 +888,9 @@ footer {
   }
 
   /* Sections */
-  .page-section { padding: 40px 2vw; }
-  .page-section.dark-bg { padding: 40px 5vw; }
+  .page-section { padding: 32px 5vw; }
+  .page-section.dark-bg { padding: 32px 5vw; }
+  .viz-frame--padded { padding: 0; }
 
   /* Headings */
   .s-heading { font-size: 29px; margin-bottom: 20px; }
@@ -930,6 +931,13 @@ footer {
   .viz-block--full .viz-frame iframe { height: 70vh !important; }
   .viz-block--full .viz-frame iframe.embed-compact { height: 320px !important; }
   .embed-bar { padding: 9px 14px; }
+
+  /* Fix caption position on mobile (overrides 430px desktop margin) */
+  .viz-block--full .viz-label,
+  .viz-block--full .viz-caption {
+    margin-left: 0;
+    padding: 0 5vw;
+  }
   .embed-bar-title { font-size: .55rem; letter-spacing: .08em; }
 
   /* Callout */
@@ -1038,7 +1046,7 @@ footer {
 @keyframes satwa-pulse { from { box-shadow: 0 0 0 2px rgba(192,64,48,.3); } to { box-shadow: 0 0 0 6px rgba(192,64,48,.55); } }
 
 /* ── PETA TEMATIK WRAPPER ── */
-#peta-tematik { display: flex; height: 1035px; overflow: hidden; width: 100%; font-family: 'Poppins', sans-serif; }
+#peta-tematik { display: flex; height: 850px; overflow: hidden; width: 100%; font-family: 'Poppins', sans-serif; }
 
 /* ── PETA TEMATIK RESPONSIVE ── */
 @media (max-width: 1280px) {
@@ -1061,16 +1069,117 @@ footer {
   #others-bubble { width: 132px; height: 132px; right: 10px; top: 56px; }
 }
 @media (max-width: 640px) {
-  #sidebar { max-height: 30vh; padding: 12px 10px; }
-  #sidebar h1 { font-size: .95rem; }
-  .mode-btn { font-size: .72rem; padding: 8px 9px; }
+  /* Tematik: column layout, fixed height so map fills the rest */
+  #peta-tematik { height: min(100svh, 700px); }
+
+  /* Sidebar: column — tab rail on top, KPI block below */
+  #sidebar {
+    width: 100%;
+    max-height: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    position: relative;
+  }
+  /* Hide title and subtitle only */
+  #sidebar h1,
+  #sidebar > p { display: none !important; }
+
+  /* Mode buttons rail: horizontal scrollable */
+  #mode-btn-rail {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 8px 12px 8px;
+    gap: 0;
+    -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%);
+    mask-image: linear-gradient(to right, black 75%, transparent 100%);
+  }
+  #mode-btn-rail::-webkit-scrollbar { display: none; }
+
+  /* Mode buttons: inline chips */
+  #sidebar .mode-btn {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    width: auto !important;
+    max-width: none !important;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    font-size: .7rem;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-bottom: none;
+    background: rgba(255,255,255,.05) !important;
+    color: rgba(245,240,232,.6);
+    margin-right: 6px;
+  }
+  #sidebar .mode-btn.active {
+    border-color: rgba(139,42,26,.5);
+    color: #f5f0e8;
+    background: rgba(139,42,26,.3) !important;
+  }
+
+  /* Konsesi submenu: absolute dropdown below the rail */
+  #konsesi-submenu {
+    display: none;
+    position: absolute;
+    top: 43px;
+    left: 0;
+    right: 0;
+    background: #1a1a1a;
+    z-index: 700;
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+    scrollbar-width: none;
+  }
+  #konsesi-submenu.show { display: flex !important; }
+  #konsesi-submenu::-webkit-scrollbar { display: none; }
+  #konsesi-submenu .cat-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 6px 10px;
+    font-size: .66rem;
+    margin-bottom: 0;
+  }
+
+  /* Divider between rail and KPI block */
+  #sidebar > .h-px { margin: 0; }
+
+  /* KPI block: compact, stays visible */
+  #sidebar > div.bg-\[rgba\(139\,42\,26\,\.14\)\] {
+    padding: 8px 12px !important;
+    border-radius: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  #sidebar #kpi-val { font-size: 1.3rem !important; margin-top: 2px !important; }
+  #sidebar #kpi-label, #sidebar #kpi-unit { font-size: .5rem !important; }
+  /* Hide bullet notes in KPI block (too long on mobile) */
+  #sidebar #sidebar-notes { display: none !important; }
+  #sidebar > div.bg-\[rgba\(139\,42\,26\,\.14\)\] > .mt-\[10px\] { display: none !important; }
+
   #interaction-hint { display: none; }
-  #title-block { top: 60px; }
+  #title-block { top: 54px; left: 8px; }
+  #title-block h2 { font-size: .9rem; }
   #others-bubble { width: 108px; height: 108px; top: 52px; right: 8px; padding: 10px; }
+  #notes-wrap { left: 8px; right: 8px; width: auto; bottom: 12px; }
   #notes-box  { max-height: 22vh; padding: 10px 10px 8px; font-size: .72rem; }
   .table-title { font-size: .52rem; padding: 6px 8px; }
   .table-card table { font-size: .6rem; }
   .table-card th, .table-card td { padding: 4px; }
+  #table-panel { width: min(96vw, 480px); }
 }
 
 /* ═══════════════════════════════════════════
@@ -1101,3 +1210,601 @@ footer {
   background: repeating-linear-gradient(45deg, transparent, transparent 12px, rgba(0,0,0,0.06) 12px, rgba(0,0,0,0.06) 13px);
 }
 #alur-embed .steps.rev .arrow { transform: scaleX(-1); }
+
+/* ═══════════════════════════════════════════
+   CHART DEFORESTASI — inline chart widget
+═══════════════════════════════════════════ */
+#chart-deforestasi-wrap {
+  background: #1a1f1e;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 510px;
+}
+
+#chart-app {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  color: #e8f0ee;
+}
+
+#chart-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 44px 20px;
+  min-width: 0;
+}
+
+.chart-header { margin-bottom: 14px; }
+.chart-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e8f0ee;
+  letter-spacing: -.01em;
+  margin-bottom: 4px;
+}
+.chart-sub {
+  font-size: .7rem;
+  color: #7a9e97;
+  font-weight: 400;
+}
+
+#chart-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  position: relative;
+}
+
+.y-axis-label {
+  font-size: .6rem;
+  color: #7a9e97;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  align-self: center;
+  padding-right: 8px;
+  letter-spacing: .05em;
+  flex-shrink: 0;
+}
+
+#y-axis {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  padding-bottom: 78px;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.y-tick {
+  font-size: .6rem;
+  color: #7a9e97;
+  text-align: right;
+  padding-right: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+#bars-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+}
+
+#grid-lines {
+  flex: 1;
+  position: relative;
+}
+
+.grid-line {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,.07);
+  position: absolute;
+  left: 0;
+}
+
+#bars-svg-wrap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  bottom: 78px;
+  display: grid;
+  align-items: flex-end;
+  column-gap: 3px;
+  padding: 0 2px;
+}
+
+.bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+}
+
+.bar-rect {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: #bc4a3c;
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  transition: background .15s;
+  position: relative;
+}
+
+.bar-col:hover .bar-rect { background: #d4574a; }
+.bar-col.active .bar-rect { background: #e07060; }
+
+#x-axis {
+  display: grid;
+  column-gap: 3px;
+  padding: 0 2px;
+  height: 78px;
+  align-items: start;
+}
+
+.x-label {
+  font-size: .52rem;
+  color: #7a9e97;
+  text-align: center;
+  font-weight: 400;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding-top: 4px;
+}
+.x-label.highlight { color: #e07060; font-weight: 600; }
+
+#detail-panel {
+  width: 280px;
+  background: #1a2826;
+  border-left: 1px solid rgba(255,255,255,.07);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.panel-inner {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.panel-header { margin-bottom: 12px; }
+.ph-title {
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #e07060;
+  margin-bottom: 3px;
+}
+.ph-sub {
+  font-size: .55rem;
+  color: rgba(255,255,255,.2);
+}
+
+.pres-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 3px;
+  border: 1px solid transparent;
+  opacity: .55;
+  transition: background .18s, opacity .18s, border-color .18s;
+}
+.pres-card:hover { background: rgba(255,255,255,.04); opacity: .8; }
+.pres-card.active {
+  background: rgba(224,112,96,.07);
+  border-color: rgba(224,112,96,.22);
+  opacity: 1;
+}
+
+.pres-avatar {
+  position: relative;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid rgba(224,112,96,.2);
+  background: rgba(255,255,255,.06);
+  transition: border-color .25s;
+}
+.pres-card.active .pres-avatar { border-color: #e07060; }
+.pres-avatar img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top; z-index: 2;
+}
+.pres-initials {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 700;
+  color: #e07060; z-index: 1;
+}
+.pres-info { flex: 1; min-width: 0; }
+.pres-name {
+  font-size: .82rem; font-weight: 700;
+  color: #e8f0ee; line-height: 1.2;
+  margin-bottom: 2px; transition: color .2s;
+}
+.pres-card.active .pres-name { color: #e07060; }
+.pres-period { font-size: .54rem; color: #7a9e97; }
+.pres-stat { text-align: right; flex-shrink: 0; }
+.pres-total {
+  font-size: .7rem; font-weight: 700;
+  color: #e8f0ee; white-space: nowrap;
+  transition: color .2s;
+}
+.pres-card.active .pres-total { color: #e07060; }
+.pres-total-unit { font-size: .5rem; color: #7a9e97; }
+
+.year-display {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  padding-bottom: 10px;
+}
+.yd-label {
+  font-size: .55rem; font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #7a9e97; margin-bottom: 4px;
+}
+.yd-val {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #e8f0ee;
+  line-height: 1; margin-bottom: 2px;
+}
+.yd-unit { font-size: .56rem; color: #7a9e97; }
+
+.panel-note {
+  font-size: .55rem;
+  color: rgba(255,255,255,.12);
+  line-height: 1.6;
+  padding-top: 14px;
+}
+
+/* ── CHART DEFORESTASI: RESPONSIVE MOBILE ── */
+@media (max-width: 639px) {
+  #chart-deforestasi-wrap {
+    height: auto;
+    border-radius: 0;
+  }
+
+  #chart-app {
+    flex-direction: column;
+  }
+
+  #chart-area {
+    padding: 16px 12px 10px;
+    min-height: 260px;
+  }
+
+  .chart-header { margin-bottom: 10px; }
+  .chart-title { font-size: 1rem; }
+
+  .y-axis-label { display: none; }
+
+  #y-axis {
+    width: 44px;
+    padding-bottom: 56px;
+  }
+
+  #bars-svg-wrap {
+    bottom: 56px;
+  }
+
+  #x-axis {
+    height: 56px;
+  }
+
+  #detail-panel {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,.07);
+    height: auto;
+  }
+
+  .panel-inner {
+    padding: 14px 16px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .panel-header { margin-bottom: 8px; }
+
+  #pres-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+
+  .pres-card {
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 0;
+  }
+
+  .pres-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .pres-name { font-size: .72rem; }
+  .pres-period { font-size: .48rem; }
+  .pres-total { font-size: .62rem; }
+
+  .year-display { display: none; }
+  .panel-note { display: none; }
+}
+
+/* ── Akurasi table — mobile compact ── */
+@media (max-width: 639px) {
+  .akurasi-table th,
+  .akurasi-table td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+  .akurasi-table thead th {
+    font-size: 7px !important;
+    letter-spacing: 0.02em !important;
+  }
+  .akurasi-table tbody td {
+    font-size: 9px !important;
+  }
+}
+
+/* ── Alur diagram — mobile compact ── */
+@media (max-width: 639px) {
+  #dwrap {
+    min-width: 540px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  #dwrap .a-lane {
+    width: 72px !important;
+    min-width: 72px !important;
+    padding-right: 8px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  #dwrap .a-lane > div:last-child {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+  }
+
+  #dwrap .a-lane > div:first-child {
+    font-size: 8px !important;
+    margin-bottom: 3px !important;
+  }
+
+  #dwrap .steps {
+    padding-left: 7px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  #dwrap .a-card {
+    padding: 7px 8px !important;
+    border-radius: 6px !important;
+  }
+
+  #dwrap .a-card > div:first-child {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  #dwrap .a-arr {
+    width: 14px !important;
+    min-width: 14px !important;
+  }
+
+  #dwrap .a-arr svg {
+    width: 14px !important;
+    height: 8px !important;
+  }
+
+  #dwrap #card-final {
+    min-height: 68px !important;
+    padding: 8px 8px !important;
+    border-radius: 6px !important;
+  }
+
+  #dwrap #card-final > div {
+    font-size: 13px !important;
+    line-height: 1.1 !important;
+  }
+}
+/* ── Akurasi table — desktop compact ── */
+@media (min-width: 640px) {
+  .akurasi-table th,
+  .akurasi-table td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  .akurasi-table thead tr:first-child th {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .akurasi-table thead tr:last-child th {
+    font-size: 10.5px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}
+
+/* ── Alur diagram — desktop compact ── */
+@media (min-width: 640px) {
+  #dwrap {
+    padding-top: 16px;
+    padding-bottom: 18px;
+  }
+
+  #dwrap .a-lane {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  #dwrap .a-lane > div:last-child {
+    font-size: 18px;
+  }
+
+  #dwrap .steps {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  #dwrap .a-card {
+    padding: 12px 14px;
+  }
+
+  #dwrap .a-card > div:first-child {
+    font-size: 12.5px;
+  }
+
+  #dwrap .a-arr {
+    width: 30px;
+    min-width: 30px;
+  }
+
+  #dwrap .a-arr svg {
+    width: 30px;
+  }
+
+  #dwrap #card-final {
+    min-height: 120px;
+    padding: 14px 14px;
+  }
+
+  #dwrap #card-final > div {
+    font-size: 18px;
+  }
+}
+
+/* ── Peta island charts — mobile: single grid box ── */
+@media (max-width: 639px) {
+  #peta-charts-wrap {
+    position: absolute !important;
+    inset: auto !important;
+    top: 80px !important;
+    left: 4px !important;
+    right: 4px !important;
+    bottom: auto !important;
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    z-index: 30;
+    pointer-events: auto !important;
+    background: rgba(245,240,232,.97);
+    border: 1px solid rgba(212,196,160,.8);
+    border-top: 3px solid #8b2a1a;
+    overflow: hidden;
+  }
+  #peta-charts-wrap.peta-open {
+    display: grid;
+  }
+  /* Charts become static grid items on mobile */
+  #peta-charts-wrap .peta-island-chart {
+    position: static !important;
+    transform: none !important;
+    filter: none !important;
+    display: block !important;
+    border-right: 1px solid rgba(212,196,160,.4);
+    border-bottom: 1px solid rgba(212,196,160,.4);
+  }
+  /* Nth child border overrides (right column & bottom row) */
+  #peta-charts-wrap .peta-island-chart:nth-child(2n) { border-right: none; }
+  #peta-charts-wrap .peta-island-chart:nth-last-child(-n+2) { border-bottom: none; }
+  /* Compact inner chart */
+  #peta-charts-wrap .peta-island-chart > div {
+    background: transparent !important;
+    border: none !important;
+    min-width: 0 !important;
+    padding: 8px 9px !important;
+  }
+  #peta-charts-wrap .peta-island-chart > div > div:first-child {
+    font-size: 0.78rem !important;
+    margin-bottom: 1px !important;
+  }
+  #peta-charts-wrap .peta-island-chart > div > div:nth-child(2) {
+    font-size: 0.4rem !important;
+    margin-bottom: 3px !important;
+  }
+}
+
+/* ── Peta island charts — desktop compact ── */
+@media (min-width: 640px) {
+  .peta-island-chart > div {
+    padding: 9px 11px !important;
+  }
+
+  .peta-island-chart > div > div:first-child {
+    font-size: 0.88rem !important;
+    margin-bottom: 1px !important;
+  }
+
+  .peta-island-chart > div > div:nth-child(2) {
+    font-size: 0.45rem !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Right-anchor Papua so it never overflows the right edge */
+  #peta-chart-papua {
+    left: auto !important;
+    right: 3% !important;
+  }
+}
+
+/* ── Peta table section — desktop compact ── */
+@media (min-width: 640px) {
+  #peta-table-section {
+    padding-top: 36px !important;
+    padding-bottom: 36px !important;
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+
+  #peta-table-section th,
+  #peta-table-section td {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  #peta-table-section thead th {
+    font-size: 0.58rem !important;
+  }
+
+  #peta-table-section tbody td:first-child,
+  #peta-table-section tfoot td:first-child {
+    font-size: 0.8rem !important;
+  }
+
+  #peta-table-section tbody td:not(:first-child),
+  #peta-table-section tfoot td:not(:first-child) {
+    font-size: 0.72rem !important;
+  }
+}

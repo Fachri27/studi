@@ -414,19 +414,20 @@ var r4c1 = document.getElementById('r4c1');
 
 if (dataindikatif && r4c1) {
   var DI = getR(dataindikatif, wrap), OV = getR(r4c1, wrap);
-  var gap2 = OV.top - DI.bottom;
-  var cp1x2 = DI.cx, cp1y2 = DI.bottom + gap2 * 0.2;
-  var cp2x2 = OV.cx, cp2y2 = OV.top - gap2 * 0.2;
+  var midY = (DI.bottom + OV.top) / 2;
   var curve2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   curve2.setAttribute('fill', 'none');
   curve2.setAttribute('stroke', '#C75B2E');
   curve2.setAttribute('stroke-width', '1.5');
   curve2.setAttribute('stroke-linecap', 'round');
+  curve2.setAttribute('stroke-linejoin', 'round');
   curve2.setAttribute('opacity', '0.7');
   curve2.setAttribute('marker-end', 'url(#xarr)');
   curve2.setAttribute('d',
     'M'+DI.cx+' '+DI.bottom+
-    ' C'+cp1x2+' '+cp1y2+','+cp2x2+' '+cp2y2+','+OV.cx+' '+(OV.cy - 50)
+    ' L'+DI.cx+' '+midY+
+    ' L'+OV.cx+' '+midY+
+    ' L'+OV.cx+' '+(OV.top-2)
   );
   svg.appendChild(curve2);
 }
@@ -434,7 +435,7 @@ if (dataindikatif && r4c1) {
 
 
 window.addEventListener('load', function() {
-  drawConnectors();
+  setTimeout(drawConnectors, 100);
   window.addEventListener('resize', function() { setTimeout(drawConnectors, 120); });
 });
 

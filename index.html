@@ -26,7 +26,7 @@
 <!-- STICKY NAV -->
 <nav id="sitenav" class="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between h-[52px] px-[5vw] bg-[rgba(245,240,232,.92)] backdrop-blur-md border-b border-[#e2d8cc]">
   <div class="nav-brand flex items-center gap-1.5 uppercase tracking-[0.18em] text-[#8b2a1a] text-[.65rem] font-semibold">
-    <img src="assets/images/logo1.png" alt="" class="h-14">
+    <img src="assets/images/logo1.png" alt="" class="h-10 sm:h-14">
   </div>
   <div class="nav-actions">
     <ul class="nav-links flex list-none">
@@ -117,13 +117,50 @@ regulasi yang melindungi seluruh hutan alam tersisa
    <div class="viz-block viz-block--full mt-2 mb-2">
     <div class="viz-frame viz-frame--padded">
       <div class="mx-auto w-full overflow-x-auto overflow-y-hidden rounded-none bg-white shadow-[0_4px_28px_rgba(26,26,26,.08)] md:overflow-x-visible" style="max-width:980px;">
-
-        <div style="background:#1a1f1e; border-radius:4px; overflow:hidden;">
-  <iframe src="chart-deforestasi.html" title="Grafik Deforestasi Indonesia" loading="lazy" style="display:block; width:100%; border:0; height:460px;"></iframe>
-</div>
+        <div id="chart-deforestasi-wrap">
+          <div id="chart-app">
+            <!-- CHART -->
+            <div id="chart-area">
+              <div class="chart-header">
+                <div class="chart-title">Deforestasi Indonesia, 2001–2025</div>
+                <div class="chart-sub">Luas hutan yang hilang per tahun · hektare</div>
+              </div>
+              <div id="chart-body">
+                <div class="y-axis-label">Deforestasi (ha)</div>
+                <div id="y-axis"></div>
+                <div id="bars-wrap">
+                  <div id="grid-lines"></div>
+                  <div id="bars-svg-wrap"></div>
+                  <div id="x-axis"></div>
+                </div>
+              </div>
+            </div>
+            <!-- DETAIL PANEL -->
+            <div id="detail-panel">
+              <div class="panel-inner">
+                <div class="panel-header">
+                  <div class="ph-title">Era Kepemimpinan</div>
+                  <div class="ph-sub">klik untuk sorot era</div>
+                </div>
+                <div id="pres-list"></div>
+                <div class="year-display">
+                  <div class="yd-label" id="yd-year">Arahkan ke bar</div>
+                  <div class="yd-val" id="yd-val">—</div>
+                  <div class="yd-unit">ha deforestasi</div>
+                </div>
+                <div class="panel-note">
+                  Data: University of Maryland Lossyear · Auriga STADI<br>
+                  simontini.id
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+
   
 
   <!-- <div class="stat-grid">
@@ -237,27 +274,24 @@ regulasi yang melindungi seluruh hutan alam tersisa
   <div style="background:#0d0d0d; border-radius:0;">
     <div class="embed-bar" style="background:#161616; border-bottom-color:rgba(255,255,255,.08);">
       <span class="embed-bar-title" style="color:rgba(255,255,255,.45);">Tahapan &amp; Pemrosesan Data SIMONTINI</span>
-      <a href="alur.html" target="_blank" class="viz-expand" style="color:#C0522A;">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline>
-          <line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line>
-        </svg>
-        Buka penuh
-      </a>
+    </div>
+    <div class="flex items-center gap-1.5 px-4 py-2 sm:hidden" style="background:#161616; border-bottom:1px solid rgba(255,255,255,.05);">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <span style="font-size:.6rem; color:rgba(255,255,255,.3); letter-spacing:.08em;">geser untuk melihat alur lengkap</span>
     </div>
 
     <!-- ALUR INLINE — replaces <iframe src="alur.html"> -->
-    <div id="alur-embed" class="bg-[#0e0e0e] font-poppins text-[#e8e2d8] antialiased">
+    <div id="alur-embed" class="bg-[#0e0e0e] font-poppins text-[#e8e2d8] antialiased overflow-x-auto">
 
-      <div class="px-[60px] pt-6 pb-8 max-w-[1400px] mx-auto relative" id="dwrap">
+      <div class="px-4 sm:px-[60px] pt-6 pb-8 min-w-[680px] sm:min-w-0 max-w-[1400px] mx-auto relative" id="dwrap">
 
         <!-- ═══ ROW 1 · Deep Learning Modeling ═══ -->
-        <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row1">
+        <div class="flex items-stretch border-t border-white/[0.07] relative" id="row1">
           <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll1">
             <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">01</div>
             <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Deep Learning Modeling</div>
           </div>
-          <div class="steps flex-1 py-6 pl-8 flex items-center relative">
+          <div class="steps flex-1 pl-8 flex items-center relative">
 
             <div class="flex items-center flex-1">
               <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r1c1" onclick="alurToggle(this)">
@@ -294,12 +328,12 @@ regulasi yang melindungi seluruh hutan alam tersisa
         </div>
 
         <!-- ═══ ROW 2 · Scoping Area ═══ -->
-        <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row2">
+        <div class="flex items-stretch border-t border-white/[0.07] relative" id="row2">
           <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll2">
             <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">02</div>
             <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Scoping Area Deforestasi</div>
           </div>
-          <div class="steps flex-1 py-6 pl-8 flex items-center relative">
+          <div class="steps flex-1 pl-8 flex items-center relative">
 
             <div class="flex items-center flex-1">
               <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r2c1" onclick="alurToggle(this)">
@@ -346,10 +380,15 @@ regulasi yang melindungi seluruh hutan alam tersisa
               </div>
             </div>
 
-            <div class="flex items-center [flex:0.8]">
-              <div class="card flex-1 border border-[rgba(199,91,46,0.3)] bg-[rgba(199,91,46,0.06)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="agreg" onclick="alurToggle(this)">
-                <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Agregasi True Alert</div>
-                <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Pengelompokan alert</li><li class="mb-0.5">Jarak maks. 10.240 m</li></ul></div>
+            <div class="flex self-stretch [flex:0.8]">
+              <div class="flex flex-col flex-1">
+                <div class="flex items-center flex-1">
+                  <div class="card flex-1 border border-[rgba(199,91,46,0.3)] bg-[rgba(199,91,46,0.06)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="agreg" onclick="alurToggle(this)">
+                    <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Agregasi True Alert</div>
+                    <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Pengelompokan alert</li><li class="mb-0.5">Jarak maks. 10.240 m</li></ul></div>
+                  </div>
+                </div>
+                <div class="flex-1 mt-2"></div>
               </div>
             </div>
 
@@ -357,12 +396,12 @@ regulasi yang melindungi seluruh hutan alam tersisa
         </div>
 
         <!-- ═══ ROW 3 · Deforestasi Indikatif (reversed) ═══ -->
-        <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row3">
+        <div class="flex items-stretch border-t border-white/[0.07] relative" id="row3">
           <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll3">
             <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">03</div>
             <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Deforestasi Indikatif</div>
           </div>
-          <div class="steps rev flex-1 py-6 pl-8 flex items-center relative flex-row-reverse">
+          <div class="steps rev flex-1 pl-8 flex items-center relative flex-row-reverse">
 
             <div class="flex flex-row-reverse items-center flex-1">
               <div class="card flex-1 border border-[rgba(199,91,46,0.3)] bg-[rgba(199,91,46,0.06)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="normcit" onclick="alurToggle(this)">
@@ -399,12 +438,12 @@ regulasi yang melindungi seluruh hutan alam tersisa
         </div>
 
         <!-- ═══ ROW 4 · Verifikasi ═══ -->
-        <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row4">
+        <div class="flex items-stretch border-t border-white/[0.07] relative" id="row4">
           <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll4">
             <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">04</div>
             <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Verifikasi</div>
           </div>
-          <div class="steps flex-1 py-6 pl-8 flex items-center relative">
+          <div class="steps flex-1 pl-8 flex items-center relative">
 
             <div class="flex [flex:0.8] self-stretch items-center">
               <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r4c1" onclick="alurToggle(this)">
@@ -488,12 +527,12 @@ regulasi yang melindungi seluruh hutan alam tersisa
 
   <div class="viz-block viz-block--full mt-5 mb-2">
     <div class="viz-frame viz-frame--padded">
-      <div class="mx-auto w-full overflow-x-auto overflow-y-hidden rounded-none bg-white shadow-[0_4px_28px_rgba(26,26,26,.08)] md:overflow-x-visible" style="max-width:980px;">
+      <div class="mx-4 sm:mx-auto overflow-x-auto overflow-y-hidden rounded-lg sm:rounded-none bg-white shadow-[0_4px_28px_rgba(26,26,26,.08)] md:overflow-x-visible" style="max-width:980px;">
         <div class="border-b border-[#ddd5c8] px-4 py-4 sm:px-6">
           <div class="text-[12px] font-semibold tracking-[-0.01em] text-[#1a1a1a] sm:text-[13px]">Hasil uji akurasi terhadap data deforestasi 2025</div>
         </div>
 
-        <table class="w-full min-w-[900px] table-fixed border-collapse text-[10px] text-[#1a1a1a] sm:text-[11px] md:min-w-full md:text-[12px]">
+        <table class="akurasi-table w-full min-w-[480px] table-fixed border-collapse text-[10px] text-[#1a1a1a] sm:text-[11px] md:min-w-full md:text-[12px]">
           <thead>
             <tr>
               <th colspan="3" class="border-r border-white/15 text-center bg-[#8b2a1a] px-2 py-3 text-left font-semibold uppercase tracking-[0.08em] text-white sm:px-4">Area deforestasi</th>
@@ -736,10 +775,10 @@ regulasi yang melindungi seluruh hutan alam tersisa
   <!-- <div class="viz-block viz-block--full" data-include-html="partials/peta-embed.html"></div><br><br><br> -->
 <div id="peta-embed" class="mx-auto">
 <!-- MAP SECTION -->
-<div class="relative bg-[#0b1008] overflow-hidden" style="height:100vh;">
+<div class="relative bg-black overflow-hidden" style="height:550px;">
 
   <!-- Header -->
-  <div class="absolute top-0 left-0 right-0 z-50 pt-6 px-10 flex justify-between items-start pointer-events-none">
+  <div class="absolute top-0 left-0 right-0 z-50 pt-4 sm:pt-6 px-4 sm:px-10 flex justify-between items-start pointer-events-none">
     <h1 class="font-poppins text-[clamp(1.6rem,3vw,2.6rem)] font-bold leading-[1.1] text-[#f5f0e8]">
       Deforestasi<br>melonjak pada <span class="text-[#8b2a1a]">2025</span>
     </h1>
@@ -751,13 +790,16 @@ regulasi yang melindungi seluruh hutan alam tersisa
   </div>
 
   <!-- Year ghost -->
-  <div id="peta-year-ghost" class="absolute bottom-[90px] right-10 z-10 pointer-events-none font-poppins font-black text-[#f5f0e8] opacity-10 leading-none tracking-tighter" style="font-size:clamp(5rem,12vw,10rem)">2025</div>
+  <div id="peta-year-ghost" class="absolute bottom-[75px] sm:bottom-[90px] right-2 sm:right-10 z-10 pointer-events-none font-poppins font-black text-[#f5f0e8] opacity-10 leading-none tracking-tighter" style="font-size:clamp(4rem,10vw,10rem)">2025</div>
 
   <!-- Charts layer -->
   <div class="absolute inset-0 z-20 pointer-events-none">
 
+    <!-- Charts wrap: desktop = absolute inset-0 passthrough; mobile = single grid box -->
+    <div id="peta-charts-wrap" class="absolute inset-0 pointer-events-none">
+
     <!-- Sumatra chart -->
-    <div class="peta-island-chart hidden absolute pointer-events-auto" id="peta-chart-sumatra" style="left:3%;top:28%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
+    <div class="peta-island-chart hidden absolute pointer-events-auto origin-top-left scale-75 sm:scale-100" id="peta-chart-sumatra" style="left:3%;top:28%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
       <div class="bg-[rgba(245,240,232,.96)] border border-[rgba(212,196,160,.8)] border-t-[3px] border-t-[#8b2a1a] p-[14px_16px] min-w-[210px]">
         <div class="font-poppins text-[1.1rem] font-bold text-[#1a1a1a] mb-0.5 leading-[1.05]">Sumatera</div>
         <div class="font-poppins text-[.52rem] font-bold text-[#1a1a1a] mb-2.5">ribu hektare</div>
@@ -775,7 +817,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
     </div>
 
     <!-- Kalimantan chart -->
-    <div class="peta-island-chart hidden absolute pointer-events-auto" id="peta-chart-kalimantan" style="left:31%;top:8%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
+    <div class="peta-island-chart hidden absolute pointer-events-auto origin-top-left scale-75 sm:scale-100" id="peta-chart-kalimantan" style="left:31%;top:8%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
       <div class="bg-[rgba(245,240,232,.96)] border border-[rgba(212,196,160,.8)] border-t-[3px] border-t-[#8b2a1a] p-[14px_16px] min-w-[210px]">
         <div class="font-poppins text-[1.1rem] font-bold text-[#1a1a1a] mb-0.5 leading-[1.05]">Kalimantan</div>
         <div class="font-poppins text-[.52rem] font-bold text-[#1a1a1a] mb-2.5">ribu hektare</div>
@@ -793,7 +835,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
     </div>
 
     <!-- Sulawesi chart -->
-    <div class="peta-island-chart hidden absolute pointer-events-auto" id="peta-chart-sulawesi" style="left:55%;top:10%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
+    <div class="peta-island-chart hidden absolute pointer-events-auto origin-top-left scale-75 sm:scale-100" id="peta-chart-sulawesi" style="left:55%;top:10%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
       <div class="bg-[rgba(245,240,232,.96)] border border-[rgba(212,196,160,.8)] border-t-[3px] border-t-[#8b2a1a] p-[14px_16px] min-w-[210px]">
         <div class="font-poppins text-[1.1rem] font-bold text-[#1a1a1a] mb-0.5 leading-[1.05]">Sulawesi</div>
         <div class="font-poppins text-[.52rem] font-bold text-[#1a1a1a] mb-2.5">ribu hektare</div>
@@ -811,7 +853,7 @@ regulasi yang melindungi seluruh hutan alam tersisa
     </div>
 
     <!-- Papua chart -->
-    <div class="peta-island-chart hidden absolute pointer-events-auto" id="peta-chart-papua" style="left:72%;top:16%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
+    <div class="peta-island-chart hidden absolute pointer-events-auto origin-top-left scale-75 sm:scale-100" id="peta-chart-papua" style="left:72%;top:16%;filter:drop-shadow(0 6px 20px rgba(26,26,26,.2))">
       <div class="bg-[rgba(245,240,232,.96)] border border-[rgba(212,196,160,.8)] border-t-[3px] border-t-[#8b2a1a] p-[14px_16px] min-w-[210px]">
         <div class="font-poppins text-[1.1rem] font-bold text-[#1a1a1a] mb-0.5 leading-[1.05]">Papua</div>
         <div class="font-poppins text-[.52rem] font-bold text-[#1a1a1a] mb-2.5">ribu hektare</div>
@@ -828,10 +870,12 @@ regulasi yang melindungi seluruh hutan alam tersisa
       </div>
     </div>
 
+    </div><!-- /peta-charts-wrap -->
+
   </div><!-- /charts-layer -->
 
   <!-- Bubbles -->
-  <div id="peta-bubbles" class="absolute bottom-[105px] left-1/2 -translate-x-1/2 flex gap-3 z-30 pointer-events-none items-center">
+  <div id="peta-bubbles" class="absolute bottom-[105px] left-0 right-0 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 flex gap-1 sm:gap-3 z-30 pointer-events-none items-center justify-center px-1 sm:px-0">
     <div class="peta-bub flex flex-col items-center justify-center rounded-full border-2 border-[rgba(245,240,232,.25)] text-[rgba(245,240,232,.55)] transition-all duration-300 shrink-0 pointer-events-auto cursor-pointer" id="peta-b0" onclick="petaSelectYear(0)"><div class="b-yr text-[.6rem] font-semibold">2021</div><div class="b-val font-bold leading-[1.1]">229.982</div><div class="b-u text-[.58rem] opacity-85">ha</div></div>
     <div class="peta-bub flex flex-col items-center justify-center rounded-full border-2 border-[rgba(245,240,232,.25)] text-[rgba(245,240,232,.55)] transition-all duration-300 shrink-0 pointer-events-auto cursor-pointer" id="peta-b1" onclick="petaSelectYear(1)"><div class="b-yr text-[.6rem] font-semibold">2022</div><div class="b-val font-bold leading-[1.1]">230.760</div><div class="b-u text-[.58rem] opacity-85">ha</div></div>
     <div class="peta-bub flex flex-col items-center justify-center rounded-full border-2 border-[rgba(245,240,232,.25)] text-[rgba(245,240,232,.55)] transition-all duration-300 shrink-0 pointer-events-auto cursor-pointer" id="peta-b2" onclick="petaSelectYear(2)"><div class="b-yr text-[.6rem] font-semibold">2023</div><div class="b-val font-bold leading-[1.1]">257.385</div><div class="b-u text-[.58rem] opacity-85">ha</div></div>
@@ -842,37 +886,37 @@ regulasi yang melindungi seluruh hutan alam tersisa
 </div><!-- /map section -->
 
 <!-- TABLE SECTION -->
-<div id="peta-table-section" class="bg-[#1a1a1a] text-[#f5f0e8] py-20 px-12 relative">
-  <div class="max-w-[980px] mx-auto">
-    <table class="w-full border-collapse">
+<div id="peta-table-section" class="bg-[#1a1a1a] text-[#f5f0e8] py-8 sm:py-20 px-4 sm:px-12 relative">
+  <div class="max-w-[980px] mx-auto overflow-x-auto">
+    <table class="w-full border-collapse min-w-[560px]">
       <thead>
-        <tr class="border-b-2 border-[#8b2a1a]">
-          <th rowspan="2" class="font-poppins text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-[9px] px-[14px] text-left align-bottom">Pulau</th>
-          <th colspan="3" class="font-poppins text-[.65rem] tracking-[.07em] uppercase text-[#c04030] py-[9px] px-[14px] text-center border-b border-[rgba(255,255,255,.1)]">Deforestasi (ha)</th>
-          <th colspan="2" class="font-poppins text-[.65rem] tracking-[.07em] uppercase py-[9px] px-[14px] text-center border-b border-[rgba(255,255,255,.1)]" style="color:#ff6b4a">Perluasan 2025 vs 2024</th>
+        <tr c lass="border-b-2 border-[#8b2a1a]">
+          <th rowspan="2" class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-1 sm:py-[9px] px-2 sm:px-[14px] text-left align-bottom">Pulau</th>
+          <th colspan="3" class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase text-[#c04030] py-1 sm:py-[9px] px-2 sm:px-[14px] text-center border-b border-[rgba(255,255,255,.1)]">Deforestasi (ha)</th>
+          <th colspan="2" class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase py-1 sm:py-[9px] px-2 sm:px-[14px] text-center border-b border-[rgba(255,255,255,.1)]" style="color:#ff6b4a">Perluasan 2025 vs 2024</th>
         </tr>
         <tr class="border-b-2 border-[#8b2a1a]">
-          <th class="font-poppins text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-[9px] px-[14px] text-right">2023</th>
-          <th class="font-poppins text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-[9px] px-[14px] text-right">2024</th>
-          <th class="font-poppins text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-[9px] px-[14px] text-right">2025</th>
-          <th class="font-poppins text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-[9px] px-[14px] text-right">Hektare</th>
-          <th class="font-poppins text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-[9px] px-[14px] text-right">Persen</th>
+          <th class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-1 sm:py-[9px] px-2 sm:px-[14px] text-right">2023</th>
+          <th class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-1 sm:py-[9px] px-2 sm:px-[14px] text-right">2024</th>
+          <th class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-1 sm:py-[9px] px-2 sm:px-[14px] text-right">2025</th>
+          <th class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-1 sm:py-[9px] px-2 sm:px-[14px] text-right">Hektare</th>
+          <th class="font-poppins text-[.45rem] sm:text-[.65rem] tracking-[.07em] uppercase text-[#d4c4a0] py-1 sm:py-[9px] px-2 sm:px-[14px] text-right">Persen</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem] text-[#f5f0e8]">Kalimantan</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">124.611</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">129.896</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">158.283</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">28.387</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct text-[#c04030] font-semibold">22%</td></tr>
-        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem] text-[#f5f0e8]">Sumatera</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">33.311</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">91.248</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">144.150</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">52.901</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct text-[#c04030] font-semibold">58%</td></tr>
-        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem] text-[#f5f0e8]">Papua</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">55.981</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">17.341</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">77.678</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">60.337</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct text-[#c04030] font-semibold">348%</td></tr>
-        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem] text-[#f5f0e8]">Sulawesi</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">36.814</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">17.361</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">39.685</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">22.324</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct text-[#c04030] font-semibold">129%</td></tr>
-        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem] text-[#f5f0e8]">Maluku</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">4.034</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">3.537</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">7.527</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">3.989</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct text-[#c04030] font-semibold">113%</td></tr>
-        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem] text-[#f5f0e8]">Bali &amp; Nusa Tenggara</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">2.052</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">1.780</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">4.209</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">2.429</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct text-[#c04030] font-semibold">136%</td></tr>
-        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem] text-[#f5f0e8]">Jawa</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">582</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">411</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">2.221</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">1.810</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct text-[#c04030] font-semibold">440%</td></tr>
-        <tr class="tot border-t-2 border-[#8b2a1a] text-[#c04030] font-semibold"><td class="py-[11px] px-[14px] text-left font-semibold text-[.88rem]">Total</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">257.385</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">261.575</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">433.751</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem]">172.177</td><td class="py-[11px] px-[14px] text-right font-poppins text-[.8rem] pct">66%</td></tr>
+        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem] text-[#f5f0e8]">Kalimantan</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">124.611</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">129.896</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">158.283</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">28.387</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct text-[#c04030] font-semibold">22%</td></tr>
+        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem] text-[#f5f0e8]">Sumatera</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">33.311</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">91.248</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">144.150</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">52.901</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct text-[#c04030] font-semibold">58%</td></tr>
+        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem] text-[#f5f0e8]">Papua</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">55.981</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">17.341</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">77.678</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">60.337</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct text-[#c04030] font-semibold">348%</td></tr>
+        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem] text-[#f5f0e8]">Sulawesi</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">36.814</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">17.361</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">39.685</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">22.324</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct text-[#c04030] font-semibold">129%</td></tr>
+        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem] text-[#f5f0e8]">Maluku</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">4.034</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">3.537</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">7.527</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">3.989</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct text-[#c04030] font-semibold">113%</td></tr>
+        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem] text-[#f5f0e8]">Bali &amp; Nusa Tenggara</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">2.052</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">1.780</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">4.209</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">2.429</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct text-[#c04030] font-semibold">136%</td></tr>
+        <tr class="border-b border-[rgba(255,255,255,.07)] hover:bg-[rgba(255,255,255,.04)]"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem] text-[#f5f0e8]">Jawa</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">582</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">411</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">2.221</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">1.810</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct text-[#c04030] font-semibold">440%</td></tr>
+        <tr class="tot border-t-2 border-[#8b2a1a] text-[#c04030] font-semibold"><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-left font-semibold text-[.65rem] sm:text-[.88rem]">Total</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">257.385</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">261.575</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">433.751</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem]">172.177</td><td class="py-1.5 sm:py-[11px] px-2 sm:px-[14px] text-right font-poppins text-[.62rem] sm:text-[.8rem] pct">66%</td></tr>
       </tbody>
     </table>
   </div>
 </div>
-</div>
+</div><br><br>
 
 
 
@@ -987,11 +1031,13 @@ regulasi yang melindungi seluruh hutan alam tersisa
     <h1 class="text-[1.35rem] font-bold leading-[1.15] mb-2">Peta Tematik<br>Deforestasi</h1>
     <p class="text-[.62rem] tracking-[.1em] uppercase text-[#d4c4a0] mb-[18px]">Pilih jenis analisis · 2025</p>
 
+    <div id="mode-btn-rail">
     <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all active" data-mode="provinsi">Deforestasi berbasis provinsi</button>
     <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="kabupaten">Deforestasi berbasis kabupaten</button>
     <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="konservasi">Deforestasi di kawasan konservasi</button>
     <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="megafauna">Deforestasi di Habitat megafauna ikonik</button>
     <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="konsesi">Deforestasi dalam Konsesi</button>
+    </div><!-- /#mode-btn-rail -->
 
     <!-- Sub-menu konsesi (hidden by default) -->
     <div id="konsesi-submenu" class="hidden mt-1">
@@ -1016,7 +1062,6 @@ regulasi yang melindungi seluruh hutan alam tersisa
     <div id="map" class="w-full flex-1 min-h-0"></div>
     <div id="satwa-badges" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-[450] pointer-events-none px-[18px] py-[10px] flex-row items-end justify-center gap-[10px] flex-nowrap overflow-x-auto bg-[rgba(248,244,238,.7)] backdrop-blur-[6px] rounded-[60px] max-w-[92vw]"></div>
 
-    <div id="interaction-hint" class="absolute top-[22px] right-[18px] z-[625] bg-[rgba(26,26,26,.78)] text-[rgba(245,240,232,.9)] border border-white/[.16] rounded-full px-[10px] py-[6px] text-[12px] tracking-[.07em] uppercase backdrop-blur-[6px]">klik titik / klik baris tabel / tombol 1–5</div>
 
     <div id="title-block" class="absolute top-[74px] left-[18px] z-[600] pointer-events-none">
       <h2 id="map-title" class="font-bold text-[clamp(1.2rem,2vw,2.15rem)] leading-[1.2] text-[#1a1a1a] [text-shadow:0_2px_10px_rgba(255,255,255,.7)]">Deforestasi berbasis provinsi</h2>
@@ -1028,8 +1073,8 @@ regulasi yang melindungi seluruh hutan alam tersisa
       <div class="text-[.56rem] mt-[2px] opacity-90" id="bubble-unit">hektare</div>
     </div>
 
-    <div id="notes-wrap" class="absolute left-[18px] bottom-[150px] z-[620] w-[min(430px,42vw)] flex flex-col">
-      <div id="notes-box" class="border border-[#918376] bg-[rgba(248,244,238,.94)] pt-[14px] px-[14px] pb-[10px] shadow-[0_8px_24px_rgba(26,26,26,.12)]">
+    <div id="notes-wrap" class="absolute left-[18px] bottom-[150px] z-[620] w-[min(400px,42vw)] flex flex-col">
+      <div id="notes-box" class=" pt-[14px] px-[14px] pb-[10px]">
         <ul id="notes-list" class="pl-[18px] [&>li]:text-[.82rem] [&>li]:leading-[1.48] [&>li]:mb-[6px]"></ul>
       </div>
     </div>
@@ -1399,37 +1444,6 @@ Auriga Nusantara. 2025 </em><br>.</div>
 </footer> -->
 
 <script src="assets/js/index.js?v=20260329"></script>
-<script>
-  
-  (function () {
-  let locked = false;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !locked) {
-        const rect = entry.target.getBoundingClientRect();
-        
-        // Hanya snap kalau masuk dari bawah (belum fully visible)
-        if (rect.top > 50) {
-          locked = true;
-          
-          const top = entry.target.getBoundingClientRect().top + window.scrollY - 60;
-          window.scrollTo({ top, behavior: 'smooth' });
-
-          setTimeout(() => { locked = false; }, 1000);
-        }
-      }
-    });
-  }, {
-    threshold: 0.1  // trigger saat 10% blok masuk viewport
-  });
-
-  document.querySelectorAll('.viz-block--full, .viz-block--slightly-wide')
-    .forEach(el => observer.observe(el));
-})();
-</script>
-
-
 <script id="peta-embed-script">
 const PETA_YEARS = [2021,2022,2023,2024,2025];
 const PETA_DATA = {
@@ -1510,6 +1524,7 @@ function petaRevealBars(idx, barOffset) {
 
 function petaSelectYear(idx) {
   const ghost = document.getElementById('peta-year-ghost');
+  const wrap = document.getElementById('peta-charts-wrap');
   // Toggle off if same year clicked again
   if (petaActiveYear === idx) {
     petaActiveYear = -1;
@@ -1522,6 +1537,7 @@ function petaSelectYear(idx) {
       document.getElementById('peta-xlabels-' + id).querySelectorAll('[data-baridx]').forEach(el => el.style.opacity = '0');
     });
     if (ghost) ghost.textContent = '2025';
+    if (wrap) wrap.classList.remove('peta-open');
     return;
   }
   petaActiveYear = idx;
@@ -1534,6 +1550,8 @@ function petaSelectYear(idx) {
       bar.classList.toggle('hi', i === idx);
     });
   });
+  // Show the wrap (triggers grid on mobile)
+  if (wrap) wrap.classList.add('peta-open');
   if (petaChartsOpen) {
     // Charts already open — update bar visibility only
     petaRevealBars(idx, 0);
@@ -1552,15 +1570,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Bubble sizing
   const totals = [229982, 230760, 257385, 261574, 433751];
   const minV = Math.min(...totals), maxV = Math.max(...totals);
-  const minS = 72, maxS = 118;
+  const isMobile = window.innerWidth < 640;
+  const minS = isMobile ? 30 : 54, maxS = isMobile ? 48 : 90;
   document.querySelectorAll('#peta-bubbles .peta-bub').forEach((bub, i) => {
     const t = (totals[i] - minV) / (maxV - minV);
     const s = Math.round(minS + t * (maxS - minS));
     bub.style.width = s + 'px'; bub.style.height = s + 'px';
     const valEl = bub.querySelector('.b-val');
-    if (valEl) valEl.style.fontSize = (0.78 + t * 0.46) + 'rem';
+    if (valEl) valEl.style.fontSize = (isMobile ? 0.48 : 0.78) + (t * (isMobile ? 0.22 : 0.46)) + 'rem';
     const yrEl = bub.querySelector('.b-yr');
-    if (yrEl) yrEl.style.fontSize = (0.60 + t * 0.14) + 'rem';
+    if (yrEl) yrEl.style.fontSize = (isMobile ? 0.42 : 0.60) + (t * (isMobile ? 0.06 : 0.14)) + 'rem';
   });
 });
 </script>
@@ -1571,14 +1590,14 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 (function() {
 const map = L.map('map', {
-  zoomControl: true,
+  zoomControl: false,
   attributionControl: false,
   gestureHandling: true,
   scrollWheelZoom: false,
   doubleClickZoom: false,
   minZoom: 4,
   maxZoom: 9
-}).setView([-2.3, 118], 5);
+}).setView([-2.3, 118], window.innerWidth < 640 ? 4 : 5);
 
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
@@ -1608,8 +1627,7 @@ const MODES = {
       'Aceh, Sumatera Utara, dan Sumatera Barat melonjak tajam.'
     ],
     notesBox: [
-      'Sepuluh teratas provinsi 2025: Kalimantan Tengah, Kalimantan Timur, Aceh, Kalimantan Barat, Papua Tengah, Sumatera Barat, Sumatera Utara, Kalimantan Utara, Riau, dan Papua Pegunungan.',
-      'Tiga provinsi di Sumatera bagian utara mengalami lonjakan tinggi: Aceh, Sumatera Utara, dan Sumatera Barat.'
+      ''
     ],
     markers: [
       { lat: -1.8, lng: 113.0, rank: 1, name: 'Kalimantan Tengah', value: '56.900', dir: 'right' },
@@ -1682,9 +1700,7 @@ const MODES = {
       'Kutai Timur dan Kapuas menjadi hotspot utama.'
     ],
     notesBox: [
-      'Dari total 514 kabupaten/kota di Indonesia, deforestasi terjadi di 383 kabupaten/kota.',
-      'Sepuluh teratas kabupaten/kota deforestasi berada di Pulau Kalimantan dan Tanah Papua.',
-      'Sepuluh teratas kabupaten/kota deforestasi mencakup sekitar 22% deforestasi nasional.'
+      ''
     ],
     bubble: { label: 'Kabupaten lainnya (373)', value: '338.018', unit: 'hektare' },
     markers: [
@@ -1712,9 +1728,7 @@ const MODES = {
       'Tekanan tertinggi terjadi di TN Kerinci Seblat dan Jayawijaya.'
     ],
     notesBox: [
-      '* Meliputi Kawasan Konservasi, Key Biodiversity Area, dan habitat spesies dilindungi.',
-      'Total deforestasi di 10 kawasan konservasi teratas mencapai 25.077 hektare.',
-      'Jika termasuk KBA, luas terdampak mencapai 46.081 hektare.'
+      ''
     ],
     markers: [
       { lat: -2.4, lng: 101.5, rank: 1, name: 'TN Kerinci Seblat', value: '6.362', dir: 'left' },
@@ -1741,9 +1755,7 @@ const MODES = {
       'Nilai tidak menghitung duplikasi area habitat yang beririsan.'
     ],
     notesBox: [
-      'Deforestasi seluas 156.463 hektare terjadi pada 29 juta hektare habitat spesies ikonik.',
-      'Angka ini tidak menghitung pengulangan di habitat yang saling beririsan.',
-      'Spesies kunci: harimau, badak, gajah, dan orangutan.'
+      ''
     ],
     species: [
       { lat: 3.4, lng: 94.2, icon: '🐅', image: 'assets/images/satwa/image.png', name: 'Panthera tigris sumatrae', value: '78.049 hektare', dir: 'left', geojsonUrl: 'geojson/panthera-tigris-sumatrae.json' },
@@ -1766,8 +1778,7 @@ const MODES = {
       'Menampilkan 10 konsesi teratas per kategori.',
     ],
     notesBox: [
-      'Data mencakup deforestasi di dalam batas konsesi yang telah diberikan izin.',
-      'Sumber: SIMONTINI 2025.'
+      ''
     ],
     markers: [],
     tables: [],
@@ -1779,8 +1790,7 @@ const MODES = {
         othersLabel: '202 izin Lainnya',
         othersVal: '21.799',
         bullets: [
-          'Deforestasi dalam 212 konsesi kebun kayu',
-          '34% deforestasi terjadi pada 10 perusahaan teratas'
+          ''
         ],
         geojsonFile: 'kebun-kayu.geojson',
         markers: [
@@ -1803,8 +1813,7 @@ const MODES = {
         othersLabel: '227 izin Lainnya',
         othersVal: '53.661',
         bullets: [
-          'Deforestasi dalam 237 konsesi logging',
-          '28% deforestasi dalam konsesi logging terjadi pada 10 perusahaan teratas'
+          ''
         ],
         geojsonFile: 'logging.geojson',
         markers: [
@@ -1827,9 +1836,7 @@ const MODES = {
         othersLabel: '709 izin Lainnya',
         othersVal: '24.300',
         bullets: [
-          'Deforestasi seluas 37.910 ha dalam 719 konsesi sawit sepanjang 2025',
-          '36% (13.610 ha) terjadi pada 10 konsesi teratas',
-          'Pusat ekspansi berada di Kalimantan dan Tanah Papua'
+          ''
         ],
         geojsonFile: 'sawit.geojson',
         markers: [
@@ -1852,9 +1859,7 @@ const MODES = {
         othersLabel: '1.131 izin Lainnya',
         othersVal: '32.233',
         bullets: [
-          'Deforestasi seluas 41.162 ha dalam 1.140 konsesi tambang sepanjang 2025',
-          '22% (8.929 ha) terjadi dalam 10 perusahaan teratas',
-          'Ekspansi tambang emas meningkat selain nikel di Indonesia'
+          ''
         ],
         geojsonFile: 'tambang.geojson',
         markers: [
@@ -2180,6 +2185,7 @@ function renderMode(modeKey) {
   const submenu = document.getElementById('konsesi-submenu');
   if (modeKey === 'konsesi') {
     submenu.classList.remove('hidden');
+    submenu.classList.add('show');
     const activecat = submenu.querySelector('.cat-btn.active');
     if (!activecat) {
       const firstCat = submenu.querySelector('.cat-btn');
@@ -2187,6 +2193,7 @@ function renderMode(modeKey) {
     }
   } else {
     submenu.classList.add('hidden');
+    submenu.classList.remove('show');
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   }
 
@@ -2369,17 +2376,16 @@ function drawAlurConnectors() {
   /* 3. Data Deforestasi Indikatif → Overlay & Filter Area */
   if (dataindikatif && r4c1) {
     var DI = getR(dataindikatif, wrap), OV = getR(r4c1, wrap);
-    var gap2 = OV.top - DI.bottom;
-    var cp1x2 = DI.cx, cp1y2 = DI.bottom + gap2 * 0.2;
-    var cp2x2 = OV.cx, cp2y2 = OV.top - gap2 * 0.2;
+    var midY = (DI.bottom + OV.top) / 2;
     var curve2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     curve2.setAttribute('fill', 'none');
     curve2.setAttribute('stroke', '#C75B2E');
     curve2.setAttribute('stroke-width', '1.5');
     curve2.setAttribute('stroke-linecap', 'round');
+    curve2.setAttribute('stroke-linejoin', 'round');
     curve2.setAttribute('opacity', '0.7');
     curve2.setAttribute('marker-end', 'url(#xarr)');
-    curve2.setAttribute('d', 'M'+DI.cx+' '+DI.bottom+' C'+cp1x2+' '+cp1y2+','+cp2x2+' '+cp2y2+','+OV.cx+' '+(OV.cy-50));
+    curve2.setAttribute('d', 'M'+OV.cx+' '+DI.bottom+' L'+OV.cx+' '+(OV.top-2));
     svg.appendChild(curve2);
   }
 }
@@ -2387,6 +2393,204 @@ function drawAlurConnectors() {
 window.addEventListener('load', function() {
   drawAlurConnectors();
   window.addEventListener('resize', function() { setTimeout(drawAlurConnectors, 120); });
+});
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+/* ─── CHART DEFORESTASI ─── */
+(function() {
+const DATA = [
+  { year: 2001, val: 133913 },
+  { year: 2002, val: 281030 },
+  { year: 2003, val: 253907 },
+  { year: 2004, val: 486010 },
+  { year: 2005, val: 483324 },
+  { year: 2006, val: 474863 },
+  { year: 2007, val: 533334 },
+  { year: 2008, val: 472889 },
+  { year: 2009, val: 691985 },
+  { year: 2010, val: 546069 },
+  { year: 2011, val: 621836 },
+  { year: 2012, val: 876456 },
+  { year: 2013, val: 523588 },
+  { year: 2014, val: 829144 },
+  { year: 2015, val: 768991 },
+  { year: 2016, val: 1055796 },
+  { year: 2017, val: 424048 },
+  { year: 2018, val: 389052 },
+  { year: 2019, val: 371087 },
+  { year: 2020, val: 307532 },
+  { year: 2021, val: 229982 },
+  { year: 2022, val: 230760 },
+  { year: 2023, val: 257384 },
+  { year: 2024, val: 261575 },
+  { year: 2025, val: 433751 },
+];
+
+const MAX_VAL = Math.max(...DATA.map(d => d.val));
+const Y_TICKS = [0, 400000, 800000, 1200000, 1600000, 2000000];
+
+/* ─── BUILD Y AXIS ─── */
+const yAxis = document.getElementById('y-axis');
+Y_TICKS.forEach(t => {
+  const el = document.createElement('div');
+  el.className = 'y-tick';
+  el.textContent = t === 0 ? '0' : (t >= 1000000 ? (t/1000000).toFixed(1).replace('.',',') + 'jt' : (t/1000) + 'rb');
+  yAxis.appendChild(el);
+});
+
+/* ─── BUILD GRID LINES ─── */
+const gridWrap = document.getElementById('grid-lines');
+Y_TICKS.forEach(t => {
+  const line = document.createElement('div');
+  line.className = 'grid-line';
+  line.style.bottom = ((t / MAX_VAL) * 100) + '%';
+  gridWrap.appendChild(line);
+});
+
+/* ─── BUILD BARS + X AXIS ─── */
+const barsWrap = document.getElementById('bars-svg-wrap');
+const xAxis   = document.getElementById('x-axis');
+const barEls  = [];
+
+const colsTemplate = `repeat(${DATA.length}, minmax(0, 1fr))`;
+barsWrap.style.gridTemplateColumns = colsTemplate;
+xAxis.style.gridTemplateColumns = colsTemplate;
+
+DATA.forEach((d, i) => {
+  const col = document.createElement('div');
+  col.className = 'bar-col';
+  col.dataset.index = i;
+
+  const rect = document.createElement('div');
+  rect.className = 'bar-rect';
+  rect.style.height = (d.val / MAX_VAL) * 100 + '%';
+
+  col.appendChild(rect);
+  barsWrap.appendChild(col);
+  barEls.push({ col, rect });
+
+  const lbl = document.createElement('div');
+  lbl.className = 'x-label' + (d.year % 4 === 1 ? ' highlight' : '');
+  lbl.textContent = d.year;
+  xAxis.appendChild(lbl);
+});
+
+/* ─── GSAP INTRO ─── */
+gsap.to(barEls.map(b => b.rect), {
+  scaleY: 1, duration: .9, ease: 'power3.out', stagger: .045, delay: .2,
+});
+
+/* ─── PRESIDENTS ─── */
+const PRESIDENTS = [
+  { name:'Megawati',                start:2001, end:2004, photo:'assets/images/presiden/meg.jpeg' },
+  { name:'Susilo Bambang Yudhoyono',start:2005, end:2014, photo:'assets/images/presiden/sby.jpg'  },
+  { name:'Jokowi',                  start:2015, end:2024, photo:'assets/images/presiden/jok.jpeg' },
+  { name:'Prabowo',                 start:2025, end:2025, photo:'assets/images/presiden/pra.jpeg' },
+];
+
+function getPresident(year) {
+  return PRESIDENTS.find(p => year >= p.start && year <= p.end) || null;
+}
+function calcTotal(p) {
+  return DATA.filter(d => d.year >= p.start && d.year <= p.end).reduce((s, d) => s + d.val, 0);
+}
+function fmtTotal(v) {
+  return (v / 1000000).toFixed(2).replace('.', ',') + ' jt';
+}
+
+/* ─── BUILD PRESIDENT CARDS ─── */
+const presList = document.getElementById('pres-list');
+const cardEls  = [];
+
+PRESIDENTS.forEach(p => {
+  const total = calcTotal(p);
+  const card  = document.createElement('div');
+  card.className = 'pres-card';
+  card.innerHTML = `
+    <div class="pres-avatar">
+      <img src="${p.photo}" alt="${p.name}" onerror="this.style.display='none'">
+      <span class="pres-initials">${p.name.slice(0,3).toUpperCase()}</span>
+    </div>
+    <div class="pres-info">
+      <div class="pres-name">${p.name}</div>
+      <div class="pres-period">${p.start === p.end ? p.start : p.start + '\u2013' + p.end}</div>
+    </div>
+    <div class="pres-stat">
+      <div class="pres-total">${fmtTotal(total)}</div>
+      <div class="pres-total-unit">ha hilang</div>
+    </div>`;
+  presList.appendChild(card);
+  cardEls.push(card);
+});
+
+/* ─── ERA STATE ─── */
+let activeEra = null;
+
+function setEra(name) {
+  activeEra = name;
+  barEls.forEach(({ col, rect }, i) => {
+    const p     = getPresident(DATA[i].year);
+    const match = p && p.name === name;
+    gsap.to(col, { opacity: match ? 1 : 0.12, duration: .3, ease: 'power2.out' });
+    rect.style.background = match ? '#e07060' : '';
+  });
+  cardEls.forEach((c, i) => c.classList.toggle('active', PRESIDENTS[i].name === name));
+}
+
+function clearEra() {
+  activeEra = null;
+  barEls.forEach(({ col, rect }) => {
+    gsap.to(col, { opacity: 1, duration: .3, ease: 'power2.out' });
+    rect.style.background = '';
+  });
+  cardEls.forEach(c => c.classList.remove('active'));
+}
+
+cardEls.forEach((card, i) => {
+  card.addEventListener('click', () => {
+    if (activeEra === PRESIDENTS[i].name) clearEra();
+    else setEra(PRESIDENTS[i].name);
+  });
+});
+
+/* ─── YEAR DISPLAY ─── */
+const ydYear = document.getElementById('yd-year');
+const ydVal  = document.getElementById('yd-val');
+
+function updateYearDisplay(d) {
+  ydYear.textContent = d ? d.year : 'Arahkan ke bar';
+  ydVal.textContent  = d ? d.val.toLocaleString('id-ID') : '\u2014';
+}
+
+/* ─── HOVER ─── */
+barEls.forEach(({ col, rect }, i) => {
+  col.addEventListener('mouseenter', () => {
+    gsap.to(rect, { scaleY: 1.025, transformOrigin: 'bottom center', duration: .18, ease: 'power1.out' });
+    updateYearDisplay(DATA[i]);
+    if (!activeEra) {
+      const hovPres = getPresident(DATA[i].year);
+      cardEls.forEach((c, ci) => {
+        c.style.opacity = hovPres && PRESIDENTS[ci].name === hovPres.name ? '1' : '0.3';
+      });
+    }
+  });
+  col.addEventListener('mouseleave', () => {
+    gsap.to(rect, { scaleY: 1, duration: .22, ease: 'power1.out' });
+    updateYearDisplay(null);
+    if (!activeEra) cardEls.forEach(c => { c.style.opacity = ''; });
+  });
+  col.addEventListener('click', () => {
+    const pres = getPresident(DATA[i].year);
+    if (!pres) return;
+    if (activeEra === pres.name) clearEra(); else setEra(pres.name);
+  });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') clearEra();
 });
 })();
 </script>

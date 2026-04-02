@@ -1,52 +1,5 @@
 // --- Scroll Snap & Lock untuk Peta ---
-(() => {
-  const petaSection = document.getElementById('peta-lock');
-  if (!petaSection) return;
-  let petaLocked = false;
-  let petaSnapped = false;
-  // Snap ke peta saat mulai masuk viewport (misal 60% visible)
-  const snapObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && entry.intersectionRatio > 0.6 && !petaSnapped && !petaLocked) {
-        petaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        petaSnapped = true;
-      }
-      // Reset snap jika sudah keluar jauh dari viewport
-      if (!entry.isIntersecting && petaSnapped && !petaLocked) {
-        petaSnapped = false;
-      }
-    });
-  }, { threshold: [0, 0.6, 1] });
-  snapObserver.observe(petaSection);
 
-  // Lock scroll saat benar-benar full satu layar
-  const lockObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.99 && !petaLocked) {
-        document.body.style.overflow = 'hidden';
-        petaLocked = true;
-        window.dispatchEvent(new Event('peta-animasi-mulai'));
-      }
-    });
-  }, { threshold: Array.from({length: 101}, (_, i) => i / 100) });
-  lockObserver.observe(petaSection);
-
-  // Listen event dari peta untuk unlock scroll
-  window.addEventListener('peta-animasi-selesai', () => {
-    if (petaLocked) {
-      document.body.style.overflow = '';
-      petaLocked = false;
-      // Reset snap agar bisa snap lagi jika user scroll ke atas
-      petaSnapped = false;
-    }
-  });
-  // Listener postMessage dari iframe peta
-  window.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'peta-animasi-selesai') {
-      window.dispatchEvent(new Event('peta-animasi-selesai'));
-    }
-  });
-})();
 const siteLoader = document.getElementById('site-loader');
 
 function hideSiteLoader() {
@@ -350,49 +303,6 @@ function bindIframeLanguageListeners() {
   });
 }
 
-function initPetaSectionScrollPause() {
-  if (!window.matchMedia('(min-width: 981px)').matches) return;
-
-  const petaHost = document.querySelector('[data-include-html="partials/peta-embed.html"]');
-  if (!petaHost) return;
-
-  let lastScrollY = window.scrollY;
-  let isAutoSnapping = false;
-  let hasSnappedOnDown = false;
-
-  const navOffset = () => (document.getElementById('sitenav')?.offsetHeight || 52) + 8;
-
-  const snapToPeta = () => {
-    const targetTop = window.scrollY + petaHost.getBoundingClientRect().top - navOffset();
-    isAutoSnapping = true;
-    window.scrollTo({ top: targetTop, behavior: 'smooth' });
-    window.setTimeout(() => {
-      isAutoSnapping = false;
-    }, 700);
-  };
-
-  const onScroll = () => {
-    const currentY = window.scrollY;
-    const scrollingDown = currentY > lastScrollY + 2;
-    const scrollingUp = currentY < lastScrollY - 2;
-    lastScrollY = currentY;
-
-    const rect = petaHost.getBoundingClientRect();
-    const shouldSnapRange = rect.top < window.innerHeight * 0.45 && rect.bottom > window.innerHeight * 0.35;
-
-    if (!isAutoSnapping && scrollingDown && !hasSnappedOnDown && shouldSnapRange) {
-      hasSnappedOnDown = true;
-      snapToPeta();
-      return;
-    }
-
-    if (scrollingUp && rect.top > window.innerHeight * 0.7) {
-      hasSnappedOnDown = false;
-    }
-  };
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-}
 
 const initialLang = localStorage.getItem('akurasi_lang') || 'id';
 langBtnId?.addEventListener('click', () => setGlobalLanguage('id'));
@@ -401,7 +311,6 @@ langBtnEn?.addEventListener('click', () => setGlobalLanguage('en'));
 loadHtmlPartials().finally(() => {
   bindIframeLanguageListeners();
   setGlobalLanguage(initialLang);
-  initPetaSectionScrollPause();
 });
 
 const io = new IntersectionObserver((entries) => {
