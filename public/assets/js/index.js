@@ -436,32 +436,32 @@ function slideProvinceTables(dir = 1) {
 // });
 
 
-(function () {
-  let locked = false;
+// (function () {
+//   let locked = false;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !locked) {
-        const rect = entry.target.getBoundingClientRect();
-        if (rect.top > 50) {
-          locked = true;
-          const top = rect.top + window.scrollY - 60;
-          window.scrollTo({ top, behavior: 'smooth' });
-          setTimeout(() => { locked = false; }, 1000);
-        }
-      }
-    });
-  }, { threshold: 0.1 });
+//   const observer = new IntersectionObserver((entries) => {
+//     entries.forEach(entry => {
+//       if (entry.isIntersecting && !locked) {
+//         const rect = entry.target.getBoundingClientRect();
+//         if (rect.top > 50) {
+//           locked = true;
+//           const top = rect.top + window.scrollY - 60;
+//           window.scrollTo({ top, behavior: 'smooth' });
+//           setTimeout(() => { locked = false; }, 1000);
+//         }
+//       }
+//     });
+//   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.viz-frame').length
+//   document.querySelectorAll('.alur, .peta').length
 
-  // ← selector yang benar
-  document.querySelectorAll('.viz-frame')
-    .forEach(el => observer.observe(el));
+//   // ← selector yang benar
+//   document.querySelectorAll('.alur, .peta')
+//     .forEach(el => observer.observe(el));
 
-  // verifikasi
-  console.log('viz-frame blocks found:', document.querySelectorAll('.viz-frame').length);
-})();
+//   // verifikasi
+//   console.log('viz-frame blocks found:', document.querySelectorAll('.alur, .peta').length);
+// })();
 
 provPrev?.addEventListener('click', () => slideProvinceTables(-1));
 provNext?.addEventListener('click', () => slideProvinceTables(1));

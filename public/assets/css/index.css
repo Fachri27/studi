@@ -935,3 +935,169 @@ footer {
   /* Callout */
   .callout { font-size: .8rem; padding: 14px 16px; }
 }
+
+/* ── PETA EMBED ── */
+#peta-embed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+#peta-embed .peta-grid-lines { position:absolute; inset:0; pointer-events:none; }
+#peta-embed .peta-grid-lines span { position:absolute; left:0; right:0; border-top:1px solid rgba(26,26,26,.12); }
+#peta-embed .peta-grid-lines span:nth-child(1){top:0%}
+#peta-embed .peta-grid-lines span:nth-child(2){top:25%}
+#peta-embed .peta-grid-lines span:nth-child(3){top:50%}
+#peta-embed .peta-grid-lines span:nth-child(4){top:75%}
+#peta-embed .peta-grid-lines span:nth-child(5){top:100%}
+#peta-embed .peta-bar.hi { background:#8b2a1a !important; box-shadow:0 0 8px rgba(139,42,26,.55); }
+#peta-embed .peta-bub.on { background:#8b2a1a; border-color:#8b2a1a; color:#fff; transform:scale(1.1); box-shadow:0 0 20px rgba(139,42,26,.45); }
+#peta-table-section::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#8b2a1a,#c04030,#8b2a1a); }
+#peta-embed .peta-bub { cursor:pointer; }
+
+/* ════════════════════════════════════════════
+   PETA TEMATIK (inline map section)
+   ════════════════════════════════════════════ */
+
+/* ── BUTTON STATES (JS-toggled .active) ── */
+.mode-btn:hover { border-color: #c04030; color: #fff; }
+.mode-btn.active { background: #8b2a1a; border-color: #8b2a1a; color: #fff; }
+.cat-btn:hover  { border-color: #c04030; color: #fff; }
+.cat-btn.active { background: #8b2a1a; border-color: #8b2a1a; color: #fff; }
+
+/* ── SIDEBAR NOTES (JS innerHTML — pseudo-element) ── */
+#sidebar-notes { list-style: none; }
+#sidebar-notes li { position: relative; padding-left: 14px; font-size: .73rem; line-height: 1.6; margin-bottom: 6px; color: rgba(245,240,232,.78); }
+#sidebar-notes li:last-child { margin-bottom: 0; }
+#sidebar-notes li::before { content: '•'; position: absolute; left: 0; color: #c04030; }
+
+/* ── TABLE PANEL OPEN STATE ── */
+#table-panel.open { transform: translateX(0); }
+#table-toggle:hover, #table-panel.open #table-toggle { background: #8b2a1a; }
+
+/* ── TABLE CARD (JS-generated HTML) ── */
+.table-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 8px 28px rgba(0,0,0,.45); border-radius: 4px; color: #f5f0e8; flex-shrink: 0; }
+.table-title { font-size: .62rem; letter-spacing: .09em; text-transform: uppercase; color: #f5f0e8; background: #8b2a1a; padding: 10px 14px; position: sticky; top: 0; z-index: 2; }
+.table-card table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+.table-card thead tr { border-bottom: 2px solid #c04030; }
+.table-card th, .table-card td { border-bottom: 1px solid rgba(255,255,255,.07); padding: 9px 12px; vertical-align: middle; white-space: nowrap; }
+.table-card th:nth-child(1), .table-card td:nth-child(1) { width: 6%; }
+.table-card th:nth-child(2), .table-card td:nth-child(2) { width: 8%; }
+.table-card th:nth-child(3), .table-card td:nth-child(3) { text-align: left; white-space: normal; overflow-wrap: break-word; }
+.table-card th { font-size: .56rem; text-transform: uppercase; letter-spacing: .06em; text-align: right; color: #d4c4a0; font-weight: 600; }
+.table-card td { text-align: right; color: #f5f0e8; }
+.table-card td:nth-child(3) { font-weight: 600; }
+.table-card tr:nth-child(even) td { background: rgba(255,255,255,.03); }
+.table-card tbody tr { cursor: pointer; transition: background .15s ease; }
+.table-card tbody tr:hover td { background: rgba(192,64,48,.18) !important; }
+.table-card tbody tr.active-row td { background: rgba(192,64,48,.26) !important; }
+.table-card tbody tr.total-row td { font-weight: 700; color: #c04030; border-top: 2px solid #c04030; background: transparent !important; }
+.td-up   { color: #c04030 !important; }
+.td-down { color: #5a5040 !important; }
+.td-same { color: #d4c4a0 !important; }
+
+/* ── LEAFLET OVERRIDES ── */
+.leaflet-container { background: #efebe3 !important; }
+.leaflet-tooltip.label-tip { background: transparent; border: none; box-shadow: none; padding: 0; }
+.leaflet-tooltip::before { display: none !important; }
+.leaflet-popup-content-wrapper { border-radius: 8px !important; padding: 0 !important; overflow: hidden; border-top: 3px solid #8b2a1a; font-family: 'Poppins',sans-serif; box-shadow: 0 8px 28px rgba(26,26,26,.18); min-width: 180px; }
+.leaflet-popup-content { margin: 0 !important; min-width: 180px; }
+
+/* ── POPUP (Leaflet bindPopup innerHTML) ── */
+.popup-inner { padding: 12px 16px; }
+.popup-rank  { font-size: .6rem; color: #5a5040; margin-bottom: 3px; }
+.popup-name  { font-size: .9rem; font-weight: 700; margin: 3px 0 6px; color: #1a1a1a; line-height: 1.3; }
+.popup-val   { font-size: 1.4rem; font-weight: 700; color: #8b2a1a; line-height: 1; }
+.popup-unit  { font-size: .6rem; color: #5a5040; margin-top: 2px; }
+.popup-type  { display: inline-block; margin-top: 8px; font-size: .6rem; background: rgba(139,42,26,.1); color: #8b2a1a; border-radius: 4px; padding: 2px 7px; }
+
+/* ── MAP MARKER DOTS (Leaflet divIcon HTML) ── */
+.rank-dot { width: 28px; height: 28px; border-radius: 50%; background: #8b2a1a; border: 2px solid rgba(255,255,255,.95); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; box-shadow: 0 2px 8px rgba(139,42,26,.35); transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+.rank-dot.active { transform: scale(1.2); box-shadow: 0 0 0 8px rgba(192,64,48,.18), 0 7px 18px rgba(139,42,26,.4); filter: saturate(1.12); }
+.species-dot { width: 54px; height: 54px; border-radius: 50%; background: #fff; border: 3px solid rgba(192,64,48,.95); color: #8b2a1a; display: flex; align-items: center; justify-content: center; font-size: 1.45rem; box-shadow: 0 3px 10px rgba(26,26,26,.22); transition: transform .16s ease, box-shadow .16s ease; overflow: hidden; }
+.species-dot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.species-dot.is-image { padding: 0; font-size: 0; }
+
+/* ── SATWA BADGES (JS-generated) ── */
+#satwa-badges { scrollbar-width: none; }
+#satwa-badges::-webkit-scrollbar { display: none; }
+#satwa-badges.visible { display: flex; }
+.satwa-badge { display: flex; flex-direction: column; align-items: center; gap: 5px; pointer-events: auto; cursor: pointer; background: transparent; flex-shrink: 0; transition: transform .18s ease; }
+.satwa-badge:hover { transform: translateY(-3px); }
+.satwa-badge-circle { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 3px solid #8b2a1a; box-shadow: 0 4px 14px rgba(0,0,0,.28); background: #fff; transition: box-shadow .2s; }
+.satwa-badge:hover .satwa-badge-circle, .satwa-badge.active .satwa-badge-circle { box-shadow: 0 0 0 4px rgba(192,64,48,.22), 0 6px 18px rgba(0,0,0,.35); }
+.satwa-badge-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.satwa-badge-name { display: none; }
+.satwa-badge-detail { display: none; flex-direction: column-reverse; align-items: center; gap: 1px; pointer-events: none; animation: satwa-info-in .18s ease; }
+.satwa-badge.active .satwa-badge-detail { display: flex; }
+.satwa-badge-detail .si-name { font-size: .58rem; font-style: italic; color: #1a1a1a; font-weight: 600; text-align: center; max-width: 90px; white-space: normal; line-height: 1.2; background: rgba(248,244,238,.9); border-radius: 4px; padding: 2px 5px; }
+.satwa-badge-detail .si-val  { font-size: .82rem; font-weight: 700; color: #c04030; background: rgba(248,244,238,.9); border-radius: 4px; padding: 1px 6px; }
+.satwa-badge-detail .si-unit { font-size: .5rem; color: #5a5040; background: rgba(248,244,238,.75); border-radius: 4px; padding: 1px 5px; }
+#satwa-badges.has-active .satwa-badge:not(.active) { opacity: .35; filter: grayscale(.5); transition: opacity .2s, filter .2s; }
+#satwa-badges.has-active .satwa-badge:not(.active):hover { opacity: .7; filter: grayscale(0); }
+.satwa-badge.loading .satwa-badge-circle { opacity: .6; animation: satwa-pulse .9s ease-in-out infinite alternate; }
+@keyframes satwa-info-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes satwa-pulse { from { box-shadow: 0 0 0 2px rgba(192,64,48,.3); } to { box-shadow: 0 0 0 6px rgba(192,64,48,.55); } }
+
+/* ── PETA TEMATIK WRAPPER ── */
+#peta-tematik { display: flex; height: 1035px; overflow: hidden; width: 100%; font-family: 'Poppins', sans-serif; }
+
+/* ── PETA TEMATIK RESPONSIVE ── */
+@media (max-width: 1280px) {
+  #table-panel { width: min(560px, 52vw); }
+  #notes-wrap  { width: min(390px, 40vw); }
+}
+@media (max-width: 980px) {
+  #peta-tematik { flex-direction: column; }
+  #sidebar { width: 100%; max-height: 32vh; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); padding: 16px 14px; }
+  #sidebar h1 { font-size: 1.08rem; }
+  .mode-btn { font-size: .78rem; padding: 9px 10px; margin-bottom: 7px; }
+  #title-block { top: 64px; left: 10px; }
+  #title-block h2 { font-size: clamp(.95rem, 2.2vw, 1.2rem); }
+  #interaction-hint { top: 8px; right: 8px; font-size: .48rem; padding: 4px 7px; }
+  #notes-wrap { left: 12px; right: 12px; width: auto; bottom: 18px; }
+  #notes-box  { max-height: 24vh; overflow-y: auto; }
+  #table-panel { width: min(96vw, 480px); }
+  .table-card table { font-size: .64rem; }
+  .table-card th, .table-card td { padding: 4px 5px; }
+  #others-bubble { width: 132px; height: 132px; right: 10px; top: 56px; }
+}
+@media (max-width: 640px) {
+  #sidebar { max-height: 30vh; padding: 12px 10px; }
+  #sidebar h1 { font-size: .95rem; }
+  .mode-btn { font-size: .72rem; padding: 8px 9px; }
+  #interaction-hint { display: none; }
+  #title-block { top: 60px; }
+  #others-bubble { width: 108px; height: 108px; top: 52px; right: 8px; padding: 10px; }
+  #notes-box  { max-height: 22vh; padding: 10px 10px 8px; font-size: .72rem; }
+  .table-title { font-size: .52rem; padding: 6px 8px; }
+  .table-card table { font-size: .6rem; }
+  .table-card th, .table-card td { padding: 4px; }
+}
+
+/* ═══════════════════════════════════════════
+   ALUR DETEKSI DEFORESTASI — scoped to #alur-embed
+   (pseudo-elements & states that can't use Tailwind)
+═══════════════════════════════════════════ */
+#alur-embed .header::before {
+  content: '';
+  position: absolute; top: -60px; left: -60px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(199,91,46,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+#alur-embed .card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #C75B2E, transparent);
+  opacity: 0; transition: opacity 0.22s ease;
+}
+#alur-embed .card:hover::before { opacity: 1; }
+#alur-embed .card.active {
+  border-color: rgba(199,91,46,0.5) !important;
+  background: #262626 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(199,91,46,0.2) !important;
+}
+#alur-embed .card.active::before { opacity: 1; }
+#alur-embed .card-final::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 12px, rgba(0,0,0,0.06) 12px, rgba(0,0,0,0.06) 13px);
+}
+#alur-embed .steps.rev .arrow { transform: scaleX(-1); }

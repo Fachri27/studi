@@ -1,50 +1,13 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth scroll-pt-[110px]">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alur Deteksi Deforestasi</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tailwind.generated.css">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #0e0e0e;
-  --surface2: #1e1e1e;
-  --surface3: #262626;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --rust: #C75B2E;
-  --rust-pale: rgba(199,91,46,0.12);
-  --text: #e8e2d8;
-  --text-muted: #6b6460;
-  --label: #8a7e78;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 110px;
-}
-body {
-  background: var(--bg);
-  font-family: 'Poppins', sans-serif;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-}
-
-/* ── Header ──────────────────────────────────────────── */
-.header {
-  padding: 48px 60px 40px;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--bg);
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
-  border-bottom: 2px solid #191919;
-
-}
+/* Pseudo-elements & complex selectors — tidak bisa di Tailwind */
 .header::before {
   content: '';
   position: absolute; top: -60px; left: -60px;
@@ -52,206 +15,74 @@ body {
   background: radial-gradient(circle, rgba(199,91,46,0.15) 0%, transparent 70%);
   pointer-events: none;
 }
-.header-inner {
-  position: relative;
-  display: flex; align-items: flex-end; justify-content: space-between;
-  max-width: 1400px; margin: 0 auto;
-}
-.eyebrow {
-  font-family: 'Poppins', sans-serif;
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--rust); margin-bottom: 12px;
-}
-h1 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 42px; font-weight: 800;
-  color: var(--text); line-height: 1.05; letter-spacing: -0.02em;
-}
-h1 span { color: #bc4a3c; }
-.subtitle { font-size: 14px; color: var(--text-muted); margin-top: 10px; font-weight: 300; }
-.badge {
-  font-size: 11px; font-weight: 500;
-  color: #bc4a3c; background: var(--rust-pale);
-  border: 1px solid rgba(199,91,46,0.25);
-  border-radius: 999px; padding: 6px 14px; letter-spacing: 0.04em;
-}
-
-/* ── Diagram ─────────────────────────────────────────── */
-.diagram-wrap {
-  padding: 40px 60px 80px;
-  max-width: 1400px; margin: 0 auto;
-  position: relative;
-}
-
-/* ── Row ─────────────────────────────────────────────── */
-.row {
-  display: flex; align-items: stretch;
-  border-top: 1px solid var(--border);
-  position: relative;
-  margin-top: 50px;
-}
-
-/* ── Lane label ──────────────────────────────────────── */
-.lane-label {
-  width: 160px; min-width: 160px;
-  padding: 28px 20px 28px 0;
-  display: flex; flex-direction: column; justify-content: center;
-  border-right: 1px solid var(--border);
-}
-.lane-num {
-  font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 700;
-  color: var(#bc4a3c); letter-spacing: 0.12em; margin-bottom: 6px;
-}
-.lane-name {
-  font-family: 'Poppins', sans-serif; font-size: 23px; font-weight: 700;
-  color: var(--text); line-height: 1.35;
-}
-
-/* ── Steps ───────────────────────────────────────────── */
-.steps {
-  flex: 1; padding: 24px 0 24px 32px;
-  display: flex; align-items: center; gap: 0; position: relative;
-}
-.steps.rev { flex-direction: row-reverse; }
-.steps.rev .arrow { transform: scaleX(-1); }
-
-/* ── Step unit ───────────────────────────────────────── */
-.step-unit { display: flex; align-items: center; flex: 1; }
-
-/* ── Card ────────────────────────────────────────────── */
-.card {
-  flex: 1; background: var(--surface2);
-  border: 1px solid var(--border2); border-radius: 10px;
-  padding: 18px 20px; cursor: pointer;
-  transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
-  position: relative; overflow: hidden;
-}
 .card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--rust), transparent);
+  background: linear-gradient(90deg, #C75B2E, transparent);
   opacity: 0; transition: opacity 0.22s ease;
 }
-.card:hover { background: var(--surface3); border-color: rgba(199,91,46,0.35); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(199,91,46,0.15); }
 .card:hover::before { opacity: 1; }
-.card.active { border-color: rgba(199,91,46,0.5); background: var(--surface3); box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(199,91,46,0.2); }
+.card.active {
+  border-color: rgba(199,91,46,0.5) !important;
+  background: #262626 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(199,91,46,0.2) !important;
+}
 .card.active::before { opacity: 1; }
-.card.ghost { background: transparent; border-color: rgba(255,255,255,0.07); }
-.card.ghost .card-title { color: var(--text-muted); }
-.card.ghost:hover { background: var(--surface2); }
-.card.accent { border-color: rgba(199,91,46,0.3); background: rgba(199,91,46,0.06); }
-.card.green  { border-color: rgba(46,139,90,0.3); background: rgba(46,139,90,0.06); }
-
-.card-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--rust); margin-bottom: 8px;
-}
-.card-label.green { color: #2E8B5A; }
-.card-title {
-  font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700;
-  color: var(--text); line-height: 1.3;
-}
-.card-desc {
-  font-size: 12.5px; color: var(--text-muted);
-  line-height: 1.6; margin-top: 10px; display: none; font-weight: 300;
-}
-.card-desc.open { display: block; }
-.card-desc ul { padding-left: 14px; }
-.card-desc li { margin-bottom: 3px; }
-.card-desc em { font-style: italic; color: var(--label); }
-
-/* ── Final card ──────────────────────────────────────── */
-.card-final {
-  flex: 1; background: var(--rust); border-radius: 10px;
-  padding: 24px 20px; display: flex; flex-direction: column; justify-content: center;
-  position: relative; overflow: hidden; min-height: 160px;
-}
 .card-final::before {
   content: ''; position: absolute; inset: 0;
   background: repeating-linear-gradient(45deg, transparent, transparent 12px, rgba(0,0,0,0.06) 12px, rgba(0,0,0,0.06) 13px);
 }
-.card-final-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
-  color: rgba(255,255,255,0.65); margin-bottom: 8px; position: relative;
-}
-.card-final-title {
-  font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 800;
-  color: #fff; line-height: 1.1; position: relative;
-}
-
-/* ── Inline arrows ───────────────────────────────────── */
-.arrow {
-  width: 40px; min-width: 40px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.arrow svg { width: 36px; height: 14px; }
-.branch-arrow { width: 50px; min-width: 50px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-/* ── Legend ──────────────────────────────────────────── */
-.legend {
-  display: flex; gap: 24px; align-items: center;
-  padding: 24px 60px 48px; max-width: 1400px; margin: 0 auto;
-  border-top: 1px solid var(--border);
-}
-.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
-.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-
-/* ── GSAP initial states ─────────────────────────────── */
-.a-card   { opacity: 0; }
-.a-arr    { opacity: 0; }
-.a-lane   { opacity: 0; }
+.steps.rev .arrow { transform: scaleX(-1); }
 </style>
 </head>
-<body>
+<body class="bg-[#0e0e0e] font-poppins text-[#e8e2d8] antialiased">
 
-<header class="header">
-  <div class="header-inner">
+<header class="header px-[60px] pt-6 pb-5 sticky top-0 z-[100] bg-[#0e0e0e] shadow-[0_4px_24px_0_rgba(0,0,0,0.18)] border-b-2 border-[#191919]">
+  <div class="relative flex items-end justify-between max-w-[1400px] mx-auto">
     <div>
-      <p class="eyebrow">Metodologi · STADI 2024</p>
-      <h1>Alur Deteksi <span>Deforestasi</span></h1>
-      <p class="subtitle">Scroll untuk melihat alur · Klik kotak untuk detail</p>
+      <p class="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#C75B2E] mb-3 mt-10">Metodologi · STADI 2024</p>
+      <h1 class="text-[42px] font-extrabold text-[#e8e2d8] leading-[1.05] tracking-[-0.02em]">Alur Deteksi <span class="text-[#bc4a3c]">Deforestasi</span></h1>
     </div>
   </div>
 </header>
 
-<div class="diagram-wrap" id="dwrap">
+<div class="px-[60px] pt-6 pb-8 max-w-[1400px] mx-auto relative" id="dwrap">
 
   <!-- ═══ ROW 1 · Deep Learning Modeling ═══ -->
-  <div class="row" id="row1">
-    <div class="lane-label a-lane" id="ll1">
-      <div class="lane-num">01</div>
-      <div class="lane-name">Deep Learning Modeling</div>
+  <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row1">
+    <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll1">
+      <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">01</div>
+      <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Deep Learning Modeling</div>
     </div>
-    <div class="steps">
+    <div class="steps flex-1 py-6 pl-8 flex items-center relative">
 
-      <div class="step-unit">
-        <div class="card a-card" id="r1c1" onclick="toggle(this)">
-          <div class="card-title">Training Dataset</div>
-          <div class="card-desc">Sentinel 2 × STADI 2024.<br>Sampel berlabel {0, 1}.</div>
+      <div class="flex items-center flex-1">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r1c1" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Training Dataset</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Sentinel 2 × STADI 2024.<br>Sampel berlabel {0, 1}.</div>
         </div>
-        <div class="arrow a-arr" id="r1a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+        <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r1a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <div class="step-unit">
-        <div class="card a-card" id="r1c2" onclick="toggle(this)">
-          <div class="card-title">Normalisasi Dataset</div>
-          <div class="card-desc"><ul><li>Cropping, tiling, slicing</li><li>Normalisasi citra</li></ul></div>
+      <div class="flex items-center flex-1">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r1c2" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Normalisasi Dataset</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Cropping, tiling, slicing</li><li class="mb-0.5">Normalisasi citra</li></ul></div>
         </div>
-        <div class="arrow a-arr" id="r1a2"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+        <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r1a2"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <div class="step-unit">
-        <div class="card a-card" id="r1c3" onclick="toggle(this)">
-          <div class="card-title">Deep Learning — UNET</div>
-          <div class="card-desc"><ul><li>Augmentasi &amp; rotasi</li><li>Encoder &amp; Decoder</li><li>Confusion Matrix</li></ul></div>
+      <div class="flex items-center flex-1">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r1c3" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Deep Learning — UNET</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Augmentasi &amp; rotasi</li><li class="mb-0.5">Encoder &amp; Decoder</li><li class="mb-0.5">Confusion Matrix</li></ul></div>
         </div>
-        <div class="arrow a-arr" id="r1a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+        <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r1a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <div class="step-unit" style="flex:0.8;">
-        <div class="card accent a-card" id="outmodel" onclick="toggle(this)">
-          <div class="card-title">Ouput Model</div>
-          <div class="card-desc">Model pemetaan deforestasi siap pakai untuk deteksi skala besar.</div>
+      <div class="flex items-center [flex:0.8]">
+        <div class="card flex-1 border border-[rgba(199,91,46,0.3)] bg-[rgba(199,91,46,0.06)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="outmodel" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Ouput Model</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Model pemetaan deforestasi siap pakai untuk deteksi skala besar.</div>
         </div>
       </div>
 
@@ -259,27 +90,27 @@ h1 span { color: #bc4a3c; }
   </div>
 
   <!-- ═══ ROW 2 · Scoping Area ═══ -->
-  <div class="row" id="row2">
-    <div class="lane-label a-lane" id="ll2">
-      <div class="lane-num">02</div>
-      <div class="lane-name">Scoping Area Deforestasi</div>
+  <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row2">
+    <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll2">
+      <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">02</div>
+      <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Scoping Area Deforestasi</div>
     </div>
-    <div class="steps">
+    <div class="steps flex-1 py-6 pl-8 flex items-center relative">
 
-      <div class="step-unit">
-        <div class="card a-card" id="r2c1" onclick="toggle(this)">
-          <div class="card-title">Penentuan Wilayah &amp; Periode</div>
-          <div class="card-desc"><ul><li>Hutan alam 2024</li><li>Alert Januari–Desember</li></ul></div>
+      <div class="flex items-center flex-1">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r2c1" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Penentuan Wilayah &amp; Periode</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Hutan alam 2024</li><li class="mb-0.5">Alert Januari–Desember</li></ul></div>
         </div>
-        <div class="arrow a-arr" id="r2a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+        <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r2a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <div class="step-unit">
-        <div class="card a-card" id="r2c2" onclick="toggle(this)">
-          <div class="card-title">Penapisan Alert</div>
-          <div class="card-desc">GLAD confidence level 3 ∩ tutupan hutan 2024.</div>
+      <div class="flex items-center flex-1">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r2c2" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Penapisan Alert</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">GLAD confidence level 3 ∩ tutupan hutan 2024.</div>
         </div>
-        <div class="branch-arrow a-arr" id="r2a2">
+        <div class="arrow w-[50px] min-w-[50px] flex items-center justify-center shrink-0 a-arr" id="r2a2">
           <svg viewBox="0 0 50 90" fill="none" width="50" height="90">
             <line x1="0" y1="45" x2="18" y2="45" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
             <line x1="18" y1="10" x2="18" y2="80" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
@@ -292,29 +123,29 @@ h1 span { color: #bc4a3c; }
       </div>
 
       <!-- True + False alert with aligned arrows -->
-      <div class="step-unit" style="align-self:stretch;align-items:stretch;">
-        <div style="display:flex;flex-direction:column;flex:1;gap:0;">
-          <div style="display:flex;align-items:center;flex:1;">
-            <div class="card green a-card" id="r2c3a" onclick="toggle(this)" style="flex:1;">
-              <div class="card-title">True Alert</div>
-              <div class="card-desc">Alert yang teridentifikasi sebagai kejadian deforestasi nyata. Diproses lebih lanjut.</div>
+      <div class="flex self-stretch items-stretch flex-1">
+        <div class="flex flex-col flex-1 gap-0">
+          <div class="flex items-center flex-1">
+            <div class="card flex-1 bg-[rgba(46,139,90,0.06)] border border-[rgba(46,139,90,0.3)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r2c3a" onclick="toggle(this)">
+              <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">True Alert</div>
+              <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Alert yang teridentifikasi sebagai kejadian deforestasi nyata. Diproses lebih lanjut.</div>
             </div>
-            <div class="arrow a-arr" id="r2a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+            <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r2a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
           </div>
-          <div style="display:flex;align-items:center;flex:1;margin-top:8px;">
-            <div class="card ghost a-card" id="r2c3b" onclick="toggle(this)" style="flex:1;">
-              <div class="card-title">False Alert</div>
-              <div class="card-desc">Positif palsu — tidak diproses lebih lanjut dalam alur ini.</div>
+          <div class="flex items-center flex-1 mt-2">
+            <div class="card flex-1 bg-transparent border border-white/[0.07] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#1e1e1e] a-card" id="r2c3b" onclick="toggle(this)">
+              <div class="text-sm font-bold text-[#6b6460] leading-[1.3]">False Alert</div>
+              <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Positif palsu — tidak diproses lebih lanjut dalam alur ini.</div>
             </div>
-            <div style="width:40px;min-width:40px;"></div>
+            <div class="w-[40px] min-w-[40px]"></div>
           </div>
         </div>
       </div>
 
-      <div class="step-unit" style="flex:0.8;">
-        <div class="card accent a-card" id="agreg" onclick="toggle(this)">
-          <div class="card-title">Agregasi True Alert</div>
-          <div class="card-desc"><ul><li>Pengelompokan alert</li><li>Jarak maks. 10.240 m</li></ul></div>
+      <div class="flex items-center [flex:0.8]">
+        <div class="card flex-1 border border-[rgba(199,91,46,0.3)] bg-[rgba(199,91,46,0.06)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="agreg" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Agregasi True Alert</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Pengelompokan alert</li><li class="mb-0.5">Jarak maks. 10.240 m</li></ul></div>
         </div>
       </div>
 
@@ -322,44 +153,41 @@ h1 span { color: #bc4a3c; }
   </div>
 
   <!-- ═══ ROW 3 · Deforestasi Indikatif (reversed) ═══ -->
-  <div class="row" id="row3">
-    <div class="lane-label a-lane" id="ll3">
-      <div class="lane-num">03</div>
-      <div class="lane-name">Deforestasi Indikatif</div>
+  <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row3">
+    <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll3">
+      <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">03</div>
+      <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Deforestasi Indikatif</div>
     </div>
-    <div class="steps rev">
+    <div class="steps rev flex-1 py-6 pl-8 flex items-center relative flex-row-reverse">
 
-      <div class="step-unit" style="flex-direction:row-reverse;">
-        <div class="card accent a-card" id="normcit" onclick="toggle(this)">
-          
-          <div class="card-title">Normalisasi Citra Sentinel 2</div>
-          <div class="card-desc"><ul><li>Spasial &amp; temporal filter</li><li>Cloud masking</li><li>Seleksi band</li></ul></div>
+      <div class="flex flex-row-reverse items-center flex-1">
+        <div class="card flex-1 border border-[rgba(199,91,46,0.3)] bg-[rgba(199,91,46,0.06)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="normcit" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Normalisasi Citra Sentinel 2</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Spasial &amp; temporal filter</li><li class="mb-0.5">Cloud masking</li><li class="mb-0.5">Seleksi band</li></ul></div>
         </div>
-        <div class="arrow a-arr" id="r3a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+        <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r3a1"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <div class="step-unit" style="flex-direction:row-reverse;">
-        <div class="card a-card" id="bbox" onclick="toggle(this)">
-         
-          <div class="card-title">Bounding Box</div>
-          <div class="card-desc">Radius 10.240 m dari ID agregasi alert.</div>
+      <div class="flex flex-row-reverse items-center flex-1">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="bbox" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Bounding Box</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Radius 10.240 m dari ID agregasi alert.</div>
         </div>
-        <div class="arrow a-arr" id="r3a2"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+        <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r3a2"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <div class="step-unit" style="flex-direction:row-reverse;">
-        <div class="card a-card" id="r3c3" onclick="toggle(this)">
-         
-          <div class="card-title">Akuisisi Citra Otomatis</div>
-          <div class="card-desc">Download Sentinel 2 per bulan kejadian secara otomatis.</div>
+      <div class="flex flex-row-reverse items-center flex-1">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r3c3" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Akuisisi Citra Otomatis</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Download Sentinel 2 per bulan kejadian secara otomatis.</div>
         </div>
-        <div class="arrow a-arr" id="r3a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+        <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r3a3"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
       </div>
 
-      <div class="step-unit" style="flex:0.8;flex-direction:row-reverse;">
-        <div class="card accent a-card" id="dataindikatif" onclick="toggle(this)">
-          <div class="card-title">Data Deforestasi Indikatif</div>
-          <div class="card-desc">Prediksi citra Sentinel via <em>deep learning</em> model yang sudah dilatih.</div>
+      <div class="flex flex-row-reverse items-center [flex:0.8]">
+        <div class="card flex-1 border border-[rgba(199,91,46,0.3)] bg-[rgba(199,91,46,0.06)] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="dataindikatif" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Data Deforestasi Indikatif</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Prediksi citra Sentinel via <em class="italic text-[#8a7e78]">deep learning</em> model yang sudah dilatih.</div>
         </div>
       </div>
 
@@ -367,21 +195,20 @@ h1 span { color: #bc4a3c; }
   </div>
 
   <!-- ═══ ROW 4 · Verifikasi ═══ -->
-  <div class="row" id="row4">
-    <div class="lane-label a-lane" id="ll4">
-      <div class="lane-num">04</div>
-      <div class="lane-name">Verifikasi</div>
+  <div class="flex items-stretch border-t border-white/[0.07] relative mt-6" id="row4">
+    <div class="w-[160px] min-w-[160px] pr-5 py-7 flex flex-col justify-center border-r border-white/[0.07] a-lane" id="ll4">
+      <div class="text-[11px] font-bold tracking-[0.12em] mb-1.5 text-[#C75B2E]">04</div>
+      <div class="text-[23px] font-bold text-[#e8e2d8] leading-[1.35]">Verifikasi</div>
     </div>
-    <div class="steps">
+    <div class="steps flex-1 py-6 pl-8 flex items-center relative">
 
       <!-- Overlay + 3-way branch -->
-      <div class="step-unit" style="flex:0.8;align-self:stretch;align-items:center;">
-        <div class="card a-card" id="r4c1" onclick="toggle(this)">
-          
-          <div class="card-title">Overlay &amp; Filter Area</div>
-          <div class="card-desc"><ul><li>Tutupan hutan 2024</li><li>Min. mapping unit 0.25 Ha</li></ul></div>
+      <div class="flex [flex:0.8] self-stretch items-center">
+        <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r4c1" onclick="toggle(this)">
+          <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Overlay &amp; Filter Area</div>
+          <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light"><ul class="pl-3.5"><li class="mb-0.5">Tutupan hutan 2024</li><li class="mb-0.5">Min. mapping unit 0.25 Ha</li></ul></div>
         </div>
-        <div class="branch-arrow a-arr" id="r4a1">
+        <div class="arrow w-[50px] min-w-[50px] flex items-center justify-center shrink-0 a-arr" id="r4a1">
           <svg viewBox="0 0 50 130" fill="none" width="50" height="130">
             <line x1="0" y1="65" x2="18" y2="65" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
             <line x1="18" y1="15" x2="18" y2="115" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/>
@@ -396,44 +223,40 @@ h1 span { color: #bc4a3c; }
       </div>
 
       <!-- 3 verifikasi cards, each with its own arrow -->
-      <div class="step-unit" style="align-self:stretch;align-items:stretch;flex:1.5;">
-        <div style="display:flex;flex-direction:column;flex:1;gap:8px;padding:8px 0;">
+      <div class="self-stretch items-stretch [flex:1.5] flex">
+        <div class="flex flex-col flex-1 gap-2 py-2">
 
-          <div style="display:flex;align-items:center;flex:1;">
-            <div class="card a-card" id="r4c2a" onclick="toggle(this)" style="flex:1;">
-              
-              <div class="card-title">Inspeksi Visual</div>
-              <div class="card-desc">Verifikasi melalui pemeriksaan visual langsung pada citra satelit.</div>
+          <div class="flex items-center flex-1">
+            <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r4c2a" onclick="toggle(this)">
+              <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Inspeksi Visual</div>
+              <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Verifikasi melalui pemeriksaan visual langsung pada citra satelit.</div>
             </div>
-            <div class="arrow a-arr" id="r4a2a"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+            <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r4a2a"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
           </div>
 
-          <div style="display:flex;align-items:center;flex:1;">
-            <div class="card a-card" id="r4c2b" onclick="toggle(this)" style="flex:1;">
-            
-              <div class="card-title">Penapisan Temporal</div>
-              <div class="card-desc">Analisis multi-temporal untuk memastikan perubahan bersifat permanen.</div>
+          <div class="flex items-center flex-1">
+            <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r4c2b" onclick="toggle(this)">
+              <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Penapisan Temporal</div>
+              <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Analisis multi-temporal untuk memastikan perubahan bersifat permanen.</div>
             </div>
-            <div class="arrow a-arr" id="r4a2b"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+            <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r4a2b"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
           </div>
 
-          <div style="display:flex;align-items:center;flex:1;">
-            <div class="card a-card" id="r4c2c" onclick="toggle(this)" style="flex:1;">
-              
-              <div class="card-title">Pengecekan Lapangan</div>
-              <div class="card-desc">Survey lapangan ke lokasi terindikasi untuk konfirmasi kondisi aktual.</div>
+          <div class="flex items-center flex-1">
+            <div class="card flex-1 bg-[#1e1e1e] border border-white/[0.12] rounded-[10px] px-5 py-[18px] cursor-pointer relative overflow-hidden transition-all duration-[220ms] hover:bg-[#262626] hover:border-[rgba(199,91,46,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(199,91,46,0.15)] a-card" id="r4c2c" onclick="toggle(this)">
+              <div class="text-sm font-bold text-[#e8e2d8] leading-[1.3]">Pengecekan Lapangan</div>
+              <div class="card-desc hidden text-[12.5px] text-[#6b6460] leading-[1.6] mt-2.5 font-light">Survey lapangan ke lokasi terindikasi untuk konfirmasi kondisi aktual.</div>
             </div>
-            <div class="arrow a-arr" id="r4a2c"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
+            <div class="arrow w-[40px] min-w-[40px] flex items-center justify-center shrink-0 a-arr" id="r4a2c"><svg viewBox="0 0 36 14" fill="none"><line x1="0" y1="7" x2="28" y2="7" stroke="#C75B2E" stroke-width="1.2" opacity="0.6"/><polyline points="22,2 29,7 22,12" stroke="#C75B2E" stroke-width="1.2" fill="none" stroke-linejoin="round" opacity="0.6"/></svg></div>
           </div>
 
         </div>
       </div>
 
       <!-- Final card: three arrows merge in via SVG overlay -->
-      <div class="step-unit" style="flex:0.8;align-self:stretch;">
-        <div class="card-final a-card" id="card-final">
-         
-          <div class="card-final-title">Data<br>Deforestasi</div>
+      <div class="[flex:0.8] self-stretch flex">
+        <div class="card-final flex-1 bg-[#C75B2E] rounded-[10px] px-5 py-6 flex flex-col justify-center relative overflow-hidden min-h-[160px] a-card" id="card-final">
+          <div class="font-poppins text-[22px] font-extrabold text-white leading-[1.1] relative">Data<br>Deforestasi</div>
         </div>
       </div>
 
@@ -462,8 +285,6 @@ h1 span { color: #bc4a3c; }
   </div>
 </div> -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 /* ═══════════════════════════════════════════
    TOGGLE
@@ -471,10 +292,10 @@ h1 span { color: #bc4a3c; }
 function toggle(card) {
   var desc = card.querySelector('.card-desc');
   if (!desc) return;
-  var open = desc.classList.contains('open');
-  document.querySelectorAll('.card-desc.open').forEach(function(d){ d.classList.remove('open'); });
+  var isHidden = desc.classList.contains('hidden');
+  document.querySelectorAll('.card-desc').forEach(function(d){ d.classList.add('hidden'); });
   document.querySelectorAll('.card.active').forEach(function(c){ c.classList.remove('active'); });
-  if (!open) { desc.classList.add('open'); card.classList.add('active'); }
+  if (isHidden) { desc.classList.remove('hidden'); card.classList.add('active'); }
 }
 
 /* ═══════════════════════════════════════════
@@ -568,7 +389,6 @@ function drawConnectors() {
       ' C'+cp1x+' '+cp1y+','+cp2x+' '+cp2y+','+B.cx+' '+(B.top-2)
     );
     svg.appendChild(curve);
-    mkLabel(svg, (A.cx + B.cx) / 2, A.bottom + gap / 2);
   }
 
   /* 2. Output Model → Normalisasi Citra (outer right loop row1 → row3) */
@@ -586,7 +406,6 @@ function drawConnectors() {
     p.setAttribute('marker-end', 'url(#xarr)');
     p.setAttribute('d', 'M'+OM.right+' '+OM.cy+' L'+far+' '+OM.cy+' L'+far+' '+NC.cy+' L'+(NC.right+2)+' '+NC.cy);
     svg.appendChild(p);
-    mkLabel(svg, far, OM.cy + (NC.cy - OM.cy) / 2);
   }
 
   /* 3. Data Deforestasi Indikatif → Overlay & Filter Area (row3 → row4) */
@@ -610,97 +429,13 @@ if (dataindikatif && r4c1) {
     ' C'+cp1x2+' '+cp1y2+','+cp2x2+' '+cp2y2+','+OV.cx+' '+(OV.cy - 50)
   );
   svg.appendChild(curve2);
-  mkLabel(svg, (DI.cx + OV.cx) / 2, DI.bottom + gap2 / 2);
 }
 }
 
-
-/* ═══════════════════════════════════════════
-   GSAP SCROLL-PIN ANIMATION
-═══════════════════════════════════════════ */
-gsap.registerPlugin(ScrollTrigger);
-
-/* GSAP owns initial transform states */
-gsap.set('.a-card', { opacity: 0, y: 20 });
-gsap.set('.a-arr',  { opacity: 0 });
-gsap.set('.a-lane', { opacity: 0, x: -14 });
 
 window.addEventListener('load', function() {
-
-  /* ── Master timeline ── */
-  var tl = gsap.timeline();
-
-  /* Phase 1 – Rows 1 & 2, column by column */
-  tl.to('#ll1',     { opacity:1, x:0,  duration:0.7, ease:'expo.out' }, 0)
-    .to('#ll2',     { opacity:1, x:0,  duration:0.7, ease:'expo.out' }, 0.08)
-    /* col 1 */
-    .to('#r1c1',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 0.25)
-    .to('#r2c1',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 0.25)
-    .to('#r1a1',    { opacity:1,       duration:0.5, ease:'power3.out' }, 0.85)
-    .to('#r2a1',    { opacity:1,       duration:0.5, ease:'power3.out' }, 0.85)
-    /* col 2 */
-    .to('#r1c2',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 1.15)
-    .to('#r2c2',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 1.15)
-    .to('#r1a2',    { opacity:1,       duration:0.5, ease:'power3.out' }, 1.75)
-    .to('#r2a2',    { opacity:1,       duration:0.5, ease:'power3.out' }, 1.75)
-    /* col 3 */
-    .to('#r1c3',    { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 2.05)
-    .to('#r2c3a',   { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 2.05)
-    .to('#r2c3b',   { opacity:1, y:0,  duration:0.6, ease:'expo.out' }, 2.3)
-    .to('#r1a3',    { opacity:1,       duration:0.5, ease:'power3.out' }, 2.7)
-    .to('#r2a3',    { opacity:1,       duration:0.5, ease:'power3.out' }, 2.7)
-    /* outputs */
-    .to('#outmodel',{ opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 3.05)
-    .to('#agreg',   { opacity:1, y:0,  duration:0.8, ease:'expo.out' }, 3.05)
-
-  /* Phase 2 – Row 3 */
-    .to('#ll3',          { opacity:1, x:0, duration:0.7, ease:'expo.out' }, 4.5)
-    .to('#normcit',      { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 4.7)
-    .to('#r3a1',         { opacity:1,      duration:0.5, ease:'power3.out' }, 5.2)
-    .to('#bbox',         { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 5.4)
-    .to('#r3a2',         { opacity:1,      duration:0.5, ease:'power3.out' }, 5.95)
-    .to('#r3c3',         { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 6.15)
-    .to('#r3a3',         { opacity:1,      duration:0.5, ease:'power3.out' }, 6.7)
-    .to('#dataindikatif',{ opacity:1, y:0, duration:0.8, ease:'expo.out' }, 6.9)
-
-  /* Phase 3 – Row 4 */
-    .to('#ll4',       { opacity:1, x:0, duration:0.7, ease:'expo.out' }, 8.3)
-    .to('#r4c1',      { opacity:1, y:0, duration:0.8, ease:'expo.out' }, 8.5)
-    .to('#r4a1',      { opacity:1,      duration:0.5, ease:'power3.out' }, 9.1)
-    .to('#r4c2a',     { opacity:1, y:0, duration:0.7, ease:'expo.out' }, 9.1)
-    .to('#r4c2b',     { opacity:1, y:0, duration:0.7, ease:'expo.out' }, 9.45)
-    .to('#r4c2c',     { opacity:1, y:0, duration:0.7, ease:'expo.out' }, 9.8)
-    .to('#r4a2a',     { opacity:1,      duration:0.4, ease:'power3.out' }, 9.6)
-    .to('#r4a2b',     { opacity:1,      duration:0.4, ease:'power3.out' }, 9.95)
-    .to('#r4a2c',     { opacity:1,      duration:0.4, ease:'power3.out' }, 10.3)
-    .to('#card-final',{ opacity:1, y:0, duration:0.9, ease:'expo.out' }, 10.3);
-
-  /* ── ScrollTrigger: pin dwrap, scrub through master timeline ── */
-  var connShown = false;
-  ScrollTrigger.create({
-    trigger: '#dwrap',
-  start: 'top 110px', // ← sesuaikan dengan tinggi header sticky
-  end: '+=' + Math.round(tl.totalDuration() * 540),
-  pin: true,
-  anticipatePin: 1,
-  scrub: 2,
-  animation: tl,
-    onUpdate: function(self) {
-      /* agreg ~3.05s, bbox ~5.4s out of 10.3s → show at ~0.52 */
-      if (self.progress >= 0.52 && !connShown) {
-        connShown = true;
-        drawConnectors();
-      } else if (self.progress < 0.52 && connShown) {
-        connShown = false;
-        var old = document.getElementById('cross-svg');
-        if (old) old.remove();
-      }
-    }
-  });
-
-  window.addEventListener('resize', function() {
-    if (connShown) setTimeout(drawConnectors, 120);
-  });
+  drawConnectors();
+  window.addEventListener('resize', function() { setTimeout(drawConnectors, 120); });
 });
 
 </script>

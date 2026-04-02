@@ -7,743 +7,181 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.css" />
+<link rel="stylesheet" href="assets/css/tailwind.generated.css" />
 <style>
+/* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 button, input, select, textarea { font-family: 'Poppins', sans-serif; }
-:root {
-  --red: #8b2a1a;
-  --red-light: #c04030;
-  --cream: #f5f0e8;
-  --dark: #1a1a1a;
-  --muted: #5a5040;
-  --tan: #d4c4a0;
-  --border: #e1d5c6;
-  --panel: #f8f4ee;
-}
-body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--cream);
-  color: var(--dark);
-  height: 1035px;
-  overflow: hidden;
-  display: flex;
-}
 
-/* SIDEBAR */
-#sidebar {
-  width: 300px;
-  flex-shrink: 0;
-  background: var(--dark);
-  color: var(--cream);
-  padding: 28px 20px;
-  overflow-y: auto;
-  border-right: 1px solid rgba(255,255,255,.08);
-}
-#sidebar h1 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.35rem;
-  font-weight: 700;
-  line-height: 1.15;
-  margin-bottom: 8px;
-}
-#sidebar .sub {
-  font-family: 'Poppins', sans-serif;
-  font-size: .62rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--tan);
-  margin-bottom: 18px;
-}
-.mode-btn {
-  width: 100%;
-  border: 1.5px solid rgba(255,255,255,.12);
-  background: transparent;
-  color: rgba(245,240,232,.65);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 9px;
-  text-align: left;
-  cursor: pointer;
-  font-size: .84rem;
-  font-weight: 600;
-  transition: .2s;
-}
-.mode-btn:hover { border-color: var(--red-light); color: #fff; }
-.mode-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+/* ── BUTTON STATES (JS-toggled .active) ── */
+.mode-btn:hover { border-color: #c04030; color: #fff; }
+.mode-btn.active { background: #8b2a1a; border-color: #8b2a1a; color: #fff; }
+.cat-btn:hover  { border-color: #c04030; color: #fff; }
+.cat-btn.active { background: #8b2a1a; border-color: #8b2a1a; color: #fff; }
 
-#sidebar .divider {
-  height: 1px;
-  background: rgba(255,255,255,.08);
-  margin: 16px 0;
-}
+/* ── SIDEBAR NOTES (JS innerHTML — pseudo-element) ── */
+#sidebar-notes { list-style: none; }
+#sidebar-notes li { position: relative; padding-left: 14px; font-size: .73rem; line-height: 1.6; margin-bottom: 6px; color: rgba(245,240,232,.78); }
+#sidebar-notes li:last-child { margin-bottom: 0; }
+#sidebar-notes li::before { content: '•'; position: absolute; left: 0; color: #c04030; }
 
-.kpi {
-  background: rgba(139,42,26,.14);
-  border-left: 3px solid var(--red);
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 10px;
-}
-.kpi .label {
-  font-family: 'Poppins', sans-serif;
-  font-size: .56rem;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--tan);
-}
-.kpi .val {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.7rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-top: 4px;
-}
-.kpi .unit {
-  font-family: 'Poppins', sans-serif;
-  font-size: .56rem;
-  color: var(--tan);
-  margin-top: 3px;
-}
+/* ── TABLE PANEL OPEN STATE ── */
+#table-panel.open { transform: translateX(0); }
+#table-toggle:hover, #table-panel.open #table-toggle { background: #8b2a1a; }
 
-.kpi #sidebar-notes {
-  list-style: none;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,.12);
-}
-.kpi #sidebar-notes li {
-  font-size: .73rem;
-  line-height: 1.6;
-  margin-bottom: 6px;
-  color: rgba(245,240,232,.78);
-  padding-left: 14px;
-  position: relative;
-}
-.kpi #sidebar-notes li:last-child {
-  margin-bottom: 0;
-}
-.kpi #sidebar-notes li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  color: var(--red-light);
-}
-
-/* MAP + OVERLAY */
-#wrap {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  background: #ece8df;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-#map {
-  width: 100%;
-  flex: 1;
-  min-height: 0;
-}
-
-#title-block {
-  position: absolute;
-  top: 74px;
-  left: 18px;
-  z-index: 600;
-  pointer-events: none;
-}
-#title-block h2 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: clamp(1.2rem, 2vw, 2.15rem);
-  line-height: 1.2;
-  color: var(--dark);
-  text-shadow: 0 2px 10px rgba(255,255,255,.7);
-}
-
-#interaction-hint {
-  position: absolute;
-  top: 22px;
-  right: 18px;
-  z-index: 625;
-  background: rgba(26,26,26,.78);
-  color: rgba(245,240,232,.9);
-  border: 1px solid rgba(255,255,255,.16);
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 12px;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  backdrop-filter: blur(6px);
-}
-
-#others-bubble {
-  position: absolute;
-  right: 22px;
-  top: 96px;
-  z-index: 620;
-  width: 168px;
-  height: 168px;
-  border-radius: 50%;
-  background: rgba(192,64,48,.95);
-  color: #fff;
-  display: none;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 16px;
-  box-shadow: 0 8px 26px rgba(139,42,26,.35);
-}
-#others-bubble .small {
-  font-size: .68rem;
-  line-height: 1.3;
-}
-#others-bubble .big {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-top: 6px;
-}
-#others-bubble .mono {
-  font-family: 'Poppins', sans-serif;
-  font-size: .56rem;
-  margin-top: 2px;
-  opacity: .9;
-}
-
-#notes-wrap {
-  position: absolute;
-  left: 18px;
-  bottom: 150px;
-  z-index: 620;
-  width: min(430px, 42vw);
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-
-
-#notes-box {
-  border: 1px solid #918376;
-  background: rgba(248,244,238,.94);
-  padding: 14px 14px 10px;
-  box-shadow: 0 8px 24px rgba(26,26,26,.12);
-}
-
-#notes-box ul {
-  margin: 0;
-  padding-left: 18px;
-}
-#notes-box li {
-  font-size: .82rem;
-  line-height: 1.48;
-  margin-bottom: 6px;
-}
-
-/* Right sliding table panel — overlays the map */
-#table-panel {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: min(600px, 56vw);
-  background: var(--dark);
-  z-index: 650;
-  transform: translateX(100%);
-  transition: transform .28s cubic-bezier(.4,0,.2,1);
-  display: flex;
-  flex-direction: column;
-  border-left: 2px solid rgba(255,255,255,.1);
-  box-shadow: -10px 0 40px rgba(0,0,0,.45);
-}
-#table-panel.open {
-  transform: translateX(0);
-}
-
-/* Toggle tab sits on the left edge of the panel */
-#table-toggle {
-  position: absolute;
-  left: -36px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  display: none;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  background: var(--dark);
-  color: var(--cream);
-  border: none;
-  border-radius: 8px 0 0 8px;
-  padding: 20px 9px;
-  font-family: 'Poppins', sans-serif;
-  font-size: .6rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: -4px 0 14px rgba(0,0,0,.3);
-  transition: background .2s;
-  line-height: 1;
-  white-space: nowrap;
-}
-#table-toggle:hover,
-#table-panel.open #table-toggle { background: var(--red); }
-
-#table-wrap {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 0;
-}
-.table-card {
-  background: var(--dark);
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 8px 28px rgba(0,0,0,.45);
-  border-radius: 4px;
-  color: var(--cream);
-  flex-shrink: 0;
-}
-.table-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: .62rem;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: var(--cream);
-  background: var(--red);
-  padding: 10px 14px;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-.table-card table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: .8rem;
-  table-layout: auto;
-}
-.table-card thead tr { border-bottom: 2px solid var(--red-light); }
-.table-card th, .table-card td {
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  padding: 9px 12px;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-.table-card th:nth-child(3), .table-card td:nth-child(3) {
-  white-space: normal;
-  overflow-wrap: break-word;
-}
-/* 5 kolom: rank25, rank24, provinsi, 2025ha, 2024ha */
+/* ── TABLE CARD (JS-generated HTML) ── */
+.table-card { background: #1a1a1a; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 8px 28px rgba(0,0,0,.45); border-radius: 4px; color: #f5f0e8; flex-shrink: 0; }
+.table-title { font-size: .62rem; letter-spacing: .09em; text-transform: uppercase; color: #f5f0e8; background: #8b2a1a; padding: 10px 14px; position: sticky; top: 0; z-index: 2; }
+.table-card table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+.table-card thead tr { border-bottom: 2px solid #c04030; }
+.table-card th, .table-card td { border-bottom: 1px solid rgba(255,255,255,.07); padding: 9px 12px; vertical-align: middle; white-space: nowrap; }
 .table-card th:nth-child(1), .table-card td:nth-child(1) { width: 6%; }
 .table-card th:nth-child(2), .table-card td:nth-child(2) { width: 8%; }
-.table-card th {
-  font-family: 'Poppins', sans-serif;
-  font-size: .56rem;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  text-align: right;
-  color: var(--tan);
-  background: transparent;
-  font-weight: 600;
-}
-.table-card th:nth-child(3) { text-align: left; }
-.table-card td { text-align: right; color: var(--cream); }
-.table-card td:nth-child(3) { text-align: left; font-weight: 600; color: var(--cream); }
+.table-card th:nth-child(3), .table-card td:nth-child(3) { text-align: left; white-space: normal; overflow-wrap: break-word; }
+.table-card th { font-size: .56rem; text-transform: uppercase; letter-spacing: .06em; text-align: right; color: #d4c4a0; font-weight: 600; }
+.table-card td { text-align: right; color: #f5f0e8; }
+.table-card td:nth-child(3) { font-weight: 600; }
 .table-card tr:nth-child(even) td { background: rgba(255,255,255,.03); }
-.table-card tbody tr {
-  cursor: pointer;
-  transition: background .15s ease;
-}
-.table-card tbody tr:hover td {
-  background: rgba(192,64,48,.18) !important;
-}
-.table-card tbody tr.active-row td {
-  background: rgba(192,64,48,.26) !important;
-}
-.table-card tbody tr.total-row td {
-  font-weight: 700;
-  color: var(--red-light);
-  border-top: 2px solid var(--red-light);
-  background: transparent !important;
-}
-.td-up   { color: var(--red-light) !important; }
-.td-down { color: var(--muted) !important; }
-.td-same { color: var(--tan) !important; }
+.table-card tbody tr { cursor: pointer; transition: background .15s ease; }
+.table-card tbody tr:hover td { background: rgba(192,64,48,.18) !important; }
+.table-card tbody tr.active-row td { background: rgba(192,64,48,.26) !important; }
+.table-card tbody tr.total-row td { font-weight: 700; color: #c04030; border-top: 2px solid #c04030; background: transparent !important; }
+.td-up   { color: #c04030 !important; }
+.td-down { color: #5a5040 !important; }
+.td-same { color: #d4c4a0 !important; }
 
-/* Leaflet custom */
+/* ── LEAFLET OVERRIDES ── */
 .leaflet-container { background: #efebe3 !important; }
-.rank-dot {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--red);
-  border: 2px solid rgba(255,255,255,.95);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Poppins', sans-serif;
-  font-size: .75rem;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(139,42,26,.35);
-  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
-}
-.rank-dot.active {
-  transform: scale(1.2);
-  box-shadow: 0 0 0 8px rgba(192,64,48,.18), 0 7px 18px rgba(139,42,26,.4);
-  filter: saturate(1.12);
-}
-.species-dot {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid rgba(192,64,48,.95);
-  color: var(--red);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.45rem;
-  box-shadow: 0 3px 10px rgba(26,26,26,.22);
-  transition: transform .16s ease, box-shadow .16s ease;
-  overflow: hidden;
-}
-.species-dot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.species-dot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  font-size: 0;
-}
-.species-dot.is-image {
-  padding: 0;
-  font-size: 0;
-}
-.leaflet-tooltip.label-tip {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-}
+.leaflet-tooltip.label-tip { background: transparent; border: none; box-shadow: none; padding: 0; }
 .leaflet-tooltip::before { display: none !important; }
-.leaflet-popup-content-wrapper {
-  border-radius: 8px !important;
-  padding: 0 !important;
-  overflow: hidden;
-  border-top: 3px solid var(--red);
-  font-family: 'Poppins', sans-serif;
-  box-shadow: 0 8px 28px rgba(26,26,26,.18);
-  min-width: 180px;
-}
-.leaflet-popup-content {
-  margin: 0 !important;
-  min-width: 180px;
-}
-.leaflet-popup-tip-container { display: block; }
+.leaflet-popup-content-wrapper { border-radius: 8px !important; padding: 0 !important; overflow: hidden; border-top: 3px solid #8b2a1a; font-family: 'Poppins',sans-serif; box-shadow: 0 8px 28px rgba(26,26,26,.18); min-width: 180px; }
+.leaflet-popup-content { margin: 0 !important; min-width: 180px; }
+
+/* ── POPUP (Leaflet bindPopup innerHTML) ── */
 .popup-inner { padding: 12px 16px; }
-.popup-rank  { font-size: .6rem; color: var(--muted); margin-bottom: 3px; }
-.popup-name  { font-size: .9rem; font-weight: 700; margin: 3px 0 6px; color: var(--dark); line-height: 1.3; }
-.popup-val   { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--red); line-height: 1; }
-.popup-unit  { font-size: .6rem; color: var(--muted); margin-top: 2px; }
-.popup-type  { display: inline-block; margin-top: 8px; font-size: .6rem; background: rgba(139,42,26,.1); color: var(--red); border-radius: 4px; padding: 2px 7px; }
+.popup-rank  { font-size: .6rem; color: #5a5040; margin-bottom: 3px; }
+.popup-name  { font-size: .9rem; font-weight: 700; margin: 3px 0 6px; color: #1a1a1a; line-height: 1.3; }
+.popup-val   { font-size: 1.4rem; font-weight: 700; color: #8b2a1a; line-height: 1; }
+.popup-unit  { font-size: .6rem; color: #5a5040; margin-top: 2px; }
+.popup-type  { display: inline-block; margin-top: 8px; font-size: .6rem; background: rgba(139,42,26,.1); color: #8b2a1a; border-radius: 4px; padding: 2px 7px; }
 
-/* Satwa Badges — horizontal strip at top of map */
-#satwa-badges {
-  display: none;
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 450;
-  pointer-events: none;
-  padding: 10px 18px;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-  background: rgba(248,244,238,.7);
-  backdrop-filter: blur(6px);
-  border-radius: 60px;
-  max-width: 92vw;
-}
+/* ── MAP MARKER DOTS (Leaflet divIcon HTML) ── */
+.rank-dot { width: 28px; height: 28px; border-radius: 50%; background: #8b2a1a; border: 2px solid rgba(255,255,255,.95); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; box-shadow: 0 2px 8px rgba(139,42,26,.35); transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+.rank-dot.active { transform: scale(1.2); box-shadow: 0 0 0 8px rgba(192,64,48,.18), 0 7px 18px rgba(139,42,26,.4); filter: saturate(1.12); }
+.species-dot { width: 54px; height: 54px; border-radius: 50%; background: #fff; border: 3px solid rgba(192,64,48,.95); color: #8b2a1a; display: flex; align-items: center; justify-content: center; font-size: 1.45rem; box-shadow: 0 3px 10px rgba(26,26,26,.22); transition: transform .16s ease, box-shadow .16s ease; overflow: hidden; }
+.species-dot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.species-dot.is-image { padding: 0; font-size: 0; }
+
+/* ── SATWA BADGES (JS-generated) ── */
+#satwa-badges { scrollbar-width: none; }
 #satwa-badges::-webkit-scrollbar { display: none; }
-#satwa-badges.visible {
-  display: flex;
-}
-
-.satwa-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  pointer-events: auto;
-  cursor: pointer;
-  background: transparent;
-  flex-shrink: 0;
-  transition: transform .18s ease;
-}
-.satwa-badge:hover {
-  transform: translateY(-3px);
-}
-
-.satwa-badge-circle {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid var(--red);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.28);
-  background: #fff;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-}
-
-.satwa-badge:hover .satwa-badge-circle,
-.satwa-badge.active .satwa-badge-circle {
-  border-color: var(--red);
-  box-shadow: 0 0 0 4px rgba(192,64,48,.22), 0 6px 18px rgba(0,0,0,0.35);
-}
-
-.satwa-badge-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.satwa-badge-name {
-  display: none;
-}
-
-.satwa-badge.active .satwa-badge-name {
-  background: var(--red);
-  color: #fff;
-}
-.satwa-badge.active .satwa-badge-name { display: none; }
-.satwa-badge-detail {
-  display: none;
-  flex-direction: column-reverse;
-  align-items: center;
-  gap: 1px;
-  pointer-events: none;
-  animation: satwa-info-in .18s ease;
-}
+#satwa-badges.visible { display: flex; }
+.satwa-badge { display: flex; flex-direction: column; align-items: center; gap: 5px; pointer-events: auto; cursor: pointer; background: transparent; flex-shrink: 0; transition: transform .18s ease; }
+.satwa-badge:hover { transform: translateY(-3px); }
+.satwa-badge-circle { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 3px solid #8b2a1a; box-shadow: 0 4px 14px rgba(0,0,0,.28); background: #fff; transition: box-shadow .2s; }
+.satwa-badge:hover .satwa-badge-circle, .satwa-badge.active .satwa-badge-circle { box-shadow: 0 0 0 4px rgba(192,64,48,.22), 0 6px 18px rgba(0,0,0,.35); }
+.satwa-badge-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.satwa-badge-name { display: none; }
+.satwa-badge-detail { display: none; flex-direction: column-reverse; align-items: center; gap: 1px; pointer-events: none; animation: satwa-info-in .18s ease; }
 .satwa-badge.active .satwa-badge-detail { display: flex; }
-@keyframes satwa-info-in {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.satwa-badge-detail .si-name {
-  font-family: 'Poppins', sans-serif;
-  font-size: .58rem;
-  font-style: italic;
-  color: var(--dark);
-  font-weight: 600;
-  text-align: center;
-  max-width: 90px;
-  white-space: normal;
-  line-height: 1.2;
-  background: rgba(248,244,238,.9);
-  border-radius: 4px;
-  padding: 2px 5px;
-}
-.satwa-badge-detail .si-val {
-  font-family: 'Poppins', sans-serif;
-  font-size: .82rem;
-  font-weight: 700;
-  color: var(--red-light);
-  background: rgba(248,244,238,.9);
-  border-radius: 4px;
-  padding: 1px 6px;
-}
-.satwa-badge-detail .si-unit {
-  font-size: .5rem;
-  color: var(--muted);
-  background: rgba(248,244,238,.75);
-  border-radius: 4px;
-  padding: 1px 5px;
-}
-#satwa-badges.has-active .satwa-badge:not(.active) {
-  opacity: 0.35;
-  filter: grayscale(0.5);
-  transition: opacity .2s ease, filter .2s ease;
-}
-#satwa-badges.has-active .satwa-badge:not(.active):hover {
-  opacity: 0.7;
-  filter: grayscale(0);
-}
-.satwa-badge.loading .satwa-badge-circle {
-  opacity: 0.6;
-  animation: satwa-pulse 0.9s ease-in-out infinite alternate;
-}
-@keyframes satwa-pulse {
-  from { box-shadow: 0 0 0 2px rgba(192,64,48,.3); }
-  to   { box-shadow: 0 0 0 6px rgba(192,64,48,.55); }
-}
+.satwa-badge-detail .si-name { font-size: .58rem; font-style: italic; color: #1a1a1a; font-weight: 600; text-align: center; max-width: 90px; white-space: normal; line-height: 1.2; background: rgba(248,244,238,.9); border-radius: 4px; padding: 2px 5px; }
+.satwa-badge-detail .si-val  { font-size: .82rem; font-weight: 700; color: #c04030; background: rgba(248,244,238,.9); border-radius: 4px; padding: 1px 6px; }
+.satwa-badge-detail .si-unit { font-size: .5rem; color: #5a5040; background: rgba(248,244,238,.75); border-radius: 4px; padding: 1px 5px; }
+#satwa-badges.has-active .satwa-badge:not(.active) { opacity: .35; filter: grayscale(.5); transition: opacity .2s, filter .2s; }
+#satwa-badges.has-active .satwa-badge:not(.active):hover { opacity: .7; filter: grayscale(0); }
+.satwa-badge.loading .satwa-badge-circle { opacity: .6; animation: satwa-pulse .9s ease-in-out infinite alternate; }
+@keyframes satwa-info-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes satwa-pulse { from { box-shadow: 0 0 0 2px rgba(192,64,48,.3); } to { box-shadow: 0 0 0 6px rgba(192,64,48,.55); } }
 
-/* Responsive */
+/* ── RESPONSIVE ── */
 @media (max-width: 1280px) {
   #table-panel { width: min(560px, 52vw); }
-  #table-wrap { gap: 0; }
-  #notes-wrap { width: min(390px, 40vw); }
+  #notes-wrap  { width: min(390px, 40vw); }
 }
-
 @media (max-width: 980px) {
-  body { flex-direction: column; overflow: hidden; }
-  #sidebar {
-    width: 100%;
-    max-height: 32vh;
-    border-right: 0;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-    padding: 16px 14px;
-  }
+  body { flex-direction: column; }
+  #sidebar { width: 100%; max-height: 32vh; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); padding: 16px 14px; }
   #sidebar h1 { font-size: 1.08rem; }
-  #sidebar .sub { margin-bottom: 12px; }
   .mode-btn { font-size: .78rem; padding: 9px 10px; margin-bottom: 7px; }
-
   #title-block { top: 64px; left: 10px; }
   #title-block h2 { font-size: clamp(.95rem, 2.2vw, 1.2rem); }
-
-  #interaction-hint {
-    top: 8px;
-    right: 8px;
-    font-size: .48rem;
-    padding: 4px 7px;
-  }
-
-  #notes-wrap {
-    left: 12px;
-    right: 12px;
-    width: auto;
-    bottom: 18px;
-  }
-  #notes-box {
-    max-height: 24vh;
-    overflow-y: auto;
-  }
+  #interaction-hint { top: 8px; right: 8px; font-size: .48rem; padding: 4px 7px; }
+  #notes-wrap { left: 12px; right: 12px; width: auto; bottom: 18px; }
+  #notes-box  { max-height: 24vh; overflow-y: auto; }
   #table-panel { width: min(96vw, 480px); }
-  #table-wrap { padding: 0; gap: 0; }
-  .table-card {
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-  }
-  .table-card table {
-    min-width: 0;
-    font-size: .64rem;
-  }
-  .table-card th, .table-card td {
-    padding: 4px 5px;
-  }
-
-  #others-bubble {
-    width: 132px;
-    height: 132px;
-    right: 10px;
-    top: 56px;
-  }
-  #others-bubble .big { font-size: 1.55rem; }
+  .table-card table { font-size: .64rem; }
+  .table-card th, .table-card td { padding: 4px 5px; }
+  #others-bubble { width: 132px; height: 132px; right: 10px; top: 56px; }
 }
 @media (max-width: 640px) {
-  #title-block { top: 60px; }
-
-  #sidebar {
-    max-height: 30vh;
-    padding: 12px 10px;
-  }
+  #sidebar { max-height: 30vh; padding: 12px 10px; }
   #sidebar h1 { font-size: .95rem; }
   .mode-btn { font-size: .72rem; padding: 8px 9px; }
-
   #interaction-hint { display: none; }
-
-  #others-bubble {
-    width: 108px;
-    height: 108px;
-    top: 52px;
-    right: 8px;
-    padding: 10px;
-  }
-  #others-bubble .small { font-size: .55rem; }
-  #others-bubble .big { font-size: 1.2rem; }
-  #others-bubble .mono { font-size: .48rem; }
-
-  #notes-box {
-    font-size: .72rem;
-    padding: 10px 10px 8px;
-    max-height: 22vh;
-  }
-  #notes-box li {
-    font-size: .72rem;
-    line-height: 1.4;
-  }
-
-  #table-wrap { gap: 8px; }
+  #title-block { top: 60px; }
+  #others-bubble { width: 108px; height: 108px; top: 52px; right: 8px; padding: 10px; }
+  #notes-box  { max-height: 22vh; padding: 10px 10px 8px; font-size: .72rem; }
   .table-title { font-size: .52rem; padding: 6px 8px; }
-  .table-card table { min-width: 0; font-size: .6rem; }
+  .table-card table { font-size: .6rem; }
   .table-card th, .table-card td { padding: 4px; }
 }
 </style>
 </head>
-<body>
-  <aside id="sidebar">
-    <h1>Peta Tematik<br>Deforestasi</h1>
-    <p class="sub">Pilih jenis analisis · 2025</p>
+<body class="font-poppins bg-[#f5f0e8] text-[#1a1a1a] h-[1035px] overflow-hidden flex">
+  <aside id="sidebar" class="w-[300px] shrink-0 bg-[#1a1a1a] text-[#f5f0e8] px-5 py-7 overflow-y-auto border-r border-white/[.08]">
+    <h1 class="text-[1.35rem] font-bold leading-[1.15] mb-2">Peta Tematik<br>Deforestasi</h1>
+    <p class="text-[.62rem] tracking-[.1em] uppercase text-[#d4c4a0] mb-[18px]">Pilih jenis analisis · 2025</p>
 
-    <button class="mode-btn active" data-mode="provinsi">Deforestasi berbasis provinsi</button>
-    <button class="mode-btn" data-mode="kabupaten">Deforestasi berbasis kabupaten</button>
-    <button class="mode-btn" data-mode="konservasi">Deforestasi di kawasan konservasi</button>
-    <button class="mode-btn" data-mode="megafauna">Deforestasi di Habitat megafauna ikonik</button>
+    <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all active" data-mode="provinsi">Deforestasi berbasis provinsi</button>
+    <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="kabupaten">Deforestasi berbasis kabupaten</button>
+    <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="konservasi">Deforestasi di kawasan konservasi</button>
+    <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="megafauna">Deforestasi di Habitat megafauna ikonik</button>
+    <button class="mode-btn w-full border-[1.5px] border-white/[.12] bg-transparent text-[rgba(245,240,232,.65)] rounded-lg px-[14px] py-3 mb-[9px] text-left cursor-pointer text-[.84rem] font-semibold transition-all" data-mode="konsesi">Deforestasi dalam Konsesi</button>
 
-    <div class="divider"></div>
+    <!-- Sub-menu konsesi (hidden by default) -->
+    <div id="konsesi-submenu" class="hidden mt-1">
+      <button class="cat-btn w-full border-[1.5px] border-white/[.1] bg-transparent text-[rgba(245,240,232,.58)] rounded-md px-3 py-[9px] mb-[7px] text-left cursor-pointer text-[.78rem] font-semibold transition-all" data-cat="kebun-kayu">🌲 Konsesi Kebun Kayu</button>
+      <button class="cat-btn w-full border-[1.5px] border-white/[.1] bg-transparent text-[rgba(245,240,232,.58)] rounded-md px-3 py-[9px] mb-[7px] text-left cursor-pointer text-[.78rem] font-semibold transition-all" data-cat="logging">🪵 Konsesi Logging</button>
+      <button class="cat-btn w-full border-[1.5px] border-white/[.1] bg-transparent text-[rgba(245,240,232,.58)] rounded-md px-3 py-[9px] mb-[7px] text-left cursor-pointer text-[.78rem] font-semibold transition-all" data-cat="sawit">🌴 Konsesi Sawit</button>
+      <button class="cat-btn w-full border-[1.5px] border-white/[.1] bg-transparent text-[rgba(245,240,232,.58)] rounded-md px-3 py-[9px] mb-[7px] text-left cursor-pointer text-[.78rem] font-semibold transition-all" data-cat="tambang">⛏️ Konsesi Tambang</button>
+    </div>
 
-    <div class="kpi">
-      <div class="label" id="kpi-label">Total</div>
-      <div class="val" id="kpi-val">433.751</div>
-      <div class="unit" id="kpi-unit">hektare</div>
+    <div class="h-px bg-white/[.08] my-4"></div>
 
-      <ul id="sidebar-notes"></ul>
+    <div class="bg-[rgba(139,42,26,.14)] border-l-[3px] border-l-[#8b2a1a] rounded-md p-3 mb-[10px]">
+      <div class="text-[.56rem] tracking-[.08em] uppercase text-[#d4c4a0]" id="kpi-label">Total</div>
+      <div class="text-[1.7rem] font-bold leading-none mt-1" id="kpi-val">433.751</div>
+      <div class="text-[.56rem] text-[#d4c4a0] mt-[3px]" id="kpi-unit">hektare</div>
+
+      <ul id="sidebar-notes" class="mt-[10px] pt-[10px] border-t border-white/[.12]"></ul>
     </div>
   </aside>
 
-  <main id="wrap">
-    <div id="map"></div>
-    <div id="satwa-badges"></div>
+  <main id="wrap" class="relative flex-1 min-w-0 bg-[#ece8df] flex flex-col overflow-hidden">
+    <div id="map" class="w-full flex-1 min-h-0"></div>
+    <div id="satwa-badges" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-[450] pointer-events-none px-[18px] py-[10px] flex-row items-end justify-center gap-[10px] flex-nowrap overflow-x-auto bg-[rgba(248,244,238,.7)] backdrop-blur-[6px] rounded-[60px] max-w-[92vw]"></div>
 
-    <div id="interaction-hint">klik titik / klik baris tabel / tombol 1–4</div>
+    <div id="interaction-hint" class="absolute top-[22px] right-[18px] z-[625] bg-[rgba(26,26,26,.78)] text-[rgba(245,240,232,.9)] border border-white/[.16] rounded-full px-[10px] py-[6px] text-[12px] tracking-[.07em] uppercase backdrop-blur-[6px]">klik titik / klik baris tabel / tombol 1–5</div>
 
-    <div id="title-block">
-      <h2 id="map-title">Deforestasi berbasis provinsi</h2>
+    <div id="title-block" class="absolute top-[74px] left-[18px] z-[600] pointer-events-none">
+      <h2 id="map-title" class="font-bold text-[clamp(1.2rem,2vw,2.15rem)] leading-[1.2] text-[#1a1a1a] [text-shadow:0_2px_10px_rgba(255,255,255,.7)]">Deforestasi berbasis provinsi</h2>
     </div>
 
-    <div id="others-bubble">
-      <div class="small" id="bubble-label">Kabupaten lainnya</div>
-      <div class="big" id="bubble-val">338.018</div>
-      <div class="mono" id="bubble-unit">hektare</div>
+    <div id="others-bubble" class="absolute right-[22px] top-[96px] z-[620] w-[168px] h-[168px] rounded-full bg-[rgba(192,64,48,.95)] text-white hidden text-center items-center justify-center flex-col p-4 shadow-[0_8px_26px_rgba(139,42,26,.35)]">
+      <div class="text-[.68rem] leading-[1.3]" id="bubble-label">Kabupaten lainnya</div>
+      <div class="text-[2rem] font-bold leading-none mt-[6px]" id="bubble-val">338.018</div>
+      <div class="text-[.56rem] mt-[2px] opacity-90" id="bubble-unit">hektare</div>
     </div>
 
-    <div id="notes-wrap">
-      <!-- <div id="map-legend">
-        <div class="leg-swatch"></div>
-        <span>Deforestasi di Indonesia</span>
-      </div> -->
-      <div id="notes-box"><ul id="notes-list"></ul></div>
+    <div id="notes-wrap" class="absolute left-[18px] bottom-[150px] z-[620] w-[min(430px,42vw)] flex flex-col">
+      <div id="notes-box" class="border border-[#918376] bg-[rgba(248,244,238,.94)] pt-[14px] px-[14px] pb-[10px] shadow-[0_8px_24px_rgba(26,26,26,.12)]">
+        <ul id="notes-list" class="pl-[18px] [&>li]:text-[.82rem] [&>li]:leading-[1.48] [&>li]:mb-[6px]"></ul>
+      </div>
     </div>
 
-    <div id="table-panel">
-      <button id="table-toggle">Tabel ▶</button>
-      <div id="table-wrap"></div>
+    <div id="table-panel" class="absolute right-0 top-0 bottom-0 w-[min(600px,56vw)] bg-[#1a1a1a] z-[650] translate-x-full transition-transform duration-[280ms] ease-[cubic-bezier(.4,0,.2,1)] flex flex-col border-l-2 border-white/[.1] shadow-[-10px_0_40px_rgba(0,0,0,.45)]">
+      <button id="table-toggle" class="absolute left-[-36px] top-1/2 -translate-y-1/2 z-10 [writing-mode:vertical-rl] [text-orientation:mixed] bg-[#1a1a1a] text-[#f5f0e8] border-0 rounded-l-lg py-5 px-[9px] text-[.6rem] font-bold tracking-[.1em] uppercase cursor-pointer shadow-[-4px_0_14px_rgba(0,0,0,.3)] transition-colors leading-none whitespace-nowrap hidden">Tabel ▶</button>
+      <div id="table-wrap" class="flex-1 overflow-y-auto overflow-x-hidden flex flex-col"></div>
     </div>
   </main>
 
@@ -935,6 +373,122 @@ const MODES = {
       { lat: 2.5, lng: 121.5, icon: '🦏', image: 'assets/images/satwa/image-7.png', name: 'Dicerorhinus sumatrensis harrissoni', value: '3.057', dir: 'right', geojsonUrl: 'geojson/dicerorhinus-sumatrensis-harrissoni.json' }
     ],
     tables: []
+  },
+
+  konsesi: {
+    kpiLabel: 'Pilih kategori konsesi',
+    kpiVal: '—',
+    kpiUnit: 'hektare',
+    notesSidebar: [
+      'Pilih kategori konsesi di atas untuk melihat data.',
+      'Menampilkan 10 konsesi teratas per kategori.',
+    ],
+    notesBox: [
+      'Data mencakup deforestasi di dalam batas konsesi yang telah diberikan izin.',
+      'Sumber: SIMONTINI 2025.'
+    ],
+    markers: [],
+    tables: [],
+    subCategories: {
+      'kebun-kayu': {
+        title: 'Konsesi Kebun Kayu',
+        kpiLabel: 'Total 10 teratas (kebun kayu)',
+        kpiVal: '11.265',
+        othersLabel: '202 izin Lainnya',
+        othersVal: '21.799',
+        bullets: [
+          'Deforestasi dalam 212 konsesi kebun kayu',
+          '34% deforestasi terjadi pada 10 perusahaan teratas'
+        ],
+        geojsonFile: 'kebun-kayu.geojson',
+        markers: [
+          { lat:2.126959285437297,  lng:117.55112979226557, rank:1,  name:'PT TANJUNG REDEB HUTANI',               value:1408, dir:'right'  },
+          { lat:0.397174210774834,  lng:110.992844937424763, rank:2,  name:'PT FINNANTARA INTIGA',                  value:1341, dir:'left'   },
+          { lat:0.407421960214845,  lng:116.367172445672026, rank:3,  name:'PT MAHAKARYA PERDANA GEMILANG UNIT II', value:1324, dir:'right'  },
+          { lat:0.566679872006894,  lng:117.174814762389829, rank:4,  name:'PT DIVA PERDANA PESONA',                value:1296, dir:'right'  },
+          { lat:-1.335276267511383, lng:114.138747007539251, rank:5,  name:'PT BUMI HIJAU PRIMA',                   value:1294, dir:'left'   },
+          { lat:-2.009800604760271, lng:111.153569955554644, rank:6,  name:'PT GRACE PUTRI PERDANA',                value:1171, dir:'left'   },
+          { lat:1.853305859481002,  lng:117.594275093006445, rank:7,  name:'PT HUTAN BERAU LESTARI',                value:1097, dir:'right'  },
+          { lat:0.026386043655114,  lng:115.929349893182021, rank:8,  name:'PT SENDAWAR ADHI KARYA',                value:1019, dir:'right'  },
+          { lat:1.340801486700338,  lng:118.240850579581576, rank:9,  name:'PT SWADAYA PERKASA',                    value:662,  dir:'right'  },
+          { lat:1.374270568895824,  lng:101.806156676794458, rank:10, name:'PT SEKATO PRATAMA MAKMUR',              value:652,  dir:'bottom' },
+        ]
+      },
+      'logging': {
+        title: 'Konsesi Logging',
+        kpiLabel: 'Total 10 teratas (logging)',
+        kpiVal: '20.749',
+        othersLabel: '227 izin Lainnya',
+        othersVal: '53.661',
+        bullets: [
+          'Deforestasi dalam 237 konsesi logging',
+          '28% deforestasi dalam konsesi logging terjadi pada 10 perusahaan teratas'
+        ],
+        geojsonFile: 'logging.geojson',
+        markers: [
+          { lat:0.881264893236657,  lng:117.026904047300249, rank:1,  name:'PT KIANI LESTARI',                        value:3739, dir:'right'  },
+          { lat:-1.252358059458737, lng:114.487610383463576, rank:2,  name:'PT DASA INTIGA',                          value:3195, dir:'left'  },
+          { lat:2.098063545278295,  lng:101.015865352762475, rank:3,  name:'PT DIAMOND RAYA TIMBER',                  value:2741, dir:'right' },
+          { lat:-3.017296513002015, lng:101.832872347710747, rank:4,  name:'PT ANUGERAH PRATAMA INSPIRASI',           value:2211, dir:'bottom'},
+          { lat:-0.75146963045224,  lng:116.510730877588813, rank:5,  name:'PT ITCI KARTIKA UTAMA (ITCIKU)',          value:1902, dir:'right' },
+          { lat:2.028798962469609,  lng:117.080426147312622, rank:6,  name:'PT INHUTANI I UNIT LABANAN',              value:1688, dir:'right' },
+          { lat:-3.502650172817841, lng:135.621210438578998, rank:7,  name:'PT JATI DHARMA INDAH PLYWOOD INDUSTRIES', value:1415, dir:'bottom'},
+          { lat:2.474287034103671,  lng:117.210276665613563, rank:8,  name:'PT INHUTANI I UNIT SAMBARATA',            value:1330, dir:'left'  },
+          { lat:-1.051472046229932, lng:113.055533404223866, rank:9,  name:'PT DWIMA JAYA UTAMA',                     value:1267, dir:'top'   },
+          { lat:1.288242736097689,  lng:99.580298186802281,  rank:10, name:'PT BARUMUN RAYA PADANG LANGKAT',          value:1260, dir:'left'  },
+        ]
+      },
+      'sawit': {
+        title: 'Konsesi Sawit',
+        kpiLabel: 'Total 10 teratas (sawit)',
+        kpiVal: '13.610',
+        othersLabel: '709 izin Lainnya',
+        othersVal: '24.300',
+        bullets: [
+          'Deforestasi seluas 37.910 ha dalam 719 konsesi sawit sepanjang 2025',
+          '36% (13.610 ha) terjadi pada 10 konsesi teratas',
+          'Pusat ekspansi berada di Kalimantan dan Tanah Papua'
+        ],
+        geojsonFile: 'sawit.geojson',
+        markers: [
+          { lat:-1.171071756797254, lng:131.391544937632204, rank:1,  name:'Inti Kebun Lestari',      value:2624, dir:'top'    },
+          { lat:0.675035799730648,  lng:121.473335486617259, rank:2,  name:'Banyan Tumbuh Lestari',   value:2094, dir:'right'  },
+          { lat:-1.283649245406992, lng:131.24771276041497,  rank:3,  name:'Inti Kebun Sejahtera',    value:2053, dir:'right'  },
+          { lat:-7.873776279100799, lng:140.650276678006122, rank:4,  name:'Merauke Sawit Jaya',      value:1808, dir:'left'   },
+          { lat:-1.444431042873964, lng:131.2297651958757,   rank:5,  name:'Papua Lestari Abadi',     value:1300, dir:'right'  },
+          { lat:0.876612002390529,  lng:112.828968572362726, rank:6,  name:'Borneo International Anugerah', value:877, dir:'right' },
+          { lat:-1.6730810929783,   lng:113.408354095172541, rank:7,  name:'Agro Kalimantan Lestari', value:784,  dir:'left'   },
+          { lat:1.223818358664025,  lng:118.285216683843913, rank:8,  name:'Anugrah Surya Mandiri',   value:713,  dir:'top'    },
+          { lat:0.996544524718871,  lng:112.051890133518881, rank:9,  name:'Khatulistiwa Agro Abadi', value:682,  dir:'left'   },
+          { lat:-0.228874466961059, lng:104.847611995376113, rank:10, name:'Citra Sugi Aditya',       value:676,  dir:'bottom' },
+        ]
+      },
+      'tambang': {
+        title: 'Konsesi Tambang',
+        kpiLabel: 'Total 10 teratas (tambang)',
+        kpiVal: '8.929',
+        othersLabel: '1.131 izin Lainnya',
+        othersVal: '32.233',
+        bullets: [
+          'Deforestasi seluas 41.162 ha dalam 1.140 konsesi tambang sepanjang 2025',
+          '22% (8.929 ha) terjadi dalam 10 perusahaan teratas',
+          'Ekspansi tambang emas meningkat selain nikel di Indonesia'
+        ],
+        geojsonFile: 'tambang.geojson',
+        markers: [
+          { lat:2.138922060693282,  lng:117.395321188956885, rank:1,  name:'Berau Coal (Batubara)',             value:1473, dir:'right'  },
+          { lat:-3.003818526025582, lng:121.809448329238492, rank:2,  name:'Sulawesi Cahaya Mineral (Nikel)',   value:1085, dir:'right'  },
+          { lat:-0.090328260786384, lng:114.919059555847099, rank:3,  name:'Maruwai Coal (Batubara)',           value:920,  dir:'top'    },
+          { lat:0.627934768307973,  lng:128.004841288293079, rank:4,  name:'Weda Bay Nickel (Nikel)',           value:902,  dir:'right'  },
+          { lat:-2.634066859436454, lng:121.488538466272828, rank:5,  name:'Vale Indonesia TBK (Nikel)',        value:842,  dir:'left'   },
+          { lat:1.370910557959839,  lng:99.149585821220384,  rank:6,  name:'Agincourt Resources (Emas)',        value:840,  dir:'left'   },
+          { lat:-0.207788395378338, lng:115.026603507062106, rank:7,  name:'Lahai Coal (Batubara)',             value:770,  dir:'left'   },
+          { lat:-1.541190947688207, lng:112.517178689769239, rank:8,  name:'Blok Waringin Agung (Emas)',        value:764,  dir:'right'  },
+          { lat:-1.039139704484105, lng:114.625074268594773, rank:9,  name:'Suprabari Mapanindo Mineral',       value:673,  dir:'left'   },
+          { lat:-2.843717003693491, lng:121.980032209226394, rank:10, name:'Bintang Delapan Mineral (Nikel)',   value:659,  dir:'bottom' },
+        ]
+      }
+    }
   }
 };
 
@@ -1268,6 +822,23 @@ function renderMode(modeKey) {
   } else {
     tableToggle.style.display = 'none';
   }
+
+  // konsesi submenu
+  const submenu = document.getElementById('konsesi-submenu');
+  if (modeKey === 'konsesi') {
+    submenu.classList.remove('hidden');
+    // Auto-load first sub-category if nothing active
+    const activecat = submenu.querySelector('.cat-btn.active');
+    if (!activecat) {
+      const firstCat = submenu.querySelector('.cat-btn');
+      if (firstCat) loadKonsesiCategory(firstCat.dataset.cat);
+    }
+  } else {
+    submenu.classList.add('hidden');
+    // Reset all cat-btn active states
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  }
+
   // beri tahu Leaflet bahwa ukuran kontainer peta berubah
   requestAnimationFrame(() => map.invalidateSize());
 
@@ -1279,14 +850,90 @@ function renderMode(modeKey) {
   // Tidak melakukan apa-apa agar map tidak bergerak saat ganti mode
 }
 
+// ── KONSESI CATEGORY LOADER ─────────────────────────────────────────────
+let konsesiMarkersLayer = null;
 
+function loadKonsesiCategory(catKey) {
+  const konsesiMode = MODES.konsesi;
+  const cat = konsesiMode.subCategories[catKey];
+  if (!cat) return;
+
+  // Update active cat-btn
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === catKey));
+
+  // Clear existing konsesi markers
+  markerLayer.clearLayers();
+  markerRegistry = [];
+  activeMarker = null;
+  map.closePopup();
+
+  // Update KPI + sidebar notes
+  document.getElementById('kpi-label').textContent = cat.kpiLabel;
+  document.getElementById('kpi-val').textContent = cat.kpiVal;
+  document.getElementById('kpi-unit').textContent = 'hektare';
+  document.getElementById('sidebar-notes').innerHTML = cat.bullets.map(b => `<li>${b}</li>`).join('');
+
+  // Update map title
+  document.getElementById('map-title').textContent = 'Deforestasi ' + cat.title;
+
+  // Update others bubble
+  const bubble = document.getElementById('others-bubble');
+  bubble.style.display = 'flex';
+  document.getElementById('bubble-label').innerHTML = cat.othersLabel;
+  document.getElementById('bubble-val').textContent = cat.othersVal;
+  document.getElementById('bubble-unit').textContent = 'hektare';
+
+  // Notes box
+  document.getElementById('notes-list').innerHTML = cat.bullets.map(b => `<li>${b}</li>`).join('');
+
+  // Load markers — try GeoJSON first, fallback to hardcoded
+  function placeMarkers(points) {
+    points.forEach(p => {
+      const item = {
+        lat: p.lat, lng: p.lng,
+        rank: p.rank,
+        name: p.name,
+        value: String(p.value),
+        dir: p.dir || 'right'
+      };
+      createRankMarker(item);
+    });
+  }
+
+  if (cat.geojsonFile) {
+    fetch(cat.geojsonFile)
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(geojson => {
+        const pts = geojson.features.map(f => ({
+          lat: f.geometry.coordinates[1],
+          lng: f.geometry.coordinates[0],
+          rank: f.properties.rank,
+          name: f.properties.namobj,
+          value: f.properties.value,
+          dir: f.properties.dir || 'right'
+        }));
+        placeMarkers(pts);
+      })
+      .catch(() => {
+        if (cat.markers && cat.markers.length) placeMarkers(cat.markers);
+      });
+  } else if (cat.markers && cat.markers.length) {
+    placeMarkers(cat.markers);
+  }
+}
+
+// ── EVENTS ──────────────────────────────────────────────────────────────
 
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => renderMode(btn.dataset.mode));
 });
 
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => loadKonsesiCategory(btn.dataset.cat));
+});
+
 window.addEventListener('keydown', (e) => {
-  const mapping = { '1': 'provinsi', '2': 'kabupaten', '3': 'konservasi', '4': 'megafauna' };
+  const mapping = { '1': 'provinsi', '2': 'kabupaten', '3': 'konservasi', '4': 'megafauna', '5': 'konsesi' };
   const mode = mapping[e.key];
   if (!mode) return;
   renderMode(mode);
